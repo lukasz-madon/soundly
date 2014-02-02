@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1>Index</h1>
+  <p>
+    Welcome on my awesome homepage.
+  </p>
+  <h2>Youtube channels ids</h2>
+   <ul>
+  {% for c in channels %}
+    <li>{{ c }}</li>
+  {% else %}
+    <li><em>Unbelievable.  No channels here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}
