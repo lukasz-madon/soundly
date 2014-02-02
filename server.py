@@ -19,6 +19,13 @@ security = Security(app, user_datastore)
 
 oauth = OAuth(app)
 
+if os.environ.get("HEROKU") is not None:
+  import logging
+  stream_handler = logging.StreamHandler()
+  app.logger.addHandler(stream_handler)
+  app.logger.setLevel(logging.INFO)
+  app.logger.info("starting app")
+
 google = oauth.remote_app(
 	"google",
 	consumer_key=app.config["GOOGLE_CLIENT_ID"],
