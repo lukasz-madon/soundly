@@ -4,15 +4,20 @@ from flask import Flask, render_template, request, url_for, redirect, session, j
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, login_required, SQLAlchemyUserDatastore
 from flask_oauthlib.client import OAuth
+from flaskext.kvsession import KVSessionExtension
+from simplekv.memory import DictStore
 
 
-from models import db, User, Role, Connection
+from models import db, User, Role
 
 
 app = Flask(__name__)
 app.config.from_pyfile("settings.py")
 db.init_app(app)
-
+# See the simplekv documentation for details
+store = DictStore()
+# This will replace the app's session handling
+KVSessionExtension(store, app)
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
@@ -71,14 +76,9 @@ def authorized(resp):
 	user = user_datastore.find_user(email=email)
 	if not user:
 		user = user_datastore.create_user(email=email, active=True)
-		conn = Connection(user_id=user.id, provider_id="google", provider_user_id=data["id"])
-		conn.access_token = resp["access_token"]
-		conn.profile_url = data.get("profile_url", "")
-		conn.image_url = data.get("image_url", "")
-		user.connection = [conn]
-		db.session.commit()
-	else:
-		user.connection.access_token = resp["access_token"]
+		user.google_user_id = data["id"]
+		user.profile_url = data.get("profile_url", "")
+		user.image_url = data.get("image_url", "")
 		db.session.commit()
 	return redirect(url_for("index"))
 

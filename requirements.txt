@@ -1,4 +1,5 @@
 Flask==0.10.1
+Flask-KVSession==0.4
 Flask-Login==0.2.9
 Flask-Mail==0.9.0
 Flask-Migrate==1.2.0
@@ -25,4 +26,5 @@ oauth2client==1.2
 oauthlib==0.6.1
 passlib==1.6.2
 psycopg2==2.5.2
+simplekv==0.6
 wsgiref==0.1.2
