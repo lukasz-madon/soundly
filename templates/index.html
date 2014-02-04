@@ -7,10 +7,11 @@
   <p>
     Welcome on my awesome homepage.
   </p>
-  <h2>Youtube channels ids</h2>
+  <button class="btn btn-default">Click me</button>
+  <h2>Youtube channels </h2>
    <ul>
   {% for c in channels %}
-    <li>{{ c }}</li>
+    <li> Title: {{ c["snippet"]["title"] }} ID: {{ c["id"] }} <br> {{ c }}</li>
   {% else %}
     <li><em>Unbelievable.  No channels here so far</em>
   {% endfor %}

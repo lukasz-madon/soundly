@@ -44,14 +44,14 @@ google = oauth.remote_app(
 	access_token_url="https://accounts.google.com/o/oauth2/token",
 	authorize_url="https://accounts.google.com/o/oauth2/auth",
 )
- #@login_required
+# TODO: we need freaking madafacking refresh token cuz this last only an hour
 # Views
 @app.route("/")
 def index():
 	if "google_token" in session:
-		channels_data = google.get("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true").data
+		channels_data = google.get("https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true").data
 		print channels_data
-		channels = [c["id"] for c in channels_data["items"]]
+		channels = [c for c in channels_data["items"]]
 		return render_template("index.html", channels=channels)
 	return redirect(url_for("google_login"))
 
