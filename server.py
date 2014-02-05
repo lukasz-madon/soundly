@@ -14,9 +14,8 @@ from models import db, User, Role
 app = Flask(__name__)
 app.config.from_pyfile("settings.py")
 db.init_app(app)
-# See the simplekv documentation for details
+
 store = DictStore()
-# This will replace the app's session handling
 KVSessionExtension(store, app)
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -36,7 +35,8 @@ google = oauth.remote_app(
 	consumer_key=app.config["GOOGLE_CLIENT_ID"],
 	consumer_secret=app.config["GOOGLE_CLIENT_SECRET"],
 	request_token_params={
-		"scope": app.config["GOOGLE_API_SCOPE"]
+		"scope": app.config["GOOGLE_API_SCOPE"],
+		"access_type":"offline"
 	},
 	base_url="https://www.googleapis.com/oauth2/v1/",
 	request_token_url=None,
