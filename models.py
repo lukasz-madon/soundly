@@ -29,3 +29,4 @@ class User(db.Model, UserMixin):
     profile_url = db.Column(db.String(512))
     image_url = db.Column(db.String(512))
     created_on = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    refresh_token = db.Column(db.String(64))

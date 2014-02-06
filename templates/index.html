@@ -3,17 +3,31 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  <h1>Index</h1>
-  <p>
-    Welcome on my awesome homepage.
-  </p>
-  <button class="btn btn-default">Click me</button>
-  <h2>Youtube channels </h2>
-   <ul>
-  {% for c in channels %}
-    <li> Title: {{ c["snippet"]["title"] }} ID: {{ c["id"] }} <br> {{ c }}</li>
-  {% else %}
-    <li><em>Unbelievable.  No channels here so far</em>
-  {% endfor %}
-  </ul>
+  <div class="row">
+    <div class="col-lg-4">
+      <h2>1. Choose your channels </h2>
+       <ul class="list-unstyled">
+      {% for c in channels %}
+      <blockquote>
+        <img src="{{ c["snippet"]["thumbnails"]["default"]["url"] }}">
+        <li> <p> {{ c["snippet"]["title"] }} </p></li>
+      {% else %}
+        <li><em>Unbelievable.  No channels here so far</em>
+      {% endfor %}
+      </ul>
+      </blockquote>
+    </div>
+    <div class="col-lg-4">
+      <h2>2. Pick Music</h2>
+      <ul class="list-unstyled">
+        <li><i class="fa fa-play"></i> music 1</li>
+        <li><i class="fa fa-play"></i> music 2</li>
+        <li><i class="fa fa-play"></i> music 3</li>
+      </ul>
+    </div>
+    <div class="col-lg-4">
+      <h2>3. Add Video</h2>
+      <button class="btn btn-default">Upload video</button>
+    </div>
+  </div>
 {% endblock %}

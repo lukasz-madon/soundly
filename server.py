@@ -1,4 +1,5 @@
 import os
+import string
 
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -6,11 +7,12 @@ from flask.ext.security import Security, login_required, SQLAlchemyUserDatastore
 from flask_oauthlib.client import OAuth
 from flaskext.kvsession import KVSessionExtension
 from simplekv.memory import DictStore
+from random import SystemRandom
 
 
 from models import db, User, Role
 
-
+rand = SystemRandom()
 app = Flask(__name__)
 app.config.from_pyfile("settings.py")
 db.init_app(app)
@@ -58,7 +60,9 @@ def index():
 
 @app.route("/login/google")
 def google_login():
-	return google.authorize(callback=url_for("authorized", _external=True))
+	# CSRF
+	session["state"] = "".join(rand.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+	return google.authorize(callback=url_for("authorized", _external=True), state=session["state"])
 
 
 @app.route("/login/google/oauthcallback")
@@ -70,6 +74,10 @@ def authorized(resp):
 			request.args["error_description"]
 		)
 	print resp
+	# CSRF
+	if request.args["state"] != session["state"]:
+		abort(400)
+	del session["state"]
 	session["google_token"] = (resp["access_token"], "")
 	data = google.get("userinfo").data
 	email = data["email"]
@@ -79,6 +87,7 @@ def authorized(resp):
 		user.google_user_id = data["id"]
 		user.profile_url = data.get("profile_url", "")
 		user.image_url = data.get("image_url", "")
+		user.refresh_token = data.get("refresh_token", "")
 		db.session.commit()
 	return redirect(url_for("index"))
 
