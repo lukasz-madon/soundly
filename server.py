@@ -1,13 +1,19 @@
 import os
 import string
+from random import SystemRandom
 
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, login_required, SQLAlchemyUserDatastore
-from flask_oauthlib.client import OAuth
 from flaskext.kvsession import KVSessionExtension
+
 from simplekv.memory import DictStore
-from random import SystemRandom
+import httplib2
+from apiclient.discovery import build
+from oauth2client.client import OAuth2WebServerFlow
+from oauth2client.client import AccessTokenRefreshError
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
 
 
 from models import db, User, Role
@@ -23,7 +29,6 @@ KVSessionExtension(store, app)
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
 
-oauth = OAuth(app)
 
 if os.environ.get("HEROKU") is not None:
   import logging
@@ -32,28 +37,21 @@ if os.environ.get("HEROKU") is not None:
   app.logger.setLevel(logging.INFO)
   app.logger.info("starting app")
 
-google = oauth.remote_app(
-	"google",
-	consumer_key=app.config["GOOGLE_CLIENT_ID"],
-	consumer_secret=app.config["GOOGLE_CLIENT_SECRET"],
-	request_token_params={
-		"scope": app.config["GOOGLE_API_SCOPE"],
-		"access_type":"offline"
-	},
-	base_url="https://www.googleapis.com/oauth2/v1/",
-	request_token_url=None,
-	access_token_method="POST",
-	access_token_url="https://accounts.google.com/o/oauth2/token",
-	authorize_url="https://accounts.google.com/o/oauth2/auth",
-)
+flow = OAuth2WebServerFlow(client_id=app.config["GOOGLE_CLIENT_ID"],
+						   client_secret=app.config["GOOGLE_CLIENT_SECRET"],
+						   scope=app.config["GOOGLE_API_SCOPE"])
+user_info_service = build("oauth2", "v2")
+youtube_service = build("youtube", "v3")
+						   
 # TODO: we need freaking madafacking refresh token cuz this last only an hour
 # Views
 @app.route("/")
 def index():
-	if "google_token" in session:
-		channels_data = google.get("https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true").data
-		print channels_data
-		channels = [c for c in channels_data["items"]]
+	if "credentials" in session:
+		credentials = session["credentials"]
+		http = credentials.authorize(httplib2.Http())
+		result = youtube_service.channels().list(part="snippet", mine="true").execute(http=http)
+		channels = [c for c in result["items"]]
 		return render_template("index.html", channels=channels)
 	return redirect(url_for("google_login"))
 
@@ -62,38 +60,37 @@ def index():
 def google_login():
 	# CSRF
 	session["state"] = "".join(rand.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
-	return google.authorize(callback=url_for("authorized", _external=True), state=session["state"])
+	flow.redirect_uri=url_for("authorized", _external=True)
+	auth_uri = flow.step1_get_authorize_url()
+	return redirect(auth_uri + "&state=%s" % (session["state"],))
 
 
 @app.route("/login/google/oauthcallback")
-@google.authorized_handler
-def authorized(resp):
-	if resp is None:
-		return "Access denied: reason=%s error=%s" % (
-			request.args["error_reason"],
-			request.args["error_description"]
-		)
-	print resp
+def authorized():
 	# CSRF
 	if request.args["state"] != session["state"]:
 		abort(400)
 	del session["state"]
-	session["google_token"] = (resp["access_token"], "")
-	data = google.get("userinfo").data
-	email = data["email"]
-	user = user_datastore.find_user(email=email)
+	code = request.args.get("code")
+	if not code:
+		abort(403)
+	try:
+		credentials = flow.step2_exchange(code)
+	except FlowExchangeError:
+		abort(400)
+	g_user_id = credentials.id_token['sub']
+	user = user_datastore.find_user(google_user_id=g_user_id)
 	if not user:
-		user = user_datastore.create_user(email=email, active=True)
-		user.google_user_id = data["id"]
-		user.profile_url = data.get("profile_url", "")
-		user.image_url = data.get("image_url", "")
-		user.refresh_token = data.get("refresh_token", "")
+		http = credentials.authorize(httplib2.Http())
+		result = user_info_service.userinfo().get().execute(http=http)
+		user = user_datastore.create_user(email=result["email"], active=True)
+		user.google_user_id = g_user_id
+		user.profile_url = result.get("link")
+		user.image_url = result.get("picture")
+		user.refresh_token = credentials.refresh_token
 		db.session.commit()
+	session["credentials"] = credentials
 	return redirect(url_for("index"))
-
-@google.tokengetter
-def get_google_oauth_token():
-	return session.get("google_token")
 
 
 if __name__ == "__main__":
