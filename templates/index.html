@@ -1,33 +1,39 @@
 {% extends "base.html" %}
 {% block head %}
   {{ super() }}
+  <link rel="stylesheet" type="text/css" href="static/inlineplayer.css" />
+  <link rel="stylesheet" type="text/css" href="static/flashblock.css" />
 {% endblock %}
 {% block content %}
   <div class="row">
     <div class="col-lg-4">
       <h2>Your channel </h2>
        <ul class="list-unstyled">
-      {% for c in channels %}
       <blockquote>
-        <img src="{{ c["snippet"]["thumbnails"]["default"]["url"] }}">
-        <li> <p> {{ c["snippet"]["title"] }} </p></li>
-      {% else %}
-        <li><em>Unbelievable.  No channels here so far</em>
-      {% endfor %}
+        <img src="{{ channels["snippet"]["thumbnails"]["default"]["url"] }}">
+        <li> <p> {{ channels["snippet"]["title"] }} </p></li>
       </ul>
       </blockquote>
     </div>
     <div class="col-lg-4">
       <h2>1. Pick Music</h2>
-      <ul class="list-unstyled">
-        <li><i class="fa fa-play"></i> music 1</li>
-        <li><i class="fa fa-play"></i> music 2</li>
-        <li><i class="fa fa-play"></i> music 3</li>
-      </ul>
+         <div id="sm2-container">
+          <!-- SM2 flash goes here -->
+         </div>
+         <ul class="graphic">
+          <li><a href="http://test.co.s3.amazonaws.com/jingiel_bacterion_v2.mp3">Jingiel bacterion</a></li>
+          <li><a href="http://www.freshly-ground.com/misc/music/carl-3-barlp.mp3">Barrlping with Carl (featureblend.com)</a></li>
+          <li><a href="http://www.freshly-ground.com/data/audio/binaural/Mak.mp3">Angry cow sound?</a></li>
+          <li><a href="http://www.freshly-ground.com/data/audio/binaural/Things that open, close and roll.mp3">Things that open, close and roll</a></li>
+          <li><a href="http://www.freshly-ground.com/misc/music/20060826%20-%20Armstrong.mp3">20060826 - Armstrong</a></li>
+          <li><a href="http://freshly-ground.com/data/video/Rain%20on%20Car%20Roof.aac">Rain On Car Roof (AAC Audio)</a></li>
+         </ul>
     </div>
     <div class="col-lg-4">
       <h2>2. Add Video</h2>
       <button class="btn btn-default">Upload video</button>
     </div>
   </div>
+  <script type="text/javascript" src="static/soundmanager2.js"></script>
+  <script type="text/javascript" src="static/inlineplayer.js"></script
 {% endblock %}

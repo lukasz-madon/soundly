@@ -51,8 +51,7 @@ def index():
 		credentials = session["credentials"]
 		http = credentials.authorize(httplib2.Http())
 		result = youtube_service.channels().list(part="snippet", mine="true").execute(http=http)
-		channels = [c for c in result["items"]]
-		return render_template("index.html", channels=channels)
+		return render_template("index.html", channels=result["items"][0])
 	return redirect(url_for("google_login"))
 
 
@@ -89,6 +88,7 @@ def authorized():
 		user.image_url = result.get("picture")
 		user.refresh_token = credentials.refresh_token
 		db.session.commit()
+	credentials.refresh_token = user.refresh_token
 	session["credentials"] = credentials
 	return redirect(url_for("index"))
 
