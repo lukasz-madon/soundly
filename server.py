@@ -88,6 +88,7 @@ def authorized():
 		user.image_url = result.get("picture")
 		user.refresh_token = credentials.refresh_token
 		db.session.commit()
+	# refresh token is send only once, need to for auto token refreshing
 	credentials.refresh_token = user.refresh_token
 	session["credentials"] = credentials
 	return redirect(url_for("index"))
