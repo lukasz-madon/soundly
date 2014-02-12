@@ -43,7 +43,6 @@ flow = OAuth2WebServerFlow(client_id=app.config["GOOGLE_CLIENT_ID"],
 user_info_service = build("oauth2", "v2")
 youtube_service = build("youtube", "v3")
 						   
-# TODO: we need freaking madafacking refresh token cuz this last only an hour
 # Views
 @app.route("/")
 def index():

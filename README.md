@@ -10,8 +10,6 @@ All python dependencies are specified in requirements.txt and managed with pip u
 1. follow instructions (/usr/local/opt/postgresql/bin/createuser -s postgres maybe needed to add one superuser)
 1. create user dbuser(P@ssw0rd) using superuser postgres
 1. http://stackoverflow.com/questions/13784340/how-to-run-postgres-locally
-1. export db uri (add to ~/.bash_profile)
-  `export DATABASE_URL='postgresql+psycopg2://dbuser:P@ssw0rd@localhost/localdb'`
 
 ### Config
 
