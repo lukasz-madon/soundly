@@ -31,7 +31,10 @@
     </div>
     <div class="col-lg-4">
       <h2>2. Add Video</h2>
-      <button class="btn btn-default">Upload video</button>
+      <form action="upload-video" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input class="btn btn-default" type="submit" value="Upload">
+      </form>
     </div>
   </div>
   <script type="text/javascript" src="static/soundmanager2.js"></script>

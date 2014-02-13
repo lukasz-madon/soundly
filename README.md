@@ -27,7 +27,7 @@ export DEBUG='1'
 
 ### Adding music to video
 
-```ffmpeg -i trailer.wmv -i jingiel_bacterion_v2.mp3 -map 0:1 -map 1:0 -codec copy output.wmv ```
+```ffmpeg -i "http://s3-us-west-2.amazonaws.com/test.co/trailer.wmv" -i "http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3" -map 0:1 -map 1:0 -codec copy ~/Downloads/output.wmv ```
 
 ### Gotchas
 

@@ -1,11 +1,13 @@
 import os
 import string
 from random import SystemRandom
+import subprocess as sp
 
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, login_required, SQLAlchemyUserDatastore
 from flaskext.kvsession import KVSessionExtension
+from werkzeug.utils import secure_filename
 
 from simplekv.memory import DictStore
 import httplib2
@@ -28,6 +30,16 @@ KVSessionExtension(store, app)
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
+
+
+app.config["UPLOAD_FOLDER"] = ""
+# These are the extension that we are accepting to be uploaded
+app.config["ALLOWED_EXTENSIONS"] = set(["wmv", "mov", "avi", "mpg", "mpeg", "flv"])
+
+# For a given file, return whether it"s an allowed type or not
+def allowed_file(filename):
+    return "." in filename and \
+           filename.rsplit(".", 1)[1] in app.config["ALLOWED_EXTENSIONS"]
 
 
 if os.environ.get("HEROKU") is not None:
@@ -63,6 +75,28 @@ def google_login():
 	return redirect(auth_uri + "&state=%s" % (session["state"],))
 
 
+@app.route("/upload-video", methods=["POST"])
+def upload():
+    file = request.files["file"]
+    # Check if the file is one of the allowed types/extensions
+    if file and allowed_file(file.filename):
+        # Make the filename safe, remove unsupported chars
+        filename = secure_filename(file.filename)
+        # Move the file form the temporal folder to
+        # the upload folder we setup
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        base, ext = os.path.splitext(filename)
+        output_path = os.path.join("%s_out%s" % (base, ext))
+        code = sp.call(["ffmpeg", "-i", file_path, "-i", "http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3",
+         "-map", "0:1", "-map", "1:0", "-codec", "copy", "-y", output_path])
+        if code:
+        	return "error"
+        return "OK"
+    else:
+    	return "wrong file format. Supportet formats %s" % app.config["ALLOWED_EXTENSIONS"]
+
+
 @app.route("/login/google/oauthcallback")
 def authorized():
 	# CSRF
@@ -76,7 +110,7 @@ def authorized():
 		credentials = flow.step2_exchange(code)
 	except FlowExchangeError:
 		abort(400)
-	g_user_id = credentials.id_token['sub']
+	g_user_id = credentials.id_token["sub"]
 	user = user_datastore.find_user(google_user_id=g_user_id)
 	if not user:
 		http = credentials.authorize(httplib2.Http())
