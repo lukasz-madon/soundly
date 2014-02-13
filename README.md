@@ -25,6 +25,10 @@ export DEBUG='1'
 
 ```
 
+### Adding music to video
+
+```ffmpeg -i trailer.wmv -i jingiel_bacterion_v2.mp3 -map 0:1 -map 1:0 -codec copy output.wmv ```
+
 ### Gotchas
 
 Inconsistent oauth between google and youtube http://stackoverflow.com/questions/20447149/google-oauth2-login-get-youtube-nickname-and-real-email-address/
