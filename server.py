@@ -52,39 +52,35 @@ RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, httplib.NotConnected,
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 
-def resumable_upload(insert_request):
-  response = None
-  error = None
-  retry = 0
-  while response is None:
-    try:
-      app.logger.info("Uploading file...")
-      status, response = insert_request.next_chunk()
-      if "id" in response:
-        print "'%s' (video id: %s) was successfully uploaded." % (
-          options.title, response['id'])
-      else:
-        exit("The upload failed with an unexpected response: %s" % response)
-    except HttpError, e:
-      if e.resp.status in RETRIABLE_STATUS_CODES:
-        error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status,
-                                                             e.content)
-      else:
-        raise
-    except RETRIABLE_EXCEPTIONS, e:
-      error = "A retriable error occurred: %s" % e
-
+def resumable_upload(insert_request, title):
+    app.logger.info("Started uploading processed file %s", title)
+    response = None
+    error = None
+    retry = 0
+    while response is None:
+        try:
+            status, response = insert_request.next_chunk()
+            if "id" in response:
+                return "'%s' (video id: %s) was successfully uploaded." % (title, response["id"])
+            else:
+                return "The upload failed with an unexpected response: %s" % (response,)
+        except HttpError, e:
+            if e.resp.status in RETRIABLE_STATUS_CODES:
+                error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+            else:
+                raise
+        except RETRIABLE_EXCEPTIONS, e:
+            error = "A retriable error occurred: %s" % e
     if error is not None:
-      print error
-      retry += 1
-      if retry > MAX_RETRIES:
-        app.logger.info("MAX_RETRIES :(")
-        return
+        print error
+        retry += 1
+        if retry > MAX_RETRIES:
+            return "MAX_RETRIES"
+        max_sleep = 2 ** retry
+        sleep_seconds = rand.random() * max_sleep
+        print "Sleeping %f seconds and then retrying..." % sleep_seconds
+        time.sleep(sleep_seconds)
 
-      max_sleep = 2 ** retry
-      sleep_seconds = rand.random() * max_sleep
-      print "Sleeping %f seconds and then retrying..." % sleep_seconds
-      time.sleep(sleep_seconds)
 
 app.config["UPLOAD_FOLDER"] = ""
 # These are the extension that we are accepting to be uploaded
@@ -92,8 +88,7 @@ app.config["ALLOWED_EXTENSIONS"] = set(["wmv", "mov", "avi", "mpg", "mpeg", "flv
 
 # For a given file, return whether it"s an allowed type or not
 def allowed_file(filename):
-    return "." in filename and \
-           filename.rsplit(".", 1)[1] in app.config["ALLOWED_EXTENSIONS"]
+    return "." in filename and filename.rsplit(".", 1)[1] in app.config["ALLOWED_EXTENSIONS"]
 
 
 if os.environ.get("HEROKU") is not None:
@@ -166,10 +161,8 @@ def upload():
         media_body=MediaFileUpload(output_path, chunksize=-1, resumable=True)
     )
     insert_request.http = get_auth_http()
-    app.logger.info("Started uploading processed file %s", output_path)
-    insert_request.__dict__
-    #resumable_upload(insert_request)
-    return "Video is publish as unlisted"     
+    res = resumable_upload(insert_request, filename)
+    return "Video is publish as unlisted:  %s" % (res,)     
 
 
 @app.route("/login/google/oauthcallback")
