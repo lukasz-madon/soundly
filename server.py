@@ -1,6 +1,5 @@
-import os
-import string
-import time
+import os, string, time, base64, hmac, urllib
+from hashlib import sha1
 from random import SystemRandom
 import subprocess as sp
 
@@ -61,7 +60,7 @@ def resumable_upload(insert_request, title):
         try:
             status, response = insert_request.next_chunk()
             if "id" in response:
-                return "'%s' (video id: %s) was successfully uploaded." % (title, response["id"])
+                return "%s (video id: %s) was successfully uploaded." % (title, response["id"])
             else:
                 return "The upload failed with an unexpected response: %s" % (response,)
         except HttpError, e:
@@ -124,6 +123,31 @@ def google_login():
     flow.redirect_uri=url_for("authorized", _external=True)
     auth_uri = flow.step1_get_authorize_url()
     return redirect(auth_uri + "&state=%s" % (session["state"],))
+
+
+@app.route("/sign-s3/")
+def sign_s3():
+    AWS_ACCESS_KEY = app.config["AWS_ACCESS_KEY_ID"]
+    AWS_SECRET_KEY = app.config["AWS_SECRET_ACCESS_KEY"]
+    S3_BUCKET = app.config["S3_BUCKET"]
+
+    object_name = request.args.get("s3_object_name")
+    mime_type = request.args.get("s3_object_type")
+
+    expires = int(time.time()+10)
+    amz_headers = "x-amz-acl:public-read"
+
+    put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
+
+    signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+    signature = urllib.quote_plus(signature.strip())
+
+    url = "https://%s.s3.amazonaws.com/%s" % (S3_BUCKET, object_name)
+
+    return jsonify({
+        "signed_request": "%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s" % (url, AWS_ACCESS_KEY, expires, signature),
+         "url": url
+      })
 
 
 @app.route("/upload-video", methods=["POST"])

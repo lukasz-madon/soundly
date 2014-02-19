@@ -24,6 +24,7 @@ export FLASK_SECRET_KEY='the quick brown fox jumps over the lazy dog'
 export DEBUG='1'
 
 ```
+Add config for AWS and Google API
 
 ### Adding music to video
 
