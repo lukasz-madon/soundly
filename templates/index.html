@@ -44,13 +44,20 @@
 <script type="text/javascript">
   function s3_upload(){
       var s3upload = new S3Upload({
+          s3_object_name: '{{ channels["id"] }}' + '-',
           file_dom_selector: 'file',
           s3_sign_put_url: '/sign-s3/',
           onProgress: function(percent, message) {
               $('#status').html('Upload progress: ' + percent + '% ' + message);
           },
           onFinishS3Put: function(public_url) {
-              $('#status').html('Upload completed. Uploaded to: '+ public_url);
+              $('#status').html('Upload completed');
+              var data = { video_url: public_url, music_url: 'http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3'};
+              $.ajax('process-video', {
+                  data : JSON.stringify(data),
+                  contentType : 'application/json',
+                  type : 'POST'
+                });
           },
           onError: function(status) {
               $('#status').html('Upload error: ' + status);

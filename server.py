@@ -1,7 +1,9 @@
 import os, string, time, base64, hmac, urllib
+import subprocess as sp
 from hashlib import sha1
 from random import SystemRandom
-import subprocess as sp
+from urlparse import urlsplit
+
 
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -81,7 +83,6 @@ def resumable_upload(insert_request, title):
         time.sleep(sleep_seconds)
 
 
-app.config["UPLOAD_FOLDER"] = ""
 # These are the extension that we are accepting to be uploaded
 app.config["ALLOWED_EXTENSIONS"] = set(["wmv", "mov", "avi", "mpg", "mpeg", "flv"])
 
@@ -138,7 +139,7 @@ def sign_s3():
     amz_headers = "x-amz-acl:public-read"
 
     put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
-
+    app.logger.info("signing for %s", put_request)
     signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
     signature = urllib.quote_plus(signature.strip())
 
@@ -150,43 +151,48 @@ def sign_s3():
       })
 
 
-@app.route("/upload-video", methods=["POST"])
-def upload():
-    file = request.files["file"]
+@app.route("/process-video", methods=["POST"])
+def process_video():
+    json = request.json
+    if not json:
+        abort(400)
+    #TODO: solve https problem for ffmpeg (ffmpeg -protocols). Tried --enable-openssl, --enable-gpl
+    # possible solution is to create custom buildpack and compile with-openssl or diff ssl lib. 
+    video_url = request.json["video_url"].replace("https", "http", 1)  # temp fix
+    music_url = request.json["music_url"]
+    video_path = os.path.basename(urlsplit(video_url)[2])
+    base, ext = os.path.splitext(video_path)
+    title = base.split("-")[1]
+    output_video = secure_filename(video_path)
     # Check if the file is one of the allowed types/extensions
-    if not file or not allowed_file(file.filename):
-        return "wrong file format. Supportet formats %s" % app.config["ALLOWED_EXTENSIONS"]
-    # Make the filename safe, remove unsupported chars
-    filename = secure_filename(file.filename)
-    # Move the file form the temporal folder to
-    # the upload folder we setup
-    app.logger.info("Uploaded %s", filename)
-    file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    file.save(file_path)
-    base, ext = os.path.splitext(filename)
-    output_path = os.path.join("%s_out%s" % (base, ext))
-    code = sp.call(["ffmpeg", "-i", file_path, "-i", "http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3",
-     "-map", "0:1", "-map", "1:0", "-codec", "copy", "-y", output_path])
+    # if not file or not allowed_file(file.filename):
+    #     return jsonify({"error": "wrong file format. Supported formats %s" % app.config["ALLOWED_EXTENSIONS"]}), 400
+    # TODO check bad chars, never trust user input
+    app.logger.info("processing %s", request.json)
+    # check how to hande all corner cases for input audio streams
+    # code = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1", 
+    #               "-map", "1:0", "-codec", "copy", "-y", output_video])
+    code = sp.call(["ffmpeg", "-i", music_url, "-i", video_url, output_video])
     if code:
-        return "error"
+        return jsonify({"error": "cannot encode the file"}), 400
     insert_request = youtube_service.videos().insert(
         part="snippet,status",
         body=dict(
           snippet=dict(
-            title=filename,
-            description="Trailer. Music provided by soundly.io",
-            tags=["soundly"],
-            categoryId="20" # seems to be gaming
+            title=title,
+            description="Music provided by http://soundly.io",
+            tags=["trailer","soundly.io"],
+            categoryId="20" # seems to be gaming for now
           ),
           status = dict(
             privacyStatus="unlisted"
           )
         ),
-        media_body=MediaFileUpload(output_path, chunksize=-1, resumable=True)
+        media_body=MediaFileUpload(output_video, chunksize=-1, resumable=True)
     )
     insert_request.http = get_auth_http()
-    res = resumable_upload(insert_request, filename)
-    return "Video is publish as unlisted:  %s" % (res,)     
+    res = resumable_upload(insert_request, title)
+    return jsonify({ "message": res })    
 
 
 @app.route("/login/google/oauthcallback")
