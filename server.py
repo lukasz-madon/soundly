@@ -54,7 +54,7 @@ RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, httplib.NotConnected,
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 
 def resumable_upload(insert_request, title):
-    app.logger.info("Started uploading processed file %s", title)
+    app.logger.info("Started uploading: %s", title)
     response = None
     error = None
     retry = 0
@@ -135,7 +135,7 @@ def sign_s3():
     object_name = request.args.get("s3_object_name")
     mime_type = request.args.get("s3_object_type")
 
-    expires = int(time.time()+10)
+    expires = int(time.time()+10)  # TODO maybe longer exp time?
     amz_headers = "x-amz-acl:public-read"
 
     put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
@@ -172,7 +172,7 @@ def process_video():
     # check how to hande all corner cases for input audio streams
     # code = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1", 
     #               "-map", "1:0", "-codec", "copy", "-y", output_video])
-    code = sp.call(["ffmpeg", "-i", music_url, "-i", video_url, output_video])
+    code = sp.call(["ffmpeg", "-i", music_url, "-i", video_url, "-codec", "copy", "-y", output_video])
     if code:
         return jsonify({"error": "cannot encode the file"}), 400
     insert_request = youtube_service.videos().insert(
