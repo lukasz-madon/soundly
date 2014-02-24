@@ -10,6 +10,7 @@ All python dependencies are specified in requirements.txt and managed with pip u
 1. follow instructions (/usr/local/opt/postgresql/bin/createuser -s postgres maybe needed to add one superuser)
 1. create user dbuser(P@ssw0rd) using superuser postgres
 1. http://stackoverflow.com/questions/13784340/how-to-run-postgres-locally
+1. brew install redis
 
 ### Config
 
@@ -28,7 +29,7 @@ Add config for AWS and Google API
 
 ### Adding music to video
 
-```ffmpeg -i "http://s3-us-west-2.amazonaws.com/test.co/trailer.wmv" -i "http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3" -map 0:1 -map 1:0 -codec copy ~/Downloads/output.wmv ```
+```ffmpeg -i "http://s3-us-west-2.amazonaws.com/test.co/trailer.wmv" -i "http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3" -codec copy -y ~/Downloads/output.wmv ```
 
 ### Gotchas
 

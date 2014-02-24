@@ -25,5 +25,11 @@ oauth2client==1.2
 oauthlib==0.6.1
 passlib==1.6.2
 psycopg2==2.5.2
+python-dateutil==2.2
+pytz==2013.9
+redis==2.9.1
+rq==0.3.13
 simplekv==0.6
+six==1.5.2
+times==0.6.2
 wsgiref==0.1.2

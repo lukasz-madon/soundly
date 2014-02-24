@@ -1,29 +1,22 @@
 import os, string, time, base64, hmac, urllib
-import subprocess as sp
 from hashlib import sha1
 from random import SystemRandom
-from urlparse import urlsplit
-
 
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, login_required, SQLAlchemyUserDatastore
 from flaskext.kvsession import KVSessionExtension
-from werkzeug.utils import secure_filename
-
 from simplekv.memory import DictStore
 import httplib2
-import httplib
 from apiclient.discovery import build
-from apiclient.http import MediaFileUpload
-from apiclient.errors import HttpError
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.client import AccessTokenRefreshError
-from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from rq import Queue
 
-
+from worker import conn
 from models import db, User, Role
+from youtube_utils import process_video_request, youtube_service
 
 rand = SystemRandom()
 app = Flask(__name__)
@@ -36,52 +29,7 @@ KVSessionExtension(store, app)
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
 
-# Explicitly tell the underlying HTTP transport library not to retry, since
-# we are handling retry logic ourselves.
-httplib2.RETRIES = 1
-
-# Maximum number of times to retry before giving up.
-MAX_RETRIES = 10
-
-# Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, httplib.NotConnected,
-  httplib.IncompleteRead, httplib.ImproperConnectionState,
-  httplib.CannotSendRequest, httplib.CannotSendHeader,
-  httplib.ResponseNotReady, httplib.BadStatusLine)
-
-# Always retry when an apiclient.errors.HttpError with one of these status
-# codes is raised.
-RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
-
-def resumable_upload(insert_request, title):
-    app.logger.info("Started uploading: %s", title)
-    response = None
-    error = None
-    retry = 0
-    while response is None:
-        try:
-            status, response = insert_request.next_chunk()
-            if "id" in response:
-                return "%s (video id: %s) was successfully uploaded." % (title, response["id"])
-            else:
-                return "The upload failed with an unexpected response: %s" % (response,)
-        except HttpError, e:
-            if e.resp.status in RETRIABLE_STATUS_CODES:
-                error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
-            else:
-                raise
-        except RETRIABLE_EXCEPTIONS, e:
-            error = "A retriable error occurred: %s" % e
-    if error is not None:
-        print error
-        retry += 1
-        if retry > MAX_RETRIES:
-            return "MAX_RETRIES"
-        max_sleep = 2 ** retry
-        sleep_seconds = rand.random() * max_sleep
-        print "Sleeping %f seconds and then retrying..." % sleep_seconds
-        time.sleep(sleep_seconds)
-
+worker_queue = Queue(connection=conn)
 
 # These are the extension that we are accepting to be uploaded
 app.config["ALLOWED_EXTENSIONS"] = set(["wmv", "mov", "avi", "mpg", "mpeg", "flv"])
@@ -102,7 +50,6 @@ flow = OAuth2WebServerFlow(client_id=app.config["GOOGLE_CLIENT_ID"],
                            client_secret=app.config["GOOGLE_CLIENT_SECRET"],
                            scope=app.config["GOOGLE_API_SCOPE"])
 user_info_service = build("oauth2", "v2")
-youtube_service = build("youtube", "v3")
     
 def get_auth_http():
     credentials = session["credentials"]
@@ -160,39 +107,14 @@ def process_video():
     # possible solution is to create custom buildpack and compile with-openssl or diff ssl lib. 
     video_url = request.json["video_url"].replace("https", "http", 1)  # temp fix
     music_url = request.json["music_url"]
-    video_path = os.path.basename(urlsplit(video_url)[2])
-    base, ext = os.path.splitext(video_path)
-    title = base.split("-")[1]
-    output_video = secure_filename(video_path)
-    # Check if the file is one of the allowed types/extensions
+    app.logger.info("processing request: %s", request.json)
+    worker_queue.enqueue(process_video_request, session["credentials"], video_url, music_url)
+     # Check if the file is one of the allowed types/extensions
     # if not file or not allowed_file(file.filename):
     #     return jsonify({"error": "wrong file format. Supported formats %s" % app.config["ALLOWED_EXTENSIONS"]}), 400
     # TODO check bad chars, never trust user input
-    app.logger.info("processing %s", request.json)
-    # check how to hande all corner cases for input audio streams
-    # code = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1", 
-    #               "-map", "1:0", "-codec", "copy", "-y", output_video])
-    code = sp.call(["ffmpeg", "-i", music_url, "-i", video_url, "-codec", "copy", "-y", output_video])
-    if code:
-        return jsonify({"error": "cannot encode the file"}), 400
-    insert_request = youtube_service.videos().insert(
-        part="snippet,status",
-        body=dict(
-          snippet=dict(
-            title=title,
-            description="Music provided by http://soundly.io",
-            tags=["trailer","soundly.io"],
-            categoryId="20" # seems to be gaming for now
-          ),
-          status = dict(
-            privacyStatus="unlisted"
-          )
-        ),
-        media_body=MediaFileUpload(output_video, chunksize=-1, resumable=True)
-    )
-    insert_request.http = get_auth_http()
-    res = resumable_upload(insert_request, title)
-    return jsonify({ "message": res })    
+
+    return jsonify({ "message": "background job is on!" })    
 
 
 @app.route("/login/google/oauthcallback")
