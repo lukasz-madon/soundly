@@ -27,7 +27,7 @@ store = DictStore()
 KVSessionExtension(store, app)
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
+# security = Security(app, user_datastore)
 
 worker_queue = Queue(connection=conn)
 
@@ -73,6 +73,42 @@ def google_login():
     return redirect(auth_uri + "&state=%s" % (session["state"],))
 
 
+@app.route("/logout")
+def logout():
+    del session["credentials"]
+    return redirect(url_for("index"))
+
+
+@app.route("/login/google/oauthcallback")
+def authorized():
+    # CSRF
+    if request.args["state"] != session["state"]:
+        abort(400)
+    del session["state"]
+    code = request.args.get("code")
+    if not code:
+        abort(403)
+    try:
+        credentials = flow.step2_exchange(code)
+    except FlowExchangeError:
+        abort(400)
+    g_user_id = credentials.id_token["sub"]
+    user = user_datastore.find_user(google_user_id=g_user_id)
+    if not user:
+        http = credentials.authorize(httplib2.Http())
+        result = user_info_service.userinfo().get().execute(http=http)
+        user = user_datastore.create_user(email=result["email"], active=True)
+        user.google_user_id = g_user_id
+        user.profile_url = result.get("link")
+        user.image_url = result.get("picture")
+        user.refresh_token = credentials.refresh_token
+        db.session.commit()
+    # refresh token is send only once, need to for auto token refreshing
+    credentials.refresh_token = user.refresh_token
+    session["credentials"] = credentials
+    return redirect(url_for("index"))
+
+
 @app.route("/sign-s3/")
 def sign_s3():
     AWS_ACCESS_KEY = app.config["AWS_ACCESS_KEY_ID"]
@@ -82,7 +118,7 @@ def sign_s3():
     object_name = request.args.get("s3_object_name")
     mime_type = request.args.get("s3_object_type")
 
-    expires = int(time.time()+10)  # TODO maybe longer exp time?
+    expires = int(time.time()) + 15 * 60  # 15min TODO check if that could be issue with net::ERR_CONNECTION_RESET
     amz_headers = "x-amz-acl:public-read"
 
     put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
@@ -115,36 +151,6 @@ def process_video():
     # TODO check bad chars, never trust user input
 
     return jsonify({ "message": "background job is on!" })    
-
-
-@app.route("/login/google/oauthcallback")
-def authorized():
-    # CSRF
-    if request.args["state"] != session["state"]:
-        abort(400)
-    del session["state"]
-    code = request.args.get("code")
-    if not code:
-        abort(403)
-    try:
-        credentials = flow.step2_exchange(code)
-    except FlowExchangeError:
-        abort(400)
-    g_user_id = credentials.id_token["sub"]
-    user = user_datastore.find_user(google_user_id=g_user_id)
-    if not user:
-        http = credentials.authorize(httplib2.Http())
-        result = user_info_service.userinfo().get().execute(http=http)
-        user = user_datastore.create_user(email=result["email"], active=True)
-        user.google_user_id = g_user_id
-        user.profile_url = result.get("link")
-        user.image_url = result.get("picture")
-        user.refresh_token = credentials.refresh_token
-        db.session.commit()
-    # refresh token is send only once, need to for auto token refreshing
-    credentials.refresh_token = user.refresh_token
-    session["credentials"] = credentials
-    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
