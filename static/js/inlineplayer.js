@@ -24,6 +24,7 @@ function InlinePlayer() {
   this.soundsByURL = [];
   this.indexByURL = [];
   this.lastSound = null;
+  this.lastSoundTitle = null;
   this.soundCount = 0;
 
   this.config = {
@@ -193,7 +194,8 @@ function InlinePlayer() {
     }
 
     self.lastSound = thisSound; // reference for next call
-
+    self.lastSoundTitle = o.innerHTML;
+    document.getElementById('music_titile').innerHTML = self.lastSoundTitle;
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();
     } else {
@@ -237,7 +239,7 @@ var inlinePlayer = null;
 
 soundManager.setup({
   // disable or enable debug output
-  debugMode: true,
+  debugMode: false,
   // use HTML5 audio for MP3/MP4, if available
   preferFlash: false,
   useFlashBlock: true,

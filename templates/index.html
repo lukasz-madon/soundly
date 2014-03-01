@@ -6,17 +6,9 @@
 {% endblock %}
 {% block content %}
   <div class="row">
-    <div class="col-lg-4">
-      <h2>Your channel </h2>
-       <ul class="list-unstyled">
-      <blockquote>
-        <img src="{{ channels["snippet"]["thumbnails"]["default"]["url"] }}">
-        <li> <p> {{ channels["snippet"]["title"] }} </p></li>
-      </ul>
-      </blockquote>
-    </div>
-    <div class="col-lg-4">
+    <div class="col-lg-8">
       <h2>1. Pick Music</h2>
+
          <div id="sm2-container">
           <!-- SM2 flash goes here -->
          </div>
@@ -28,11 +20,15 @@
           <li><a href="http://www.freshly-ground.com/misc/music/20060826%20-%20Armstrong.mp3">20060826 - Armstrong</a></li>
           <li><a href="http://freshly-ground.com/data/video/Rain%20on%20Car%20Roof.aac">Rain On Car Roof (AAC Audio)</a></li>
          </ul>
+         <h4> Your pick : <strong><span id="music_titile"></span></strong> </h4>
+         <small>  You must choose, but choose wisely </small>
     </div>
     <div class="col-lg-4">
-      <h2>2. Add Video</h2>
+      <h2>2. Upload Video</h2>
       <input type="file" name="file" id="file">
-      <p id="status">Status</p> While you're waiting try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a>
+      <p>Any second thoughts on the music? No? Add it!</p>
+      <a class="btn btn-primary" href="#" id="add-music">Add music</a>
+      <p id="status"></p> While you're waiting try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a>
     </div>
   </div>
 {% endblock %}
@@ -42,31 +38,44 @@
 <script type="text/javascript" src="static/js/inlineplayer.js"></script>
 <script type="text/javascript" src="static/js/s3upload.js"></script>
 <script type="text/javascript">
+  var s3_video_url = null;
   function s3_upload(){
       var s3upload = new S3Upload({
           s3_object_name: '{{ channels["id"] }}' + '-',
           file_dom_selector: 'file',
           s3_sign_put_url: '/sign-s3/',
           onProgress: function(percent, message) {
-              $('#status').html('Upload progress: ' + percent + '% ' + message);
+            $('#status').html('Upload progress: ' + percent + '% ' + message);
           },
           onFinishS3Put: function(public_url) {
-              $('#status').html('Upload completed');
-              var data = { video_url: public_url, music_url: 'http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3'};
-              $.ajax('process-video', {
-                  data : JSON.stringify(data),
-                  contentType : 'application/json',
-                  type : 'POST'
-                });
+            s3_video_url = public_url;
+            $('#status').html('Upload completed');
           },
           onError: function(status) {
-              $('#status').html('Upload error: ' + status);
+            $('#status').html('Upload error: ' + status);
           }
       });
   }
 
   $().ready(function() {
-      $('#file').on("change", s3_upload);
+      $('#file').on('change', s3_upload);
+      $('#add-music').click(function(){
+        if (inlinePlayer.lastSound === null) {
+          alert('music pls');
+          return;
+        }
+        if (s3_video_url === null) {
+          alert('no video uploaded :(');
+          return;
+        }
+        var data = { video_url: s3_video_url, music_url: inlinePlayer.lastSound.url };
+        $.ajax('process-video', {
+          data : JSON.stringify(data),
+          contentType : 'application/json',
+          type : 'POST'
+        });
+        $('#status').html('Your video will be available on your channels shortly. <br> <img class="img-responsive" src="http://wearesocialmedia.gr/wp-content/uploads/2013/11/3879-animated_gif-chuck_norris-dodgeball-thumbs_up.gif">');
+      });
   });
 </script>
 {% endblock %}

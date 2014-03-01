@@ -31,11 +31,16 @@ Add config for AWS and Google API
 
 ```ffmpeg -i "http://s3-us-west-2.amazonaws.com/test.co/trailer.wmv" -i "http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3" -codec copy -y ~/Downloads/output.wmv ```
 
+### TODO
+
+1. Check s3 naming policy (remove white spaces)
+
 ### Gotchas
 
 Some users can have google oAuth but no channel or think they have a channel but it's not merge with oAuth -> don't upload 
 
 Inconsistent oauth between google and youtube http://stackoverflow.com/questions/20447149/google-oauth2-login-get-youtube-nickname-and-real-email-address/
+
 
 when logged in with gmail account
 ```
