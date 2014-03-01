@@ -34,6 +34,7 @@ Add config for AWS and Google API
 ### TODO
 
 1. Check s3 naming policy (remove white spaces)
+1. Restrict policy for app only
 
 ### Gotchas
 

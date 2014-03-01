@@ -61,11 +61,11 @@
       $('#file').on('change', s3_upload);
       $('#add-music').click(function(){
         if (inlinePlayer.lastSound === null) {
-          alert('music pls');
+          alert('First pick the best music');
           return;
         }
         if (s3_video_url === null) {
-          alert('no video uploaded :(');
+          alert('You need to upload the video first');
           return;
         }
         var data = { video_url: s3_video_url, music_url: inlinePlayer.lastSound.url };
