@@ -1,7 +1,8 @@
-import os, string, time, base64, hmac, urllib
+import os, string, time, base64, hmac
 from hashlib import sha1
 from random import SystemRandom
 
+from werkzeug.urls import url_fix
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, login_required, SQLAlchemyUserDatastore
@@ -115,16 +116,16 @@ def sign_s3():
     AWS_SECRET_KEY = app.config["AWS_SECRET_ACCESS_KEY"]
     S3_BUCKET = app.config["S3_BUCKET"]
 
-    object_name = request.args.get("s3_object_name")
+    object_name = url_fix(request.args.get("s3_object_name"))
     mime_type = request.args.get("s3_object_type")
 
-    expires = int(time.time()) + 15 * 60  # 15min TODO check if that could be issue with net::ERR_CONNECTION_RESET
+    expires = int(time.time()) + 15 * 60  # 15min TODO check if that cause net::ERR_CONNECTION_RESET in chrome (shouldn't?)
     amz_headers = "x-amz-acl:public-read"
 
     put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
     app.logger.info("signing for %s", put_request)
     signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
-    signature = urllib.quote_plus(signature.strip())
+    signature = url_fix(signature.strip())
 
     url = "https://%s.s3.amazonaws.com/%s" % (S3_BUCKET, object_name)
 
