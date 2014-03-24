@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block head %}
   {{ super() }}
-  <link rel="stylesheet" type="text/css" href="static/css/inlineplayer.css" />
-  <link rel="stylesheet" type="text/css" href="static/css/flashblock.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/inlineplayer.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/flaskblock.css') }}" />
 {% endblock %}
 {% block content %}
   <div class="row">
@@ -34,9 +34,9 @@
 {% endblock %}
 {% block script %}
   {{ super() }}
-<script type="text/javascript" src="static/js/soundmanager2.js"></script>
-<script type="text/javascript" src="static/js/inlineplayer.js"></script>
-<script type="text/javascript" src="static/js/s3upload.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/soundmanager2.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/inlineplayer.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/s3upload.js') }}"></script>
 <script type="text/javascript">
   var s3_video_url = null;
   function s3_upload(){

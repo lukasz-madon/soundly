@@ -62,7 +62,7 @@ def index():
     if "credentials" in session:
         result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
         return render_template("index.html", channels=result["items"][0])
-    return redirect(url_for("landing"))
+    return render_template("landing.html")
 
 @app.route("/faq")
 def faq():
