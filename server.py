@@ -41,11 +41,11 @@ def allowed_file(filename):
 
 
 if os.environ.get("HEROKU") is not None:
-  import logging
-  stream_handler = logging.StreamHandler()
-  app.logger.addHandler(stream_handler)
-  app.logger.setLevel(logging.INFO)
-  app.logger.info("starting app")
+    import logging
+    stream_handler = logging.StreamHandler()
+    app.logger.addHandler(stream_handler)
+    app.logger.setLevel(logging.INFO)
+    app.logger.info("starting app")
 
 flow = OAuth2WebServerFlow(client_id=app.config["GOOGLE_CLIENT_ID"],
                            client_secret=app.config["GOOGLE_CLIENT_SECRET"],
@@ -62,7 +62,7 @@ def index():
     if "credentials" in session:
         result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
         return render_template("index.html", channels=result["items"][0])
-    return redirect(url_for("google_login"))
+    return redirect(url_for("landing"))
 
 @app.route("/faq")
 def faq():
