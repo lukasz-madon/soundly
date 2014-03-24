@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/landing.css') }}" />
+{% endblock %}
+{% block navbar %}
+{% endblock %}
+{% block content %}
+<a class="sing-up" href="{{ url_for('google_login') }}">Sing up</a>
+<span class="beta">Beta</span>
+<div class="logo text-center">
+  <img class="img-responsive push" src="{{ url_for('static', filename = 'img/logo.png') }}">
+  <h2>Music for your trailer.</h2>
+</div>
+<div class="row content-section-a">
+  <div class="col-lg-8 col-lg-offset-2">
+    <iframe width="100%" height="400" src="https://www.youtube.com/embed/X-b2Zrr8BEk" frameborder="0" allowfullscreen>
+    </iframe>
+  </div>
+</div>
+<div class="row content-section-a">
+  <div class="col-lg-4 col-lg-offset-2 col-sm-6">
+    <h2 class="section-heading">Quality Music.</h2>
+    <p class="lead">
+      Pick the best music from our collection. 
+    </p>
+  </div>
+  <div class="col-lg-5 col-lg-offset-1 col-sm-6">
+    <i class="fa fa-music fa-7x"></i>
+  </div>
+</div>
+<div class="row content-section-b">
+  <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+    <h2 class="section-heading">Simple pricing</h2>
+    <p class="lead">
+      First 1000 views are free. Next 1 ¢ for 5 views. No gimmicks. No hidden fees.
+    </p>
+  </div>
+  <div class="col-lg-4 col-lg-offset-2 col-sm-pull-6  col-sm-6">
+    <i class="fa fa-money fa-7x"></i>
+  </div>
+</div>
+<div class="row content-section-a">
+  <div class="col-lg-4 col-lg-offset-2 col-sm-6">
+    <h2 class="section-heading">Quality Music.</h2>
+    <p class="lead">
+      Pick the best music from our collection. 
+    </p>
+  </div>
+  <div class="col-lg-5 col-lg-offset-1 col-sm-6">
+    <i class="fa fa-music fa-7x"></i>
+  </div>
+</div>
+
+{% endblock %}
+{% block script %}
+  {{ super() }}
+{% endblock %}

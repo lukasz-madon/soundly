@@ -14,6 +14,7 @@
     {% endblock %}
   </head>
   <body>
+    {% block navbar %}
     <div class="navbar navbar-default">
       <div class="container">
         <div class="navbar-header">
@@ -26,7 +27,6 @@
         </div>
         <div class="navbar-collapse collapse navbar-responsive-collapse">
           <ul class="nav navbar-nav">
-           <!--  <li><a href="#">Foo</a></li> -->
             <!-- <li class="active"><a href="#">Active</a></li>
             <li><a href="#">Link</a></li>
             <li class="dropdown">
@@ -65,12 +65,28 @@
         </div><!-- /.nav-collapse -->
       </div>
     </div><!-- /.navbar -->
+    {% endblock %}
     <div id="content" class="container">
       {% block content %}{% endblock %}
     </div>
-    <div id="footer" class="container footer">
-      <p>&copy; Soundly.io 2014</p>
-    </div>
+    <footer id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="list-inline">
+              <li><a href="about.html">About</a> </li>
+              <li class="footer-menu-divider">&sdot;</li>
+              <li><a href="faq.html">FAQ</a></li>
+              <li class="footer-menu-divider">&sdot;</li>
+              <li><a href="terms.html">Terms</a></li>
+              <li class="footer-menu-divider">&sdot;</li>
+              <li><a href="privacy.html">Privacy</a></li>
+            </ul>
+            <p class="copyright text-muted small">&copy; Soundly.io 2014 </p>
+          </div>
+        </div>
+      </div>
+    </footer>
     {% block script %}
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>

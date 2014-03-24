@@ -64,6 +64,14 @@ def index():
         return render_template("index.html", channels=result["items"][0])
     return redirect(url_for("google_login"))
 
+@app.route("/faq")
+def faq():
+    return render_template("faq.html")
+
+@app.route("/landing")
+def landing():
+    return render_template("landing.html")
+
 
 @app.route("/login/google")
 def google_login():
