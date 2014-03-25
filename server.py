@@ -84,7 +84,8 @@ def google_login():
 
 @app.route("/logout")
 def logout():
-    del session["credentials"]
+    # TODO add proper auth handling. This is temp
+    session.pop("credentials", None)
     return redirect(url_for("index"))
 
 
