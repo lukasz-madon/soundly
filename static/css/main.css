@@ -11,3 +11,8 @@
 #footer {
 	margin-top: 20px;
 }
+
+/* bootstrap override TODO refactor */
+.navbar {
+	border-radius: 0px;
+}
