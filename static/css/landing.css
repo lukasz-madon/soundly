@@ -6,7 +6,7 @@ body {
 .logo {
 	max-width: 400px;
 	margin: 0 auto;
-	margin-top: 200px;
+	margin-top: 100px;
 }
 
 .center {
@@ -32,11 +32,8 @@ a.sing-up {
 	font-size: 2em;
 }
 
-.fa-8x {
-	font-size: 8em;
-}
-
-.icon-margin {
+.icon-large {
+	font-size: 7em;
 	margin-top: 25px;
 }
 
