@@ -26,18 +26,28 @@
     </p>
   </div>
   <div class="col-sm-4 col-xs-4">
-    <i class="fa fa-music fa-7x"></i>
+    <i class="fa fa-music fa-8x icon-margin"></i>
   </div>
 </div>
 <div class="row content-section-b">
   <div class="col-sm-2 col-sm-offset-3 col-xs-4 col-xs-offset-1">
-    <i class="fa fa-money fa-7x"></i>
+    <i class="fa fa-money fa-8x icon-margin"></i>
   </div>
   <div class="col-sm-4 col-sm-offset-1 col-xs-6">
     <h2 class="section-heading">Simple pricing.</h2>
     <p class="lead">
       First 1000 views are free. Next 1¢ for 5 views. No gimmicks. No hidden fees. Pay for what you use.
     </p>
+  </div>
+  <div class="col-sm-2 col-sm-offset-3 col-xs-4 col-xs-offset-1">
+    <div class="form-group">
+      <label class="control-label" for="focusedInput"><h3>Views</h3></label>
+      <input class="form-control" id="focusedInput" type="text" value="1000">
+    </div>
+  </div>
+  <div class="col-sm-4 col-sm-offset-1 col-xs-6">
+    <h3>Estimated Price</h3>
+    <label class="price-text">$<span id="price">0.00</span></label>
   </div>
 </div>
 <div class="row content-section-a">
@@ -48,7 +58,7 @@
     </p>
   </div>
   <div class="col-sm-4 col-xs-4">
-    <i class="fa fa-laptop fa-7x"></i>
+    <i class="fa fa-laptop fa-8x icon-margin"></i>
   </div>
 </div>
 <div class="center">
@@ -57,4 +67,19 @@
 {% endblock %}
 {% block script %}
   {{ super() }}
+  <script type="text/javascript">
+  $('#focusedInput').on('input', function() {
+    var value = parseInt($(this).val());
+    if (value <= 1000) {
+      value = 0;
+    } else {
+      value = (value - 1000) / 500;
+    }
+    if (isNaN(value)) {
+      value = 0;
+    }
+    $('#price').text(value.toFixed(2));
+    // do your stuff
+  })
+  </script>
 {% endblock %}

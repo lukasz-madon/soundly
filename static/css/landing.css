@@ -27,8 +27,17 @@ a.sing-up {
 	top: 1rem;
 	font-size: 2rem;
 }
-.fa-7x {
-	font-size: 7em;
+
+.price-text {
+	font-size: 2em;
+}
+
+.fa-8x {
+	font-size: 8em;
+}
+
+.icon-margin {
+	margin-top: 25px;
 }
 
 .content-section-a {
