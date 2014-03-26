@@ -6,10 +6,9 @@
 {% block navbar %}
 {% endblock %}
 {% block content %}
-<a class="sing-up flash animated" href="{{ url_for('google_login') }}">Sing up for free</a>
-<span class="beta">Beta</span>
+<a class="sing-up flash animated" href="{{ url_for('google_login') }}">Sing up</a>
 <div class="logo text-center">
-  <img class="img-responsive push" src="{{ url_for('static', filename = 'img/logo.png') }}">
+  <img class="img-responsive push" src="{{ url_for('static', filename = 'img/logo_beta.png') }}">
   <h2>Music for your trailer.</h2>
 </div>
 <div class="row content-section-a">
@@ -30,7 +29,7 @@
   </div>
 </div>
 <div class="row content-section-b">
-  <div class="col-sm-2 col-sm-offset-3 col-xs-4 col-xs-offset-1">
+  <div class="col-sm-2 col-sm-offset-3 col-xs-4 col-xs-offset-1 money">
     <i class="fa fa-money icon-large"></i>
   </div>
   <div class="col-sm-4 col-sm-offset-1 col-xs-6">
@@ -57,7 +56,7 @@
        Just 3 clicks to get things done. No extra software. 
     </p>
   </div>
-  <div class="col-sm-4 col-xs-4">
+  <div class="col-sm-4 col-xs-4 laptop">
     <i class="fa fa-laptop icon-large"></i>
   </div>
 </div>
@@ -92,22 +91,24 @@
       // Get the position of the element on the page.
       var elemTop = Math.round( $elem.offset().top );
       var elemBottom = elemTop + $elem.height();
-      return ((elemTop < viewportBottom) && (elemBottom > viewportTop));
+      return ((elemTop + 20) < viewportBottom) && ((elemBottom - 20) > viewportTop); // start when part of the elem is in
   }
   // Check if it's time to start the animation.
-  function checkAnimation() {
-      var $elem = $('.music');
+  function checkAnimation(selector, anim) {
+      var $elem = $(selector);
       // If the animation has already been started
-      if ($elem.hasClass('swing')) return;
+      if ($elem.hasClass(anim)) return;
 
       if (isElementInViewport($elem)) {
           // Start the animation
-          $elem.addClass('swing animated');
+          $elem.addClass(anim + ' animated');
       }
   }
   // Capture scroll events
   $(window).scroll(function(){
-      checkAnimation();
+      checkAnimation('.music', 'swing');
+      checkAnimation('.money', 'fadeInLeft');
+      checkAnimation('.laptop', 'bounceIn');
   });
   </script>
 {% endblock %}
