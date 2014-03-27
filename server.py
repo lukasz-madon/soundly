@@ -62,7 +62,7 @@ def index():
     if "credentials" in session:
         result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
         return render_template("index.html", channels=result["items"][0])
-    return render_template("landing.html")
+    return render_template("landing-beta.html")
 
 @app.route("/faq")
 def faq():
@@ -70,7 +70,7 @@ def faq():
 
 @app.route("/landing")
 def landing():
-    return render_template("landing.html")
+    return render_template("landing-beta-white.html")
 
 
 @app.route("/login/google")

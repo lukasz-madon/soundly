@@ -78,7 +78,7 @@ def process_video_request(credentials , video_url, music_url):
             categoryId="20" # seems to be gaming for now
           ),
           status = dict(
-            privacyStatus="unlisted"
+            privacyStatus="public"
           )
         ),
         media_body=MediaFileUpload(output_video, chunksize=-1, resumable=True)
