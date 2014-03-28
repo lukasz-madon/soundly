@@ -64,9 +64,21 @@ def index():
         return render_template("index.html", channels=result["items"][0])
     return render_template("landing-beta.html")
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 @app.route("/faq")
 def faq():
     return render_template("faq.html")
+
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
 
 @app.route("/landing")
 def landing():

@@ -16,3 +16,7 @@
 .navbar {
 	border-radius: 0px;
 }
+
+.user-bar li a {
+	display: inline;
+}
