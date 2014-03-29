@@ -1,8 +1,8 @@
 import os, string, time, base64, hmac
 from hashlib import sha1
 from random import SystemRandom
+from urllib import quote
 
-from werkzeug.urls import url_fix
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, login_required, SQLAlchemyUserDatastore
@@ -54,6 +54,7 @@ user_info_service = build("oauth2", "v2")
     
 def get_auth_http():
     credentials = session["credentials"]
+    print credentials.__dict__
     return credentials.authorize(httplib2.Http())
 
 # Views
@@ -62,7 +63,7 @@ def index():
     if "credentials" in session:
         result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
         return render_template("index.html", channels=result["items"][0])
-    return render_template("landing-beta.html")
+    return redirect(url_for("home"))
 
 @app.route("/about")
 def about():
@@ -80,8 +81,8 @@ def terms():
 def privacy():
     return render_template("privacy.html")
 
-@app.route("/landing")
-def landing():
+@app.route("/home")
+def home():
     return render_template("landing-beta-white.html")
 
 
@@ -137,17 +138,16 @@ def sign_s3():
     AWS_SECRET_KEY = app.config["AWS_SECRET_ACCESS_KEY"]
     S3_BUCKET = app.config["S3_BUCKET"]
 
-    object_name = url_fix(request.args.get("s3_object_name"))
+    object_name = request.args.get("s3_object_name").encode('ascii', 'ignore')  # remove spaces, + etc.  forward slash and unicode?
     mime_type = request.args.get("s3_object_type")
 
-    expires = int(time.time()) + 15 * 60  # 15min TODO check if that cause net::ERR_CONNECTION_RESET in chrome (shouldn't?)
-    amz_headers = "x-amz-acl:public-read"
+    expires = int(time.time()) + 60  # 60 sec for starting request should be enough 
+    amz_headers = "x-amz-acl:public-read"  # TODO public -> private view of the files or just add 24h expiry 
 
     put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
-    app.logger.info("signing for %s", put_request)
     signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
-    signature = url_fix(signature.strip())
-
+    signature = quote(signature.strip()).replace("/", "%2F")
+    app.logger.info("signing for %s with signature %s", put_request, signature)
     url = "https://%s.s3.amazonaws.com/%s" % (S3_BUCKET, object_name)
 
     return jsonify({

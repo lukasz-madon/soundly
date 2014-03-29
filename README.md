@@ -54,4 +54,57 @@ when logged in with youtube
 
 ```
 {u'picture': u'https://lh3.googleusercontent.com/-q1Smh9d8d0g/AAAAAAAAAAM/AAAAAAAAAAA/3YaY0XeTIPc/photo.jpg?sz=50', u'name': u'AwesomeStudios', u'locale': u'pl', u'email': u'awesomestudios-3347@pages.plusgoogle.com', u'link': u'https://plus.google.com/109358000285879682859', u'id': u'109358000285879682859', u'verified_email': True}
+
+```
+Example credentials
+```
+{
+	'token_expiry': datetime.datetime(2014, 3, 29, 17, 20, 50, 958924),
+ 	'access_token': u'...zUQ',
+ 	'token_uri': 'https://accounts.google.com/o/oauth2/token', 
+ 	'store': None, 
+ 	'invalid': False, 
+ 	'token_response': 	{
+ 		u'access_token': u'ya...Q',
+ 		u'token_type': u'Bearer',
+ 		u'expires_in': 3599, 
+		u'id_token': 
+ 		{
+ 			u'aud': u'845097974070-jl19gphqg5dgg49k7f5dmjtv8af3r35h.apps.googleusercontent.com',
+ 			u'sub': u'102709671723459182442',
+ 			u'cid': u'845097974070-jl19gphqg5dgg49k7f5dmjtv8af3r35h.apps.googleusercontent.com',
+ 			u'iss': u'accounts.google.com',
+ 			u'email_verified': u'true',
+ 			u'email': u'stest-2142-0086@pages.plusgoogle.com',
+ 			u'at_hash': u'JBih7jKCzE6kv0rq4Vjlgg',
+ 			u'exp': 1396113651,
+ 			u'azp': u'845097974070-jl19gphqg5dgg49k7f5dmjtv8af3r35h.apps.googleusercontent.com',
+ 			u'iat': 1396109751,
+ 			u'token_hash': u'JBih7jKCzE6kv0rq4Vjlgg',
+ 			u'id': u'102709671723459182442',
+ 			u'verified_email': u'true'
+ 		}
+ 	},
+ 	'client_id': '845097974070-jl19gphqg5dgg49k7f5dmjtv8af3r35h.apps.googleusercontent.com',
+ 	'id_token': {
+ 		u'aud': u'845097974070-jl19gphqg5dgg49k7f5dmjtv8af3r35h.apps.googleusercontent.com',
+ 		u'sub': u'102709671723459182442',
+ 		u'cid': u'845097974070-jl19gphqg5dgg49k7f5dmjtv8af3r35h.apps.googleusercontent.com',
+ 		u'iss': u'accounts.google.com',
+ 		u'email_verified': u'true',
+ 		u'email': u'stest-2142-0086@pages.plusgoogle.com', 
+ 		u'at_hash': u'JBih7jKCzE6kv0rq4Vjlgg', 
+ 		u'exp': 1396113651, 
+ 		u'azp': u'845097974070-jl19gphqg5dgg49k7f5dmjtv8af3r35h.apps.googleusercontent.com', 
+ 		u'iat': 1396109751, 
+ 		u'token_hash': u'JBih7jKCzE6kv0rq4Vjlgg', 
+ 		u'id': u'102709671723459182442', 
+ 		u'verified_email': u'true'
+ 	}, 
+ 	'client_secret': 'OPsb9...HM',
+ 	'revoke_uri': 'https://accounts.google.com/o/oauth2/revoke',
+ 	'refresh_token': u'1D...on-zcI',
+ 	'user_agent': None
+ }
+
 ```
