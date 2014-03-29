@@ -8,12 +8,12 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, login_required, SQLAlchemyUserDatastore
 from flaskext.kvsession import KVSessionExtension
 from simplekv.memory import DictStore
-import httplib2
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.client import AccessTokenRefreshError
 from oauth2client.client import FlowExchangeError
 from rq import Queue
+import httplib2
 
 from worker import conn
 from models import db, User, Role
