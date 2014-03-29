@@ -1,11 +1,12 @@
 import os, string, time, base64, hmac
+from functools import wraps
 from hashlib import sha1
 from random import SystemRandom
 from urllib import quote
 
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, login_required, SQLAlchemyUserDatastore
+
 from flaskext.kvsession import KVSessionExtension
 from simplekv.memory import DictStore
 from apiclient.discovery import build
@@ -26,9 +27,6 @@ db.init_app(app)
 
 store = DictStore()
 KVSessionExtension(store, app)
-
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-# security = Security(app, user_datastore)
 
 worker_queue = Queue(connection=conn)
 
@@ -51,10 +49,23 @@ flow = OAuth2WebServerFlow(client_id=app.config["GOOGLE_CLIENT_ID"],
                            client_secret=app.config["GOOGLE_CLIENT_SECRET"],
                            scope=app.config["GOOGLE_API_SCOPE"])
 user_info_service = build("oauth2", "v2")
+
+def auth_required(f):
+  @wraps(f)
+  def wrapper(*args, **kwargs):
+    token = request.headers.get("X-Token")
+    if token is None:
+      abort(400)
+    user = User.verify_auth_token(token, app.config["SECRET_KEY"])
+    if user is None:
+      abort(401)
+    g.user = user
+    g.token = token
+    return f(*args, **kwargs)
+  return wrapper
     
 def get_auth_http():
     credentials = session["credentials"]
-    print credentials.__dict__
     return credentials.authorize(httplib2.Http())
 
 # Views
@@ -116,15 +127,16 @@ def authorized():
     except FlowExchangeError:
         abort(400)
     g_user_id = credentials.id_token["sub"]
-    user = user_datastore.find_user(google_user_id=g_user_id)
+    user = User.query.filter_by(google_user_id=g_user_id).first()
     if not user:
         http = credentials.authorize(httplib2.Http())
         result = user_info_service.userinfo().get().execute(http=http)
-        user = user_datastore.create_user(email=result["email"], active=True)
+        user = User(email=result["email"], active=True)
         user.google_user_id = g_user_id
         user.profile_url = result.get("link")
         user.image_url = result.get("picture")
         user.refresh_token = credentials.refresh_token
+        db.session.add(user)
         db.session.commit()
     # refresh token is send only once, need to for auto token refreshing
     credentials.refresh_token = user.refresh_token
