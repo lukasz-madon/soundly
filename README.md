@@ -39,7 +39,10 @@ Add config for AWS and Google API
 - ffmpeg for codecs 
 - Frontend based on Jinja2 + Bootstrap, Jquery and some js (possibly use of Angular for video/music editor etc)  
 - hosting heroku (maybe barebone AWS or Digital Ocean)
-- dns and domain gandi.net
+- DNS and domain gandi.net
+- for searching Algolia maybe or elastic search? 
+- New Relict for performance 
+- Other add-ons for logging etc
 
 ### Gotchas
 
