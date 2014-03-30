@@ -31,11 +31,15 @@ Add config for AWS and Google API
 
 ```ffmpeg -i "http://s3-us-west-2.amazonaws.com/test.co/trailer.wmv" -i "http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3" -codec copy -y ~/Downloads/output.wmv ```
 
-### TODO
+### Architecture 
 
-1. Check s3 naming policy (remove white spaces)
-1. Restrict policy for app only 
-1. Check XHR net::ERR_CONNECTION_RESET in chrome (happens only on when s3 upload starts)
+- Redis for worker -> web app queue, caching and storing session
+- Postgres for data
+- Python for backend (Flask)
+- ffmpeg for codecs 
+- Frontend based on Jinja2 + Bootstrap, Jquery and some js (possibly use of Angular for video/music editor etc)  
+- hosting heroku (maybe barebone AWS or Digital Ocean)
+- dns and domain gandi.net
 
 ### Gotchas
 

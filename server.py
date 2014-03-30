@@ -4,7 +4,7 @@ from hashlib import sha1
 from random import SystemRandom
 from urllib import quote
 
-from flask import Flask, render_template, request, url_for, redirect, session, jsonify
+from flask import Flask, render_template, request, url_for, redirect, session, jsonify, g
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from flaskext.kvsession import KVSessionExtension
@@ -53,14 +53,15 @@ user_info_service = build("oauth2", "v2")
 def auth_required(f):
   @wraps(f)
   def wrapper(*args, **kwargs):
-    token = request.headers.get("X-Token")
-    if token is None:
-      abort(400)
-    user = User.verify_auth_token(token, app.config["SECRET_KEY"])
-    if user is None:
-      abort(401)
-    g.user = user
-    g.token = token
+    if "credentials" in session:
+        g_user_id = session["credentials"].id_token["sub"]
+        user = User.query.filter_by(google_user_id=g_user_id).first()
+        if user:
+            g.user = user
+        else:
+            return redirect(url_for("home"))
+    else:
+        return redirect(url_for("home"))
     return f(*args, **kwargs)
   return wrapper
     
@@ -70,11 +71,10 @@ def get_auth_http():
 
 # Views
 @app.route("/")
+@auth_required
 def index():
-    if "credentials" in session:
-        result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
-        return render_template("index.html", channels=result["items"][0])
-    return redirect(url_for("home"))
+    result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
+    return render_template("index.html", channels=result["items"][0])
 
 @app.route("/about")
 def about():
@@ -108,7 +108,6 @@ def google_login():
 
 @app.route("/logout")
 def logout():
-    # TODO add proper auth handling. This is temp
     session.pop("credentials", None)
     return redirect(url_for("index"))
 
@@ -149,8 +148,8 @@ def sign_s3():
     AWS_ACCESS_KEY = app.config["AWS_ACCESS_KEY_ID"]
     AWS_SECRET_KEY = app.config["AWS_SECRET_ACCESS_KEY"]
     S3_BUCKET = app.config["S3_BUCKET"]
-
-    object_name = request.args.get("s3_object_name").encode('ascii', 'ignore')  # remove spaces, + etc.  forward slash and unicode?
+    # object name on S3 are unicode but hmac don't like it. Since there gonna be temp no need to be correct
+    object_name = request.args.get("s3_object_name").encode('ascii', 'ignore')  
     mime_type = request.args.get("s3_object_type")
 
     expires = int(time.time()) + 60  # 60 sec for starting request should be enough 
