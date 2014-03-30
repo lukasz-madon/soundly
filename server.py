@@ -94,7 +94,7 @@ def privacy():
 
 @app.route("/home")
 def home():
-    return render_template("landing-beta-white.html")
+    return render_template("landing-beta.html")
 
 
 @app.route("/login/google")
