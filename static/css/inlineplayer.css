@@ -124,10 +124,10 @@ ul.graphic li a.sm2_link {
 ul.graphic li a, /* use a.sm2_link {} if you want play icons showing only if SM2 is supported */
 ul.graphic li a.sm2_paused:hover,
 ul.graphic li a.sm2_link:hover {
- background-image:url(../image/icon_play.png);
+ background-image:url(../img/icon_play.png);
  background-position:3px 50%;
  background-repeat:no-repeat;
- _background-image:url(../image/icon_play.gif); /* IE 6 */
+ _background-image:url(../img/icon_play.gif); /* IE 6 */
 }
 
 ul.graphic li a.sm2_link:hover {
@@ -141,14 +141,14 @@ ul.graphic li a.sm2_paused {
 }
 
 ul.graphic li a.sm2_paused:hover {
- background:#003366 url(../image/icon_play.png) no-repeat 3px 50%;
- _background-image:url(../image/icon_play.gif);
+ background:#003366 url(../img/icon_play.png) no-repeat 3px 50%;
+ _background-image:url(../img/icon_play.gif);
 }
 
 ul.graphic li a.sm2_playing,
 ul.graphic li a.sm2_playing:hover {
- background:#003366 url(../image/icon_pause.png) no-repeat 3px 50%;
- _background-image:url(../image/icon_pause.gif);
+ background:#003366 url(../img/icon_pause.png) no-repeat 3px 50%;
+ _background-image:url(../img/icon_pause.gif);
  text-decoration:none;
 }
 
