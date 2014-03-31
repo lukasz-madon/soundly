@@ -29,9 +29,13 @@
         </div>
         <div class="navbar-collapse collapse navbar-responsive-collapse">
           <ul class="nav navbar-nav">
-            <!-- <li class="active"><a href="#">Active</a></li>
-            <li><a href="#">Link</a></li>
-            <li class="dropdown">
+       {%- for endpoint, caption in [('index', 'Music'), ('dashboard', 'Dashboard')] 
+        %}
+        <li{% if endpoint == request.endpoint %} class="active" {% endif %}>
+          <a href={{ url_for(endpoint) }}>{{ caption }}</a>
+        </li>
+      {%- endfor %}
+<!--             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="#">Action</a></li>
@@ -45,10 +49,9 @@
             </li> -->
           </ul>
           {% if g.user %}
-          <ul class="nav navbar-nav navbar-right user-bar">
+          <ul class="nav navbar-nav navbar-right user-bar">          
             <li> 
-              <a href="{{ url_for('dashboard') }}">Dashboard</a>
-              <a> Hi {{ channels["snippet"]["title"] }} </a>
+              <a href="{{ url_for('profile') }}"> Hi {{ channels["snippet"]["title"] }} </a>
               <img class="img-rounded channel-thumbnail" src="{{ channels["snippet"]["thumbnails"]["default"]["url"] }}"> 
               <a href="{{ url_for('logout') }}">Logout</a>
             </li>
@@ -61,14 +64,13 @@
     <div id="content" class="container">
       {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <ul>
-        {% for message in messages %}
-            <li>{{ message }} </li>
-        {% endfor %}
-        </ul>
+          <ul>
+          {% for message in messages %}
+              <li>{{ message }} </li>
+          {% endfor %}
+          </ul>
         {% endif %}
       {% endwith %}
-
       {% block content %}
       {% endblock %}
     </div>

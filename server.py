@@ -108,6 +108,12 @@ def dashboard():
     result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
     return render_template("dashboard.html", channels=result["items"][0])
 
+@app.route("/profile")
+@auth_required
+def profile():
+    result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
+    return render_template("profile.html", channels=result["items"][0])
+
 
 @app.route("/login/google")
 def google_login():
