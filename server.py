@@ -92,6 +92,10 @@ def terms():
 def privacy():
     return render_template("privacy.html")
 
+@app.route("/landing-beta")
+def landing():
+    return render_template("landing-beta-white.html")
+
 @app.route("/home")
 def home():
     return render_template("landing-beta.html")
@@ -135,7 +139,6 @@ def authorized():
         user.profile_url = result.get("link")
         user.image_url = result.get("picture")
         user.refresh_token = credentials.refresh_token
-        print "roles madafaka"
         user.roles = [Role(name="user")]
         db.session.add(user)
         db.session.commit()
