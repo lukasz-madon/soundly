@@ -135,6 +135,8 @@ def authorized():
         user.profile_url = result.get("link")
         user.image_url = result.get("picture")
         user.refresh_token = credentials.refresh_token
+        print "roles madafaka"
+        user.roles = [Role(name="user")]
         db.session.add(user)
         db.session.commit()
     # refresh token is send only once, need to for auto token refreshing
