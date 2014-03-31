@@ -33,6 +33,9 @@ class User(db.Model, ModelMixin):
     created_on = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     refresh_token = db.Column(db.String(64))
 
+    def is_authenticated(self):
+        return True
+
 class Music(db.Model, ModelMixin):
     __tablename__ = "music"
     id = db.Column(db.Integer, primary_key=True)

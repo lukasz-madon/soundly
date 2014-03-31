@@ -8,7 +8,7 @@
 {% block content %}
 <a class="sing-up flash animated" href="{{ url_for('google_login') }}">Sing up</a>
 <div class="logo text-center">
-  <img class="img-responsive push" src="{{ url_for('static', filename = 'img/logo-beta.png') }}">
+  <img class="img-responsive push" src="{{ url_for('static', filename = 'img/logo.png') }}">
   <h2>Music for your trailer.</h2>
 </div>
 <div class="row content-section-a">
@@ -83,7 +83,6 @@
 
   function isElementInViewport(elem) {
       var $elem = $(elem);
-      console.log($elem);
       // Get the scroll position of the page.
       var scrollElem = ((navigator.userAgent.toLowerCase().indexOf('webkit') != -1) ? 'body' : 'html');
       var viewportTop = $(scrollElem).scrollTop();

@@ -73,6 +73,7 @@ def get_auth_http():
 @app.route("/")
 @auth_required
 def index():
+    # TODO refactor that in a seperate model?
     result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
     music = Music.query.all()
     return render_template("index.html", channels=result["items"][0], music=music)
@@ -100,6 +101,12 @@ def landing():
 @app.route("/home")
 def home():
     return render_template("landing-beta.html")
+
+@app.route("/dashboard")
+@auth_required
+def dashboard():
+    result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
+    return render_template("dashboard.html", channels=result["items"][0])
 
 
 @app.route("/login/google")

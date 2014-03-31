@@ -8,6 +8,10 @@
   <div class="row">
     <div class="col-lg-8">
       <h2>1. Pick Music</h2>
+          <form>
+            <input type="text" class="form-control" placeholder="Search">
+          </form>
+          <br>
          <div id="sm2-container">
           <!-- SM2 flash goes here -->
          </div>
@@ -16,8 +20,8 @@
             <li><a href="{{ item.url }}">{{ item.title }}</a></li>
           {% endfor %}
          </ul>
-         <h4> Your pick : <strong><span id="music_titile"></span></strong> </h4>
-         <small>  You must choose, but choose wisely. </small>
+         <h4>Your pick : <strong><span id="music_titile"></span></strong> </h4>
+         <small>You must choose, but choose wisely. </small>
     </div>
     <div class="col-lg-4">
       <h2>2. Upload Video</h2>
@@ -27,7 +31,8 @@
       <p>Any second thoughts on the music? No? Add it!</p>
       <a class="btn btn-primary" href="#" id="add-music">Add music</a>
       <div id="ok"></div>
-      While you're waiting try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a>
+      <br>
+      <small>While you're waiting try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a></small>
     </div>
   </div>
 {% endblock %}

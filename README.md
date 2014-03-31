@@ -5,7 +5,7 @@
 All python dependencies are specified in requirements.txt and managed with pip using virtualenv
 
 ### DB 
-1. install postgres with homebrew
+1. install postgres with homebrew (check with heroku tutorial first for changes/diff way)
 1. 'brew install postgressql'
 1. follow instructions (/usr/local/opt/postgresql/bin/createuser -s postgres maybe needed to add one superuser)
 1. create user dbuser(P@ssw0rd) using superuser postgres
