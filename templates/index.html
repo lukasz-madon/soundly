@@ -12,12 +12,9 @@
           <!-- SM2 flash goes here -->
          </div>
          <ul class="graphic">
-          <li><a href="http://test.co.s3.amazonaws.com/jingiel_bacterion_v2.mp3">Jingiel bacterion</a></li>
-          <li><a href="http://www.freshly-ground.com/misc/music/carl-3-barlp.mp3">Barrlping with Carl (featureblend.com)</a></li>
-          <li><a href="http://www.freshly-ground.com/data/audio/binaural/Mak.mp3">Angry cow sound?</a></li>
-          <li><a href="http://www.freshly-ground.com/data/audio/binaural/Things that open, close and roll.mp3">Things that open, close and roll</a></li>
-          <li><a href="http://www.freshly-ground.com/misc/music/20060826%20-%20Armstrong.mp3">20060826 - Armstrong</a></li>
-          <li><a href="http://freshly-ground.com/data/video/Rain%20on%20Car%20Roof.aac">Rain On Car Roof (AAC Audio)</a></li>
+          {% for item in music %}
+            <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+          {% endfor %}
          </ul>
          <h4> Your pick : <strong><span id="music_titile"></span></strong> </h4>
          <small>  You must choose, but choose wisely. </small>

@@ -17,7 +17,7 @@ from rq import Queue
 import httplib2
 
 from worker import conn
-from models import db, User, Role
+from models import db, User, Role, Music
 from youtube_utils import process_video_request, youtube_service
 
 rand = SystemRandom()
@@ -74,7 +74,8 @@ def get_auth_http():
 @auth_required
 def index():
     result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
-    return render_template("index.html", channels=result["items"][0])
+    music = Music.query.all()
+    return render_template("index.html", channels=result["items"][0], music=music)
 
 @app.route("/about")
 def about():
