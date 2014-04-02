@@ -135,7 +135,7 @@ def authorized():
     # CSRF
     if request.args["state"] != session["state"]:
         abort(400)
-    del session["state"]
+    del session.pop("state", None)
     code = request.args.get("code")
     if not code:
         abort(403)
