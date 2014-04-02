@@ -3,6 +3,7 @@ import subprocess as sp
 from random import random
 from urlparse import urlsplit
 
+from flask import jsonify
 import httplib
 import httplib2
 from apiclient.errors import HttpError
