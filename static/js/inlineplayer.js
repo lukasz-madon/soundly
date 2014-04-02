@@ -194,7 +194,7 @@ function InlinePlayer() {
     }
 
     self.lastSound = thisSound; // reference for next call
-    self.lastSoundTitle = o.innerHTML;
+    self.lastSoundTitle = o.innerText || o.textContent;;
     document.getElementById('music_titile').innerHTML = self.lastSoundTitle;
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();

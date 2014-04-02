@@ -1,8 +1,6 @@
 /*
-
  SoundManager 2: In-page MP3 player example
  ------------------------------------------
-
  Clicks on links to MP3s are intercepted via JS, calls are
  made to SoundManager to load/play sounds. CSS classes are
  appended to the link, which are used to highlight the
@@ -20,13 +18,11 @@
  sm2_paused
 
  eg.
-
  <!-- default -->
  <a href="some.mp3" class="sm2_link">some.mp3</a>
 
  <!-- playing -->
  <a href="some.mp3" class="sm2_link sm2_playing">some.mp3</a>
-
 
  Note you don't require ul.graphic / ul.flat etc. for your use
  if only using one style on a page. You can just use .sm2_link{}
@@ -57,73 +53,31 @@
  a.sm2_paused {}
  a.sm2_paused:hover {}
 
-
 */
 /* background-image-based CSS3 example */
 
-.player-item  a {
+ a.sm2_link {
 	text-decoration: none;
 }
-
-ul.graphic li {
- margin-bottom:2px;
+.player-item i {
+	font-size: 20px;
+	margin-left: 5px;
+	margin-top: 5px;
+}
+.player-item .txt {
+	width: 100%;
 }
 
-ul.graphic li a,
-ul.graphic li a.sm2_link {
- /* assume all items will be sounds rather than wait for onload etc. in this example.. may differ for your uses. */
- display:inline-block;
- padding-left:22px;
- min-height:16px;
- vertical-align: middle;
- background-color:#336699;
- border-radius:3px;
- padding:3px 3px 3px 25px;
- min-width:19em;
- _width:19em; /* IE 6 */
- text-decoration:none;
- font-weight:normal;
- color:#f6f9ff;
+
+.player-item a.sm2_paused {
+ background-color: #ecf0f1;
 }
 
-ul.graphic li a.sm2_link {
- /* safari 3.1+ fun (or, proprietary crap. TBD.) */
- -webkit-transition-property: hover;
- -webkit-transition: background-color 0.15s linear;
- -moz-transition: background-color 0.15s linear 0s; /* firefox 4 */
-  -o-transition-property: background-color; /* opera 10.5 */
-  -o-transition-duration: 0.15s;
-}
 
-ul.graphic li a, /* use a.sm2_link {} if you want play icons showing only if SM2 is supported */
-ul.graphic li a.sm2_paused:hover,
-ul.graphic li a.sm2_link:hover {
- background-image:url(../img/icon_play.png);
- background-position:3px 50%;
- background-repeat:no-repeat;
- _background-image:url(../img/icon_play.gif); /* IE 6 */
-}
 
-ul.graphic li a.sm2_link:hover {
- /* default hover color, if you'd like.. */
- background-color:#003366;
- color:#fff;
-}
-
-ul.graphic li a.sm2_paused {
- background-color:#999;
-}
-
-ul.graphic li a.sm2_paused:hover {
- background:#003366 url(../img/icon_play.png) no-repeat 3px 50%;
- _background-image:url(../img/icon_play.gif);
-}
-
-ul.graphic li a.sm2_playing,
-ul.graphic li a.sm2_playing:hover {
- background:#003366 url(../img/icon_pause.png) no-repeat 3px 50%;
- _background-image:url(../img/icon_pause.gif);
- text-decoration:none;
+.player-item  a.sm2_playing,
+.player-item  a.sm2_playing:hover {
+ background-color: #2c3e50;
 }
 
 /* hide button while playing?

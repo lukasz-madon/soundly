@@ -14,35 +14,38 @@
         <br>
        <!-- <div id="sm2-container">
         SM2 flash goes here, but I think we can ship flask. audio html5 is now supported on 83% of browsers 
+              <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+              </div>  
        </div> -->
        <div class="row player-grid">
         {% for item in music %}
           <div class="player-item col-xs-6 col-sm-4">
             <a class="thumbnail" href="{{ item.url }}">
               <i class="fa fa-play"></i> 
-              {{ item.title }}
-    <!--           <div class="spinner">
-                <div class="rect1"></div>
-                <div class="rect2"></div>
-                <div class="rect3"></div>
-                <div class="rect4"></div>
-                <div class="rect5"></div>
-              </div>  -->
+                 <div class="txt text-right">
+                  {{ item.artist }} <br>
+                  <strong>{{ item.title }}</strong>
+                 </div>
             </a>
           </div>
-        {% endfor %}
+        {% endfor %} 
        </div>
-       <h4>Your pick : <strong><span id="music_titile"></span></strong> </h4>
        <small>You must choose, but choose wisely. </small>
     </div>
     <div class="col-lg-4">
-      <div data-spy="affix" data-offset-top="5" data-offset-bottom="100">
+      <div data-spy="affix" data-offset-top="1" data-offset-bottom="100">
         <h2>2. Upload Video</h2>
         <input type="file" name="file" id="file">
         <p id="status"></p>
         <h2>3. Add Music to video</h2>
-        <p>Any second thoughts on the music? No? Add it!</p>
+        <h4>Your pick : <strong><span id="music_titile"></span></strong> </h4>
         <a class="btn btn-primary" href="#" id="add-music">Add music</a>
+        <p> <small>Any second thoughts on the music? No? Add it!</small></p>
         <div id="ok"></div>
         <br>
         <small>While you're waiting try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a></small>
