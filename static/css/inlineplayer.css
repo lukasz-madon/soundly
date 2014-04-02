@@ -59,36 +59,10 @@
 
 
 */
-
-/* two different list types */
-
-ul.flat {
- list-style-type:none;
- padding-left:0px;
-}
-
-ul.flat li,
-ul.graphic li {
- padding-bottom:1px;
-}
-
-ul.flat li a {
- display:inline-block;
- padding:2px 4px 2px 4px;
-}
-
-ul.graphic {
- list-style-type:none;
- padding-left:0px;
- margin-left:0px;
-}
-
 /* background-image-based CSS3 example */
 
-ul.graphic {
- list-style-type:none;
- margin:0px;
- padding:0px;
+.player-item  a {
+	text-decoration: none;
 }
 
 ul.graphic li {
@@ -167,44 +141,4 @@ body #sm2-container embed {
 
  left:-9999em;
  top:-9999em;
-}
-
-/* flat CSS example */
-
-ul.flat a.sm2_link {
- /* default state: "a playable link" */
- border-left:6px solid #999;
- padding-left:4px;
- padding-right:4px;
-}
-
-ul.flat a.sm2_link:hover {
- /* default (inactive) hover state */
- border-left-color:#333;
-}
-
-
-ul.flat a.sm2_playing {
- /* "now playing" */
- border-left-color:#6666ff;
- background-color:#000;
- color:#fff;
- text-decoration:none;
-}
-
-ul.flat a.sm2_playing:hover {
- /* "clicking will now pause" */
- border-left-color:#cc3333;
-}
-
-ul.flat a.sm2_paused {
- /* "paused state" */
- background-color:#666;
- color:#fff;
- text-decoration:none;
-}
-
-ul.flat a.sm2_paused:hover {
- /* "clicking will resume" */
- border-left-color:#33cc33;
 }

@@ -40,4 +40,5 @@ class Music(db.Model, ModelMixin):
     __tablename__ = "music"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode(128))
+    artist = db.Column(db.Unicode(128))
     url = db.Column(db.String(256))
