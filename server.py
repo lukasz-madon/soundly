@@ -167,8 +167,8 @@ def sign_s3():
     AWS_ACCESS_KEY = app.config["AWS_ACCESS_KEY_ID"]
     AWS_SECRET_KEY = app.config["AWS_SECRET_ACCESS_KEY"]
     S3_BUCKET = app.config["S3_BUCKET"]
-    # object name on S3 are unicode but hmac don't like it. Since there gonna be temp no need to be correct
-    object_name = request.args.get("s3_object_name").encode('ascii', 'ignore')  
+    # object name on S3 are unicode but hmac don't like it. Possbile bug?
+    object_name = quote(request.args.get("s3_object_name").encode('ascii', 'ignore'))
     mime_type = request.args.get("s3_object_type")
 
     expires = int(time.time()) + 60  # 60 sec for starting request should be enough 
