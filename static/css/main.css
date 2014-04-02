@@ -22,6 +22,10 @@
 	top: 4px;   /* wtf figure that out */
 }
 
+.progress {
+  height: 20px;
+}
+
 
 /* spinner with bars */
 .spinner {

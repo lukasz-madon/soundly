@@ -102,7 +102,7 @@
           var percentLoaded;
           if (e.lengthComputable) {
             percentLoaded = Math.round((e.loaded / e.total) * 100);
-            return this_s3upload.onProgress(percentLoaded, percentLoaded === 100 ? 'Finalizing.' : 'Uploading.');
+            return this_s3upload.onProgress(percentLoaded, percentLoaded === 100 ? 'Finalizing.' : '');
           }
         };
       }

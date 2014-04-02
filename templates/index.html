@@ -41,7 +41,13 @@
       <div data-spy="affix" data-offset-top="1" data-offset-bottom="100">
         <h2>2. Upload Video</h2>
         <input type="file" name="file" id="file">
-        <p id="status"></p>
+        <br>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                   <span id="status">0%</span>
+          </div>
+        </div>
+        <span id="upload-error"></span>
         <h2>3. Add Music to video</h2>
         <h4>Your pick : <strong><span id="music_titile"></span></strong> </h4>
         <a class="btn btn-primary" href="#" id="add-music">Add music</a>
@@ -66,14 +72,15 @@
           file_dom_selector: 'file',
           s3_sign_put_url: '/sign-s3/',
           onProgress: function(percent, message) {
-            $('#status').html('Upload progress: ' + percent + '% ' + message);
+            $('#status').html(percent + '% ' + message);
+            $('.progress-bar').width(percent + '%');
           },
           onFinishS3Put: function(public_url) {
             s3_video_url = public_url;
             $('#status').html('Upload completed');
           },
           onError: function(status) {
-            $('#status').html('Upload error: ' + status);
+            $('#upload-error').html('Upload error: ' + status);
           }
       });
   }
