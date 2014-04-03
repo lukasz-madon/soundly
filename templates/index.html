@@ -68,7 +68,7 @@
   var s3_video_url = null;
   function s3_upload(){
       var s3upload = new S3Upload({
-          s3_object_name: '{{ channels["id"] }}' + '-',
+          s3_object_name: '{{ g.user.google_user_id }}' + '-',
           file_dom_selector: 'file',
           s3_sign_put_url: '/sign-s3/',
           onProgress: function(percent, message) {

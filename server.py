@@ -17,7 +17,7 @@ from rq import Queue
 import httplib2
 
 from worker import conn
-from models import db, User, Role, Music
+from models import db, User,  Music
 from youtube_utils import process_video_request, youtube_service
 
 rand = SystemRandom()
@@ -74,9 +74,9 @@ def get_auth_http():
 @auth_required
 def index():
     # TODO refactor that in a seperate model?
-    result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
+    # result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
     music = Music.query.all()
-    return render_template("index.html", channels=result["items"][0], music=music)
+    return render_template("index.html", music=music)
 
 @app.route("/about")
 def about():
@@ -105,14 +105,12 @@ def home():
 @app.route("/dashboard")
 @auth_required
 def dashboard():
-    result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
-    return render_template("dashboard.html", channels=result["items"][0])
+    return render_template("dashboard.html")
 
 @app.route("/profile")
 @auth_required
 def profile():
-    result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
-    return render_template("profile.html", channels=result["items"][0])
+    return render_template("profile.html")
 
 
 @app.route("/login/google")
@@ -148,15 +146,14 @@ def authorized():
     if not user:
         http = credentials.authorize(httplib2.Http())
         result = user_info_service.userinfo().get().execute(http=http)
-        user = User(email=result["email"], active=True)
+        user = User(email=result["email"], name=result.get("name"))
         user.google_user_id = g_user_id
         user.profile_url = result.get("link")
         user.image_url = result.get("picture")
         user.refresh_token = credentials.refresh_token
-        user.roles = [Role(name="user")]
         db.session.add(user)
         db.session.commit()
-    # refresh token is send only once, need to for auto token refreshing
+    # refresh token is send only once, needed for auto token refreshing
     credentials.refresh_token = user.refresh_token
     session["credentials"] = credentials
     return redirect(url_for("index"))

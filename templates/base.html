@@ -50,8 +50,8 @@
           {% if g.user %}
           <ul class="nav navbar-nav navbar-right user-bar">          
             <li> 
-              <a href="{{ url_for('profile') }}"> Hi {{ channels["snippet"]["title"] }} </a>
-              <img class="img-rounded channel-thumbnail" src="{{ channels["snippet"]["thumbnails"]["default"]["url"] }}"> 
+              <a href="{{ url_for('profile') }}"> Hi {{ g.user.name }} </a>
+              <img class="img-rounded channel-thumbnail" src="{{ g.user.image_url }}"> 
               <a href="{{ url_for('logout') }}">Logout</a>
             </li>
           {% endif %}
@@ -80,13 +80,10 @@
             <ul class="list-inline">
               <li><a href="{{ url_for('about') }}">About</a> </li>
               <li class="footer-menu-divider">&sdot;</li>
-
               <li><a href="{{ url_for('faq') }}">FAQ</a></li>
               <li class="footer-menu-divider">&sdot;</li>
-
               <li><a href="{{ url_for('terms') }}">Terms</a></li>
               <li class="footer-menu-divider">&sdot;</li>
-
               <li><a href="{{ url_for('privacy') }}">Privacy</a></li>
             </ul>
             <p class="copyright text-muted small">&copy; Soundly.io 2014 </p>
@@ -100,10 +97,8 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
       ga('create', 'UA-49378616-1', 'soundly.io');
       ga('send', 'pageview');
-
     </script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>

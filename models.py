@@ -2,23 +2,14 @@ import datetime
 
 from flask.ext.sqlalchemy import SQLAlchemy
 
-
+ROLE_USER = 0
+ROLE_ADMIN = 1
 db = SQLAlchemy()
 
 
 class ModelMixin(object):
   def __repr__(self):
     return unicode(self.__dict__)
-
-roles_users = db.Table("roles_users",
-        db.Column("user_id", db.Integer(), db.ForeignKey("users.id")),
-        db.Column("role_id", db.Integer(), db.ForeignKey("roles.id")))
-
-class Role(db.Model, ModelMixin):
-    __tablename__ = "roles"
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(256))
 
 
 class User(db.Model, ModelMixin):
@@ -28,14 +19,12 @@ class User(db.Model, ModelMixin):
     name = db.Column(db.Unicode(64))
     email = db.Column(db.String(128))
     active = db.Column(db.Boolean(), default=True)
-    roles = db.relationship("Role", secondary=roles_users, backref=db.backref("users", lazy="dynamic"))
+    role = db.Column(db.SmallInteger, default = ROLE_USER)
     profile_url = db.Column(db.String(256))
     image_url = db.Column(db.String(256))
     created_on = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     refresh_token = db.Column(db.String(64))
 
-    def is_authenticated(self):
-        return True
 
 class Music(db.Model, ModelMixin):
     __tablename__ = "music"
