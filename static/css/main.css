@@ -24,8 +24,12 @@
 
 .progress {
   height: 20px;
+  max-width: 400px;
 }
 
+table a, .table a {
+  text-decoration: none;
+}
 
 /* spinner with bars */
 .spinner {
