@@ -25,6 +25,7 @@ class User(db.Model, ModelMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     google_user_id = db.Column(db.String(64), unique=True, index=True)
+    name = db.Column(db.Unicode(64))
     email = db.Column(db.String(128))
     active = db.Column(db.Boolean(), default=True)
     roles = db.relationship("Role", secondary=roles_users, backref=db.backref("users", lazy="dynamic"))

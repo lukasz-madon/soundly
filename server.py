@@ -164,6 +164,7 @@ def authorized():
 
 @app.route("/sign-s3/")
 def sign_s3():
+    # TODO validate user input. Is object_name not too long?
     AWS_ACCESS_KEY = app.config["AWS_ACCESS_KEY_ID"]
     AWS_SECRET_KEY = app.config["AWS_SECRET_ACCESS_KEY"]
     S3_BUCKET = app.config["S3_BUCKET"]
