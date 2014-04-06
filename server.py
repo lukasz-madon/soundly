@@ -4,7 +4,7 @@ from hashlib import sha1
 from random import SystemRandom
 from urllib import quote
 
-from flask import Flask, render_template, request, url_for, redirect, session, jsonify, g
+from flask import Flask, render_template, request, url_for, redirect, session, jsonify, g, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from flaskext.kvsession import KVSessionExtension
@@ -69,14 +69,23 @@ def get_auth_http():
     credentials = session["credentials"]
     return credentials.authorize(httplib2.Http())
 
+def detect_default_email():
+    """flashes user abour default email that is caused be youtube and G+ mess.
+    youtube id has been merged with google and youtube users that are not linked to gmail
+    have @pages.plusgoogle.com email.
+    requires auth_requred()
+    """
+    if "@pages.plusgoogle.com" in g.user.email:
+        flash("""Your email address is %s. This maybe a default email.
+         Click your name in the upper right corner to change it.""" %(g.user.email,), "warning") 
+
 # Views
 @app.route("/")
 @auth_required
 def index():
-    # TODO refactor that in a seperate model?
+    detect_default_email()
     # result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
-    music = Music.query.all()
-    return render_template("index.html", music=music)
+    return render_template("index.html", music=Music.query.all())
 
 @app.route("/about")
 def about():
