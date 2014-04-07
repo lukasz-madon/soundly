@@ -11,6 +11,15 @@
 #footer {
 	margin-top: 20px;
 }
+.affix {
+   position: static;
+}
+@media (min-width:1200px){
+  .affix {
+      position: fixed;
+      top: 10px;
+  }
+}
 
 /* bootstrap override TODO refactor */
 .navbar {

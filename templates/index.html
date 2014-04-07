@@ -38,13 +38,13 @@
        <small>You must choose, but choose wisely. </small>
     </div>
     <div class="col-lg-4">
-      <div data-spy="affix" data-offset-top="1" data-offset-bottom="60">
+      <div id="my-affix">
         <h2>2. Upload Video</h2>
         <input type="file" name="file" id="file">
         <br>
         <div class="progress">
           <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                   <span id="status"></span>
+            <span id="status"></span>
           </div>
         </div>
         <span id="upload-error"></span>
@@ -104,6 +104,14 @@
         });
         $('#ok').html('Your video will be available on your channels shortly. Don&apos;t forget to edit video description! <br> <img class="img-responsive" src="http://wearesocialmedia.gr/wp-content/uploads/2013/11/3879-animated_gif-chuck_norris-dodgeball-thumbs_up.gif">');
       });
+        $('#my-affix').affix({
+          offset: {
+            top: 100
+          , bottom: function () {
+              return (this.bottom = $('.footer').outerHeight(true))
+            }
+          }
+        })
   });
 </script>
 {% endblock %}
