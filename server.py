@@ -117,8 +117,11 @@ def logout():
 @app.route("/login/google/oauthcallback")
 def authorized():
     # CSRF
-    if request.args["state"] != session["state"]:
-        abort(400)
+    try:
+        if request.args["state"] != session["state"]:
+            abort(400)
+    except KeyError:
+        abort(401)
     session.pop("state", None)
     code = request.args.get("code")
     if not code:
