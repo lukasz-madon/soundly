@@ -54,9 +54,9 @@ def resumable_upload(insert_request, title, music_id, user_id):
                 v.music = [session.query(Music).get(music_id)]
                 session.add(v)
                 session.commit()
-                return "%s (video id: %s) was successfully uploaded." % (title, response["id"])
+                print "%s (video id: %s) was successfully uploaded." % (title, response["id"])
             else:
-                return "The upload failed with an unexpected response: %s" % (response,)
+                print "The upload failed with an unexpected response: %s" % (response,)
         except HttpError, e:
             if e.resp.status in RETRIABLE_STATUS_CODES:
                 error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
@@ -85,7 +85,7 @@ def process_video_request(credentials , video_url, music_url, music_id, user_id)
     code = sp.call(["ffmpeg", "-i", music_url, "-i", video_url, "-codec", "copy", "-y", output_video])
     # TODO refactor for loggin or returning error to webdyno (redis?)
     if code:
-        return jsonify({"error": "cannot encode the file"}), 400
+        print "error -cannot encode the file"
     insert_request = youtube_service.videos().insert(
         part="snippet,status",
         body=dict(
