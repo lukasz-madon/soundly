@@ -31,6 +31,7 @@
 {% block script %}
   {{ super() }}
 <script type="text/javascript">
+$(document).ready(function() {
 	$('.views').each(function() {
 	    self = $(this);
 	    var url = self.attr('data-url');
@@ -39,5 +40,6 @@
 	    	self.text(data.entry.yt$statistics.viewCount);
 		});
 	});
+});
 </script>
 {% endblock %}

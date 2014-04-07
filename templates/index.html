@@ -85,7 +85,7 @@
       });
   }
 
-  $().ready(function() {
+  $(document).ready(function() {
       $('#file').on('change', s3_upload);
       $('#add-music').click(function(){
         if (inlinePlayer.lastSound === null) {
