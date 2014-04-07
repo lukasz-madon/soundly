@@ -14,6 +14,12 @@
 .affix {
    position: static;
 }
+.affix-top {
+   position: static;
+}
+.affix-bottom {
+  position: absolute;
+}
 @media (min-width:1200px){
   .affix {
       position: fixed;
