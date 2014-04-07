@@ -19,7 +19,7 @@
 		      <td>{{ loop.index }}</td>
 		      <td><a href="{{ item.url }}" target="_blank"> {{ item.title }}</a></td>
 		      <td>{% for m in item.music %} {{ m.title }} {% endfor %}</td>
-		      <td>{{ item.views }}</td>
+		      <td class="views" data-url="{{ item.url }}">{{ item.views }}</td>
 		      <td>free in beta</td>
 		    </tr>
 		  {% endfor %}
@@ -27,4 +27,17 @@
 		</table> 
     </div>
   </div>
+{% endblock %}
+{% block script %}
+  {{ super() }}
+<script type="text/javascript">
+	$('.views').each(function() {
+	    self = $(this);
+	    var url = self.attr('data-url');
+	    var id = url.split('=')[1];
+	    $.getJSON('https://gdata.youtube.com/feeds/api/videos/' + id +'?v=2&alt=json', function( data ) {
+	    	self.text(data.entry.yt$statistics.viewCount);
+		});
+	});
+</script>
 {% endblock %}

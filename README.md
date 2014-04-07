@@ -115,3 +115,5 @@ Example credentials
  }
 
 ```
+
+You can get views from youtube data api v2.0 `https://gdata.youtube.com/feeds/api/videos/MSrTnWDTdwI?v=2&alt=json` as json from client side which is nice, but need to store in DB to calculate the price later on.

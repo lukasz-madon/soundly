@@ -85,13 +85,13 @@ def process_video_request(credentials , video_url, music_url, music_id, user_id)
     code = sp.call(["ffmpeg", "-i", music_url, "-i", video_url, "-codec", "copy", "-y", output_video])
     # TODO refactor for loggin or returning error to webdyno (redis?)
     if code:
-        print "error -cannot encode the file"
+        print "error - cannot encode the file"
     insert_request = youtube_service.videos().insert(
         part="snippet,status",
         body=dict(
           snippet=dict(
             title=title,
-            description="Music provided by http://soundly.io",
+            description=" Music provided by http://soundly.io",
             tags=["trailer","soundly.io"],
             categoryId="20" # seems to be gaming for now
           ),
