@@ -4,8 +4,10 @@ from random import SystemRandom
 from urllib import quote
 
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify, g, flash
+from flask.ext.wtf import Form
 from flask.ext.sqlalchemy import SQLAlchemy
 from flaskext.kvsession import KVSessionExtension
+from wtforms import TextField, TextAreaField, PasswordField, SubmitField
 from simplekv.memory import DictStore
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
@@ -49,6 +51,9 @@ flow = OAuth2WebServerFlow(client_id=app.config["GOOGLE_CLIENT_ID"],
                            scope=app.config["GOOGLE_API_SCOPE"])
 user_info_service = build("oauth2", "v2")
 
+class EmailForm(Form):
+    email = TextField("Email")
+    submit = SubmitField("Submit")
 
 ### Views ###
 @app.route("/")
@@ -90,7 +95,7 @@ def dashboard():
 @app.route("/profile")
 @auth_required
 def profile():
-    return render_template("profile.html")
+    return render_template("profile.html", form=EmailForm())
 
 
 @app.route("/login/google")
