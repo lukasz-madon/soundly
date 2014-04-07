@@ -20,10 +20,15 @@ class User(db.Model, ModelMixin):
     email = db.Column(db.String(128))
     active = db.Column(db.Boolean(), default=True)
     role = db.Column(db.SmallInteger, default = ROLE_USER)
-    profile_url = db.Column(db.String(256))
-    image_url = db.Column(db.String(256))
+    profile_url = db.Column(db.String(128))
+    image_url = db.Column(db.String(128))
     created_on = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     refresh_token = db.Column(db.String(64))
+    videos = db.relationship("Video", backref="user", lazy="dynamic")
+
+    @property
+    def is_admin(self):
+        return self.role == ROLE_ADMIN
 
 
 class Music(db.Model, ModelMixin):
@@ -31,4 +36,16 @@ class Music(db.Model, ModelMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode(128))
     artist = db.Column(db.Unicode(128))
-    url = db.Column(db.String(256))
+    url = db.Column(db.String(128))
+    video_id = db.Column(db.Integer, db.ForeignKey("videos.id"))
+
+
+class Video(db.Model, ModelMixin):
+    __tablename__ = "videos"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Unicode(128))
+    url = db.Column(db.String(64))
+    views = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    music = db.relationship("Music", backref="video")
+

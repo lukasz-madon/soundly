@@ -10,6 +10,17 @@ from apiclient.errors import HttpError
 from apiclient.http import MediaFileUpload
 from apiclient.discovery import build
 from werkzeug.utils import secure_filename
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+import settings
+from models import Music, Video
+
+engine = create_engine(settings.SQLALCHEMY_DATABASE_URI)
+Session = sessionmaker(bind=engine)    
+session = Session()
+session._model_changes = {}
+
 
 youtube_service = build("youtube", "v3")
 # Explicitly tell the underlying HTTP transport library not to retry, since
@@ -29,7 +40,7 @@ RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, httplib.NotConnected,
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 
-def resumable_upload(insert_request, title):
+def resumable_upload(insert_request, title, music_id, user_id):
     print "Started uploading: %s", (title,)
     response = None
     error = None
@@ -38,6 +49,11 @@ def resumable_upload(insert_request, title):
         try:
             status, response = insert_request.next_chunk()
             if "id" in response:
+                v = Video(title=title, url="https://www.youtube.com/watch?v=" + response["id"])
+                v.user_id = user_id
+                v.music = [session.query(Music).get(music_id)]
+                session.add(v)
+                session.commit()
                 return "%s (video id: %s) was successfully uploaded." % (title, response["id"])
             else:
                 return "The upload failed with an unexpected response: %s" % (response,)
@@ -58,7 +74,7 @@ def resumable_upload(insert_request, title):
         print "Sleeping %f seconds and then retrying..." % sleep_seconds
         time.sleep(sleep_seconds)
 
-def process_video_request(credentials , video_url, music_url):
+def process_video_request(credentials , video_url, music_url, music_id, user_id):
     video_path = os.path.basename(urlsplit(video_url)[2])
     base, ext = os.path.splitext(video_path)
     title = base.split("-")[1]
@@ -67,6 +83,7 @@ def process_video_request(credentials , video_url, music_url):
     # code = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1", 
     #               "-map", "1:0", "-codec", "copy", "-y", output_video])
     code = sp.call(["ffmpeg", "-i", music_url, "-i", video_url, "-codec", "copy", "-y", output_video])
+    # TODO refactor for loggin or returning error to webdyno (redis?)
     if code:
         return jsonify({"error": "cannot encode the file"}), 400
     insert_request = youtube_service.videos().insert(
@@ -85,4 +102,4 @@ def process_video_request(credentials , video_url, music_url):
         media_body=MediaFileUpload(output_video, chunksize=-1, resumable=True)
     )
     insert_request.http = credentials.authorize(httplib2.Http())
-    res = resumable_upload(insert_request, title)
+    res = resumable_upload(insert_request, title, music_id, user_id)

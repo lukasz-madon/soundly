@@ -22,9 +22,9 @@ def auth_required(f):
   return wrapper
 
     
-def get_auth_http():
-    credentials = session["credentials"]
-    return credentials.authorize(httplib2.Http())
+# def get_auth_http():
+#     credentials = session["credentials"]
+#     return credentials.authorize(httplib2.Http())
 
 
 def detect_default_email():

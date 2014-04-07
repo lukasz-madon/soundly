@@ -25,7 +25,7 @@
        <div class="row player-grid">
         {% for item in music %}
           <div class="player-item col-xs-6 col-sm-4">
-            <a class="thumbnail" href="{{ item.url }}">
+            <a class="thumbnail" href="{{ item.url }}" data-id={{ item.id }}>
               <i class="fa"></i> 
                  <div class="txt text-right">
                   {{ item.artist }} <br>
@@ -96,7 +96,7 @@
           alert('You need to upload the video first');
           return;
         }
-        var data = { video_url: s3_video_url, music_url: inlinePlayer.lastSound.url };
+        var data = { video_url: s3_video_url, music_id: inlinePlayer.lastSoundId,  music_url: inlinePlayer.lastSound.url };
         $.ajax('process-video', {
           data : JSON.stringify(data),
           contentType : 'application/json',

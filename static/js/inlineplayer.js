@@ -25,6 +25,7 @@ function InlinePlayer() {
   this.indexByURL = [];
   this.lastSound = null;
   this.lastSoundTitle = null;
+  this.lastSoundId = 0;
   this.soundCount = 0;
 
   this.config = {
@@ -194,8 +195,10 @@ function InlinePlayer() {
     }
 
     self.lastSound = thisSound; // reference for next call
-    self.lastSoundTitle = o.innerText || o.textContent;;
+    self.lastSoundTitle = o.innerText || o.textContent;
+    // TODO refatroc global state
     document.getElementById('music_titile').innerHTML = self.lastSoundTitle;
+    self.lastSoundId = o.getAttribute('data-id');
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();
     } else {
