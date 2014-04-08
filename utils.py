@@ -28,11 +28,11 @@ def auth_required(f):
 
 
 def detect_default_email():
-    """flashes user abour default email that is caused be youtube and G+ mess.
-    youtube id has been merged with google and youtube users that are not linked to gmail
+    """flashes user about default email that is caused be youtube and G+ mess.
+    youtube id has been merged with google id and youtube users that are not linked to gmail
     have @pages.plusgoogle.com email.
     requires auth_requred()
     """
     if "@pages.plusgoogle.com" in g.user.email:
-        flash("""Your email address is %s. This maybe a default email.
-         Click your name in the upper right corner to change it.""" %(g.user.email,), "warning") 
+        flash("""Your email %s. is default.
+         Click your name in the navigation bar to change it.""" %(g.user.email,), "warning") 

@@ -92,10 +92,16 @@ def home():
 def dashboard():
     return render_template("dashboard.html", videos=g.user.videos)
 
-@app.route("/profile")
+@app.route("/profile", methods = ["POST", "GET"])
 @auth_required
 def profile():
-    return render_template("profile.html", form=EmailForm())
+    form = EmailForm()
+    if form.validate_on_submit():
+        g.user.email = form.email.data
+        db.session.add(g.user)
+        db.session.commit()
+        flash("email was changed", "success")
+    return render_template("profile.html", form=form)
 
 
 @app.route("/login/google")
