@@ -49,7 +49,7 @@ def resumable_upload(insert_request, title, music_id, user_id):
         try:
             status, response = insert_request.next_chunk()
             if "id" in response:
-                v = Video(title=title, url="https://www.youtube.com/watch?v=" + response["id"])
+                v = Video(title=title, url="https://www.youtu.be/" + response["id"])
                 v.user_id = user_id
                 v.music = [session.query(Music).get(music_id)]
                 session.add(v)
@@ -91,7 +91,7 @@ def process_video_request(credentials , video_url, music_url, music_id, user_id)
         body=dict(
           snippet=dict(
             title=title,
-            description=" Music provided by http://soundly.io",
+            description="\nMusic provided by http://soundly.io",
             tags=["trailer","soundly.io"],
             categoryId="20" # seems to be gaming for now
           ),

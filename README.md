@@ -117,3 +117,23 @@ Example credentials
 ```
 
 You can get views from youtube data api v2.0 `https://gdata.youtube.com/feeds/api/videos/MSrTnWDTdwI?v=2&alt=json` as json from client side which is nice, but need to store in DB to calculate the price later on.
+
+Youtube categories
+
+```
+	<option value="2">Autos &amp; Vehicles</option>
+    <option value="23">Comedy</option>
+    <option value="27">Education</option>
+    <option value="24">Entertainment</option>
+    <option value="1">Film &amp; Animation</option>
+    <option value="20" selected="">Gaming</option>
+    <option value="26">Howto &amp; Style</option>
+    <option value="10">Music</option>
+    <option value="25">News &amp; Politics</option>
+    <option value="29">Nonprofits &amp; Activism</option>
+    <option value="22">People &amp; Blogs</option>
+    <option value="15">Pets &amp; Animals</option>
+    <option value="28">Science &amp; Technology</option>
+    <option value="17">Sports</option>
+    <option value="19">Travel &amp; Events</option>
+```
