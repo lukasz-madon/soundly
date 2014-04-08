@@ -186,14 +186,20 @@ def process_video():
     json = request.json
     if not json:
         abort(400)
-    #TODO: solve https problem for ffmpeg (ffmpeg -protocols). Tried --enable-openssl, --enable-gpl
+    # TODO: solve https problem for ffmpeg (ffmpeg -protocols). Tried --enable-openssl, --enable-gpl
     # possible solution is to create custom buildpack and compile with-openssl or diff ssl lib. 
     video_url = request.json["video_url"].replace("https", "http", 1)  # temp fix
     music_id = int(request.json["music_id"])
     music_url = request.json["music_url"]
+    title = u"test"
+    description = "des"
+    tags = ["trailer","soundly.io"]
+    categoryId = 20
+    privacyStatus = "public"    
     app.logger.info("processing request: %s", request.json)
-    worker_queue.enqueue(process_video_request, session["credentials"], video_url, music_url, music_id, g.user.id)
-     # Check if the file is one of the allowed types/extensions
+    worker_queue.enqueue(process_video_request, session["credentials"], video_url, music_url, music_id, g.user.id,
+        title, description, tags, categoryId, privacyStatus)
+    # Check if the file is one of the allowed types/extensions
     # if not file or not allowed_file(file.filename):
     #     return jsonify({"error": "wrong file format. Supported formats %s" % app.config["ALLOWED_EXTENSIONS"]}), 400
     # TODO check bad chars, never trust user input

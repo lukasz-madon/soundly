@@ -49,7 +49,7 @@ def resumable_upload(insert_request, title, music_id, user_id):
         try:
             status, response = insert_request.next_chunk()
             if "id" in response:
-                v = Video(title=title, url="https://www.youtu.be/" + response["id"])
+                v = Video(title=title, url="https://www.youtube.com/watch?v=" + response["id"])
                 v.user_id = user_id
                 v.music = [session.query(Music).get(music_id)]
                 session.add(v)
@@ -74,10 +74,9 @@ def resumable_upload(insert_request, title, music_id, user_id):
         print "Sleeping %f seconds and then retrying..." % sleep_seconds
         time.sleep(sleep_seconds)
 
-def process_video_request(credentials , video_url, music_url, music_id, user_id):
+def process_video_request(credentials , video_url, music_url, music_id, user_id, title, description, tags, categoryId, privacyStatus):
     video_path = os.path.basename(urlsplit(video_url)[2])
     base, ext = os.path.splitext(video_path)
-    title = base.split("-")[1]
     output_video = secure_filename(video_path)
     # check how to hande all corner cases for input audio streams
     # code = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1", 
@@ -91,12 +90,12 @@ def process_video_request(credentials , video_url, music_url, music_id, user_id)
         body=dict(
           snippet=dict(
             title=title,
-            description="\nMusic provided by http://soundly.io",
-            tags=["trailer","soundly.io"],
-            categoryId="20" # seems to be gaming for now
+            description=description + "\nMusic provided by http://soundly.io",
+            tags=tags,
+            categoryId=categoryId
           ),
           status = dict(
-            privacyStatus="public"
+            privacyStatus=privacyStatus
           )
         ),
         media_body=MediaFileUpload(output_video, chunksize=-1, resumable=True)
