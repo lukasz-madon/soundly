@@ -48,8 +48,8 @@
           </div>
         </div>
         <span id="upload-error"></span>
-        <h4>Your pick : <strong><span id="music_titile"></span></strong> </h4>
         <div class="well">
+        <h4>Your pick : <strong><span id="music_titile"></span></strong> </h4>
           <form class="form-horizontal">
             <fieldset>
               <div class="form-group">
@@ -64,8 +64,8 @@
               </div>
               <div class="form-group">
                 <div class="col-lg-12">
-                  <a class="btn btn-primary" href="#" id="add-music">Add music</a>
-                  <p> <small>Any second thoughts on the music? No? Add it!</small></p>
+                  <a class="btn btn-primary" id="publish">Publish</a>
+                  <p> <small>Any second thoughts on the music? No? Publish it!</small></p>
                 </div>
               </div>
             </fieldset>
@@ -85,27 +85,30 @@
 <script type="text/javascript">
   var s3_video_url = null;
   function s3_upload(){
-      var s3upload = new S3Upload({
-          s3_object_name: '{{ g.user.google_user_id }}' + '-',
-          file_dom_selector: 'file',
-          s3_sign_put_url: '/sign-s3/',
-          onProgress: function(percent, message) {
-            $('#status').html(percent + '% ' + message);
-            $('.progress-bar').width(percent + '%');
-          },
-          onFinishS3Put: function(public_url) {
-            s3_video_url = public_url;
-            $('#status').html('Upload completed');
-          },
-          onError: function(status) {
-            $('#upload-error').html('Upload error: ' + status);
-          }
-      });
+    var title = this.files[0].name.split('.')[0];
+    var capTitle = title.charAt(0).toUpperCase() + title.slice(1);
+    $('#title').val(capTitle);
+    var s3upload = new S3Upload({
+        s3_object_name: '{{ g.user.google_user_id }}' + '-',
+        file_dom_selector: 'file',
+        s3_sign_put_url: '/sign-s3/',
+        onProgress: function(percent, message) {
+          $('#status').html(percent + '% ' + message);
+          $('.progress-bar').width(percent + '%');
+        },
+        onFinishS3Put: function(public_url) {
+          s3_video_url = public_url;
+          $('#status').html('Upload completed');
+        },
+        onError: function(status) {
+          $('#upload-error').html('Upload error: ' + status);
+        }
+    });
   }
 
   $(document).ready(function() {
       $('#file').on('change', s3_upload);
-      $('#add-music').click(function(){
+      $('#publish').click(function(){
         if (inlinePlayer.lastSound === null) {
           alert('First pick the best music');
           return;
