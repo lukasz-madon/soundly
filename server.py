@@ -191,10 +191,9 @@ def process_video():
     video_url = request.json["video_url"].replace("https", "http", 1)  # temp fix
     music_id = int(request.json["music_id"])
     music_url = request.json["music_url"]
-    base, ext = os.path.splitext(video_url)
-    title = base.split("-")[1]
-    description = ""
-    tags = ["trailer","soundly.io"]
+    title = request.json["title"]
+    description = request.json["description"]
+    tags = ["soundly.io"]
     categoryId = 20
     privacyStatus = "public"    
     app.logger.info("processing request: %s", request.json)

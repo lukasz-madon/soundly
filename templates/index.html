@@ -49,7 +49,7 @@
         </div>
         <span id="upload-error"></span>
         <div class="well">
-        <h4>Your pick : <strong><span id="music_titile"></span></strong> </h4>
+        <h5>Your pick: <strong><span id="music_titile"></span></strong></h5>
           <form class="form-horizontal">
             <fieldset>
               <div class="form-group">
@@ -117,7 +117,13 @@
           alert('You need to upload the video first');
           return;
         }
-        var data = { video_url: s3_video_url, music_id: inlinePlayer.lastSoundId,  music_url: inlinePlayer.lastSound.url };
+        var data = { 
+          title: $('#title').val(),   //TODO validation here as well?
+          description: $('#description').val(),
+          video_url: s3_video_url,
+          music_id: inlinePlayer.lastSoundId,  
+          music_url: inlinePlayer.lastSound.url 
+        };
         $.ajax('process-video', {
           data : JSON.stringify(data),
           contentType : 'application/json',

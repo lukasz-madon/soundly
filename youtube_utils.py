@@ -41,7 +41,7 @@ RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, httplib.NotConnected,
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 
 def resumable_upload(insert_request, title, music_id, user_id):
-    print "Started uploading: %s", (title,)
+    print "User %s Started uploading: %s" % (user_id, title)
     response = None
     error = None
     retry = 0
@@ -68,7 +68,7 @@ def resumable_upload(insert_request, title, music_id, user_id):
         print error
         retry += 1
         if retry > MAX_RETRIES:
-            return "MAX_RETRIES"
+            print "MAX_RETRIES"
         max_sleep = 2 ** retry
         sleep_seconds = random() * max_sleep
         print "Sleeping %f seconds and then retrying..." % sleep_seconds
@@ -102,3 +102,4 @@ def process_video_request(credentials , video_url, music_url, music_id, user_id,
     )
     insert_request.http = credentials.authorize(httplib2.Http())
     res = resumable_upload(insert_request, title, music_id, user_id)
+    os.remove(output_video)
