@@ -40,6 +40,13 @@ a.sing-up {
 	padding: 50px 0;
 }
 
+.bottom-section {
+  border-bottom: 0px;
+}
+
+.money {
+  opacity: 0;
+}
 /*  hover */
 @-webkit-keyframes push {
   50% {
@@ -278,4 +285,46 @@ a:hover, .push:hover {
 .bounceIn {
   -webkit-animation-name: bounceIn;
   animation-name: bounceIn;
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+
+  50% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+
+  50% {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
 }

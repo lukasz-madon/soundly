@@ -60,6 +60,17 @@
     <i class="fa fa-laptop icon-large"></i>
   </div>
 </div>
+<div class="row content-section-b bottom-section">
+  <div class="col-sm-2 col-sm-offset-3 col-xs-4 col-xs-offset-1 youtube">
+    <i class="fa fa-youtube icon-large"></i>
+  </div>
+  <div class="col-sm-4 col-sm-offset-1 col-xs-6">
+    <h2 class="section-heading">Publish to Youtube.</h2>
+    <p class="lead">
+      Adding music and uploading to Youtube is automatic. 
+    </p>
+  </div>
+</div>
 <div class="center">
   <a class="btn btn-success" href="{{ url_for('google_login') }}">Sing up for free</a>
 </div>
@@ -108,6 +119,7 @@
       checkAnimation('.music', 'swing');
       checkAnimation('.money', 'fadeInLeft');
       checkAnimation('.laptop', 'bounceIn');
+      checkAnimation('.youtube', 'pulse');
   });
   </script>
 {% endblock %}

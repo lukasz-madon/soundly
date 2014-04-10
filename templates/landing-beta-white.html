@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "landing-beta.html" %}
 {% block head %}
   {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename = 'css/landing.css') }}" />
@@ -11,91 +11,8 @@
       border-top: 1px solid #F3F4F5;
       border-bottom: 1px solid #F3F4F5;
     }
+    .bottom-section {
+      border-bottom: 0px;
+    }
   </style>
-{% endblock %}
-{% block navbar %}
-{% endblock %}
-{% block content %}
-<a class="sing-up flash animated" href="{{ url_for('google_login') }}">Sing up</a>
-<div class="logo text-center">
-  <img class="img-responsive push" src="{{ url_for('static', filename = 'img/logo-beta-white.png') }}">
-  <h2>Music for your trailer.</h2>
-</div>
-<div class="row content-section-a">
-  <div class="col-md-8 col-md-offset-2">
-    <iframe width="100%" height="400" src="https://www.youtube.com/embed/X-b2Zrr8BEk" frameborder="0" allowfullscreen>
-    </iframe>
-  </div>
-</div>
-<div class="row content-section-a">
-  <div class="col-sm-5 col-sm-offset-3 col-xs-6 col-xs-offset-1">
-    <h2 class="section-heading">Quality Music.</h2>
-    <p class="lead">
-      Pick the best music from our royalty free collection. No extra legal hassle needed.
-    </p>
-  </div>
-  <div class="col-sm-4 col-xs-4 music">
-    <i class="fa fa-music icon-large"></i>
-  </div>
-</div>
-<div class="row content-section-b">
-  <div class="col-sm-2 col-sm-offset-3 col-xs-4 col-xs-offset-1 money">
-    <i class="fa fa-money icon-large"></i>
-  </div>
-  <div class="col-sm-4 col-sm-offset-1 col-xs-6">
-    <h2 class="section-heading">Simple pricing.</h2>
-    <p class="lead">
-      Free in beta. 
-    </p>
-  </div>
-</div>
-<div class="row content-section-a">
-  <div class="col-sm-5 col-sm-offset-3 col-xs-6 col-xs-offset-1">
-    <h2 class="section-heading">Seamless process.</h2>
-    <p class="lead">
-       Just 3 clicks to get things done. No extra software. 
-    </p>
-  </div>
-  <div class="col-sm-4 col-xs-4 laptop">
-    <i class="fa fa-laptop icon-large"></i>
-  </div>
-</div>
-<div class="center">
-  <a class="btn btn-success" href="{{ url_for('google_login') }}">Sing up for free</a>
-</div>
-{% endblock %}
-{% block script %}
-  {{ super() }}
-  <script type="text/javascript">
-
-  function isElementInViewport(elem) {
-      var $elem = $(elem);
-      console.log($elem);
-      // Get the scroll position of the page.
-      var scrollElem = ((navigator.userAgent.toLowerCase().indexOf('webkit') != -1) ? 'body' : 'html');
-      var viewportTop = $(scrollElem).scrollTop();
-      var viewportBottom = viewportTop + $(window).height();
-      // Get the position of the element on the page.
-      var elemTop = Math.round( $elem.offset().top );
-      var elemBottom = elemTop + $elem.height();
-      return ((elemTop + 20) < viewportBottom) && ((elemBottom - 20) > viewportTop); // start when part of the elem is in
-  }
-  // Check if it's time to start the animation.
-  function checkAnimation(selector, anim) {
-      var $elem = $(selector);
-      // If the animation has already been started
-      if ($elem.hasClass(anim)) return;
-
-      if (isElementInViewport($elem)) {
-          // Start the animation
-          $elem.addClass(anim + ' animated');
-      }
-  }
-  // Capture scroll events
-  $(window).scroll(function(){
-      checkAnimation('.music', 'swing');
-      checkAnimation('.money', 'fadeInLeft');
-      checkAnimation('.laptop', 'bounceIn');
-  });
-  </script>
 {% endblock %}
