@@ -195,10 +195,11 @@ def process_video():
     description = request.json["description"]
     tags = ["soundly.io"]
     categoryId = 20
-    privacyStatus = "public"    
+    privacyStatus = request.json["privacy_status"]
+    override_audio = request.json["override_audio"]    
     app.logger.info("processing request: %s", request.json)
     worker_queue.enqueue(process_video_request, session["credentials"], video_url, music_url, music_id, g.user.id,
-        title, description, tags, categoryId, privacyStatus)
+        title, description, tags, categoryId, privacyStatus, override_audio)
     # Check if the file is one of the allowed types/extensions
     # if not file or not allowed_file(file.filename):
     #     return jsonify({"error": "wrong file format. Supported formats %s" % app.config["ALLOWED_EXTENSIONS"]}), 400

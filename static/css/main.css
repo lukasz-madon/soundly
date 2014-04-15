@@ -39,6 +39,11 @@
   max-width: 400px;
 }
 
+.checkbox {
+  padding-left: 0px;
+  padding-bottom: 10px;
+}
+
 table a, .table a {
   text-decoration: none;
 }

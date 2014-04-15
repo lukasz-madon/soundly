@@ -74,14 +74,15 @@ def resumable_upload(insert_request, title, music_id, user_id):
         print "Sleeping %f seconds and then retrying..." % sleep_seconds
         time.sleep(sleep_seconds)
 
-def process_video_request(credentials , video_url, music_url, music_id, user_id, title, description, tags, categoryId, privacyStatus):
+def process_video_request(credentials , video_url, music_url, music_id, user_id, title, description, tags, 
+    categoryId, privacyStatus, override_audio):
     video_path = os.path.basename(urlsplit(video_url)[2])
     base, ext = os.path.splitext(video_path)
     output_video = secure_filename(video_path)
     # check how to hande all corner cases for input audio streams
     # code = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1", 
     #               "-map", "1:0", "-codec", "copy", "-y", output_video])
-    code = sp.call(["ffmpeg", "-i", music_url, "-i", video_url, "-codec", "copy", "-y", output_video])
+    code = sp.call(["ffmpeg", "-i", music_url, "-i", video_url, "-codec", "copy", "-y", "-shortest", output_video])
     # TODO refactor for loggin or returning error to webdyno (redis?)
     if code:
         print "error - cannot encode the file"
@@ -101,5 +102,7 @@ def process_video_request(credentials , video_url, music_url, music_id, user_id,
         media_body=MediaFileUpload(output_video, chunksize=-1, resumable=True)
     )
     insert_request.http = credentials.authorize(httplib2.Http())
-    res = resumable_upload(insert_request, title, music_id, user_id)
-    os.remove(output_video)
+    try:
+        res = resumable_upload(insert_request, title, music_id, user_id)
+    finally:
+        os.remove(output_video)

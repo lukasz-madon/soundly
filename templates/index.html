@@ -63,11 +63,25 @@
                 </div>
               </div>
               <div class="form-group">
-                <div class="col-lg-12">
-                  <a class="btn btn-primary" id="publish">Publish</a>
-                  <p> <small>Any second thoughts about music? No? Publish it!</small></p>
+                <div class="col-xs-4">
+                  <a class="btn btn-primary" id="publish">Publish</a> 
+                </div>
+                <div class="col-xs-4">
+                  <div class="checkbox">
+                    <label>
+                      <input id="override_audio" type="checkbox" checked><small>Override audio</small>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <select class="form-control" id="privacyStatus">
+                    <option>public</option>
+                    <option>unlisted</option>
+                    <option>private</option>
+                  </select>
                 </div>
               </div>
+            <p class="text-muted"> <small>Any second thoughts about music? No? Publish it!</small></p>
             </fieldset>
           </form>
         </div>
@@ -122,7 +136,9 @@
           description: $('#description').val(),
           video_url: s3_video_url,
           music_id: inlinePlayer.lastSoundId,  
-          music_url: inlinePlayer.lastSound.url 
+          music_url: inlinePlayer.lastSound.url,
+          override_audio: $("#override_audio").is(':checked'),
+          privacy_status: $("#privacyStatus option:selected").text()
         };
         $.ajax('process-video', {
           data : JSON.stringify(data),
