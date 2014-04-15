@@ -3,7 +3,7 @@ from hashlib import sha1
 from random import SystemRandom
 from urllib import quote
 
-from flask import Flask, render_template, request, url_for, redirect, session, jsonify, g, flash
+from flask import Flask, render_template, request, url_for, redirect, session, jsonify, g, flash, abort
 from flask.ext.wtf import Form
 from flask.ext.sqlalchemy import SQLAlchemy
 from flaskext.kvsession import KVSessionExtension
