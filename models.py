@@ -43,6 +43,8 @@ class Music(db.Model, ModelMixin):
     url = db.Column(db.String(128))
     video_id = db.Column(db.Integer, db.ForeignKey("videos.id"))
     artist_id = db.Column(db.Integer, db.ForeignKey("artists.id"))
+    category = db.Column(db.Unicode(64))
+    tag = db.Column(db.Unicode(20))
 
 
 class Artist(db.Model, ModelMixin):
