@@ -100,7 +100,7 @@ def profile():
         g.user.email = form.email.data
         db.session.add(g.user)
         db.session.commit()
-        flash("email was changed", "success")
+        flash("Email was changed", "success")
     return render_template("profile.html", form=form)
 
 

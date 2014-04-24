@@ -3,7 +3,8 @@ import datetime
 from flask.ext.sqlalchemy import SQLAlchemy
 
 ROLE_USER = 0
-ROLE_ADMIN = 1
+ROLE_MUSIC_OWNER = 1
+ROLE_ADMIN = 2
 db = SQLAlchemy()
 
 
@@ -17,7 +18,7 @@ class User(db.Model, ModelMixin):
     id = db.Column(db.Integer, primary_key=True)
     google_user_id = db.Column(db.String(64), unique=True, index=True)
     name = db.Column(db.Unicode(64))
-    email = db.Column(db.String(128))
+    email = db.Column(db.String(64))
     active = db.Column(db.Boolean(), default=True)
     role = db.Column(db.SmallInteger, default = ROLE_USER)
     profile_url = db.Column(db.String(128))
@@ -30,14 +31,25 @@ class User(db.Model, ModelMixin):
     def is_admin(self):
         return self.role == ROLE_ADMIN
 
+    @property
+    def is_music_owner(self):
+        return self.role == ROLE_MUSIC_OWNER
+
 
 class Music(db.Model, ModelMixin):
     __tablename__ = "music"
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Unicode(128))
-    artist = db.Column(db.Unicode(128))
+    title = db.Column(db.Unicode(64))
     url = db.Column(db.String(128))
     video_id = db.Column(db.Integer, db.ForeignKey("videos.id"))
+    artist_id = db.Column(db.Integer, db.ForeignKey("artists.id"))
+
+
+class Artist(db.Model, ModelMixin):
+    __tablename__ = "artists"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Unicode(64))
+    music = db.relationship("Music", backref="artist")
 
 
 class Video(db.Model, ModelMixin):
