@@ -36,3 +36,4 @@ def detect_default_email():
     if "@pages.plusgoogle.com" in g.user.email:
         flash("""Your email %s. is default.
          Click your name in the navigation bar to change it.""" %(g.user.email,), "warning") 
+
