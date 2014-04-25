@@ -9,8 +9,12 @@ db = SQLAlchemy()
 
 
 class ModelMixin(object):
-  def __repr__(self):
-    return unicode(self.__dict__)
+    def __repr__(self):
+        return unicode(self.to_dict)
+
+    @property
+    def to_dict(self):
+        return dict((col, getattr(self, col)) for col in self.__table__.columns.keys())
 
 
 class User(db.Model, ModelMixin):
@@ -20,7 +24,7 @@ class User(db.Model, ModelMixin):
     name = db.Column(db.Unicode(64))
     email = db.Column(db.String(64))
     active = db.Column(db.Boolean(), default=True)
-    role = db.Column(db.SmallInteger, default = ROLE_USER)
+    role = db.Column(db.SmallInteger, default=ROLE_USER)
     profile_url = db.Column(db.String(128))
     image_url = db.Column(db.String(128))
     created_on = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -62,4 +66,3 @@ class Video(db.Model, ModelMixin):
     views = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     music = db.relationship("Music", backref="video")
-

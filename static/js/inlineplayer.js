@@ -234,7 +234,7 @@ function InlinePlayer() {
     sm._writeDebug('inlinePlayer.init(): Found '+foundItems+' relevant items.');
   }
 
-  this.init();
+  //this.init();
 
 }
 

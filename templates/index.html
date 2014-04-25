@@ -9,7 +9,7 @@
     <div class="col-lg-8">
       <h2>Pick Music</h2>
         <form>
-          <input type="text" class="form-control" placeholder="Search">
+          <input id="q" type="text" class="form-control" placeholder="Search">
         </form>
         <br>
        <!-- <div id="sm2-container">
@@ -22,18 +22,8 @@
                 <div class="rect5"></div>
               </div>  
        </div> -->
-       <div class="row player-grid">
-        {% for item in music %}
-          <div class="player-item col-xs-6 col-sm-4">
-            <a class="thumbnail" href="{{ item.url }}" data-id={{ item.id }}>
-              <i class="fa"></i> 
-                 <div class="txt text-right">
-                  {{ item.artist.name }} <br>
-                  <strong>{{ item.title }}</strong>
-                 </div>
-            </a>
-          </div>
-        {% endfor %} 
+       <div id="player-grid" class="row">
+
        </div> 
        <small>You must choose, but choose wisely. </small>
     </div>
@@ -96,6 +86,38 @@
 <script type="text/javascript" src="{{ url_for('static', filename = 'js/soundmanager2.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename = 'js/inlineplayer.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename = 'js/s3upload.js') }}"></script>
+<script src="https://d3ibatyzauff7b.cloudfront.net/assets/algolia/algoliasearch.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  var client = new AlgoliaSearch('{{ ALGOLIASEARCH_APPLICATION_ID }}', '{{ ALGOLIASEARCH_API_KEY_SEARCH }}');
+  var index = client.initIndex('music');
+  var $hits = $('#player-grid');
+  // validation on DB side so no XSS
+  function searchCallback(success, content) {
+    if (!success || $('#q').val() != content.query) {
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < content.hits.length; ++i) {
+      var hit = content.hits[i];
+      html += '<div class="player-item col-xs-6 col-sm-4">' +
+                '<a class="thumbnail" href="' + hit.url + '" data-id="' + hit.id + '"">' +
+                  '<i class="fa"></i> ' +
+                  '<div class="txt text-right">' + 
+                  hit._highlightResult.artist.value + '<br>' +
+                  '<strong>' + hit._highlightResult.title.value + '</strong>' +
+                  '</div>' +
+                '</a>' +
+              '</div>'
+    }
+    $hits.html(html);
+    inlinePlayer.init();
+  }
+  $('#q').keyup(function() {
+    index.search($(this).val(), searchCallback, { hitsPerPage: 30 });
+  }).trigger('keyup').focus();
+});
+</script>
 <script type="text/javascript">
   var s3_video_url = null;
   function s3_upload(){

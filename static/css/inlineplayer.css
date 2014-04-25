@@ -69,7 +69,11 @@
 .player-item .txt {
 	width: 100%;
 }
-
+.player-item em {
+    font-weight: bold;
+    font-style: normal;
+    text-decoration: underline;
+}
 .player-item a.sm2_paused {
 	background-color: #ecf0f1;
 }
@@ -77,7 +81,6 @@
 .player-item a.sm2_paused i:before {
 	content: "\f04c";
 }
-
 .player-item  a.sm2_playing,
 .player-item  a.sm2_playing:hover {
  background-color: #ecf0f1;

@@ -10,13 +10,10 @@ def export_music():
 	index = client.initIndex("music")
 	batch = []
 	for m in Music.query.all():
-		obj = {
-			"title":  m.title,
-			"artist":  m.artist.name,
-			"category":  m.category,
-			"tag":  m.tag	
-		}
+		obj = m.to_dict 
+		obj["artist"] = m.artist.name
+		my_dict.pop("artist_id")
 		batch.append(obj)
 	index.setSettings({"attributesToIndex": ["title", "artist", "category", "tag"]})
 	index.addObjects(batch)
-	print index.search("ba")
+

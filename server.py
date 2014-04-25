@@ -61,7 +61,8 @@ class EmailForm(Form):
 def index():
     detect_default_email()
     # result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
-    return render_template("index.html", music=Music.query.all())
+    return render_template("index.html", ALGOLIASEARCH_APPLICATION_ID=app.config["ALGOLIASEARCH_APPLICATION_ID"],
+    ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"])
 
 @app.route("/about")
 def about():
