@@ -9,18 +9,22 @@ from models import User
 def auth_required(f):
   @wraps(f)
   def wrapper(*args, **kwargs):
-    if "credentials" in session:
-        g_user_id = session["credentials"].id_token["sub"]
-        user = User.query.filter_by(google_user_id=g_user_id).first()
-        if user:
-            g.user = user
-        else:
-            return redirect(url_for("home"))
+    user = get_auth_user()
+    if user:
+        g.user = user
     else:
         return redirect(url_for("home"))
     return f(*args, **kwargs)
   return wrapper
 
+
+def get_auth_user():
+    try:
+        if "credentials" in session:
+            g_user_id = session["credentials"].id_token["sub"]
+            return User.query.filter_by(google_user_id=g_user_id).first()
+    except:
+        return None
     
 # def get_auth_http():
 #     credentials = session["credentials"]

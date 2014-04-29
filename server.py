@@ -6,6 +6,8 @@ from urllib import quote
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify, g, flash, abort
 from flask.ext.wtf import Form
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.admin import Admin
+
 from flaskext.kvsession import KVSessionExtension
 from wtforms import TextField, TextAreaField, PasswordField, SubmitField
 from simplekv.memory import DictStore
@@ -18,6 +20,7 @@ import httplib2
 
 from worker import conn
 from models import db, User, Music, Video
+from admin import AdminModelView
 from youtube_utils import process_video_request, youtube_service
 from utils import detect_default_email, auth_required
 
@@ -54,6 +57,13 @@ user_info_service = build("oauth2", "v2")
 class EmailForm(Form):
     email = TextField("Email")
     submit = SubmitField("Submit")
+
+admin = Admin(app)
+admin.add_view(AdminModelView(User, db.session))
+admin.add_view(AdminModelView(Music, db.session))
+admin.add_view(AdminModelView(Video, db.session))
+
+
 
 ### Views ###
 @app.route("/")

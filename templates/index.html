@@ -9,7 +9,7 @@
     <div class="col-lg-8">
       <h2>Pick Music</h2>
         <form>
-          <input id="q" type="text" class="form-control" placeholder="Search">
+          <input id="q" autocomplete="off" autocorrect="off" type="text" class="form-control" placeholder="Music Search" spellcheck="false">
         </form>
         <br>
        <!-- <div id="sm2-container">
@@ -105,7 +105,8 @@ $(document).ready(function() {
                   '<i class="fa"></i> ' +
                   '<div class="txt text-right">' + 
                   hit._highlightResult.artist.value + '<br>' +
-                  '<strong>' + hit._highlightResult.title.value + '</strong>' +
+                  '<strong>' + hit._highlightResult.title.value + '</strong><br>' + 
+                  '<small class="text-muted">#' + hit._highlightResult.tag.value + '</small>' +
                   '</div>' +
                 '</a>' +
               '</div>'

@@ -1,4 +1,5 @@
 Flask==0.10.1
+Flask-Admin==1.0.8
 Flask-KVSession==0.4
 Flask-Login==0.2.9
 Flask-Mail==0.9.0

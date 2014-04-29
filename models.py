@@ -31,6 +31,9 @@ class User(db.Model, ModelMixin):
     refresh_token = db.Column(db.String(64))
     videos = db.relationship("Video", backref="user", lazy="dynamic")
 
+    def __unicode__(self):
+        return self.email
+
     @property
     def is_admin(self):
         return self.role == ROLE_ADMIN
