@@ -168,7 +168,13 @@ $(document).ready(function() {
           contentType : 'application/json',
           type : 'POST'
         });
-        $('#ok').html('Your video will be available on your channels shortly. <br> <img class="img-responsive" src="http://wearesocialmedia.gr/wp-content/uploads/2013/11/3879-animated_gif-chuck_norris-dodgeball-thumbs_up.gif">');
+        // Just for fun :)
+        if(Math.random() < 0.5) {
+          $('#ok').html('Your video will be available on your channels shortly.<br> <img class="img-responsive" src="http://d24w6bsrhbeh9d.cloudfront.net/photo/a44rgWQ_460sa.gif">');
+        } else {
+          $('#ok').html('Your video will be available on your channels shortly.<br> <img class="img-responsive" src="http://wearesocialmedia.gr/wp-content/uploads/2013/11/3879-animated_gif-chuck_norris-dodgeball-thumbs_up.gif">');
+        }
+          
       });
   });
 </script>

@@ -64,7 +64,6 @@ admin.add_view(AdminModelView(Music, db.session))
 admin.add_view(AdminModelView(Video, db.session))
 
 
-
 ### Views ###
 @app.route("/")
 @auth_required
@@ -159,7 +158,7 @@ def authorized():
         user.refresh_token = credentials.refresh_token
         db.session.add(user)
         db.session.commit()
-    # refresh token is send only once, needed for auto token refreshing
+    # refresh token is send only once, needed for auto token refreshing 
     credentials.refresh_token = user.refresh_token
     session["credentials"] = credentials
     return redirect(url_for("index"))
