@@ -100,14 +100,16 @@ $(document).ready(function() {
     var html = '';
     for (var i = 0; i < content.hits.length; ++i) {
       var hit = content.hits[i];
-      html += '<div class="player-item col-xs-6 col-sm-4">' +
+      html += '<div class="player-item  col-xs-12 col-sm-4">' +
                 '<a class="thumbnail" href="' + hit.url + '" data-id="' + hit.id + '"">' +
-                  '<i class="fa"></i> ' +
-                  '<div class="txt text-right">' + 
+                '<div class="row">' +
+                  '<div class="col-xs-2"><i class="fa"></i></div>' +
+                  '<div class="col-xs-10 txt text-right">' + 
                   hit._highlightResult.artist.value + '<br>' +
                   '<strong>' + hit._highlightResult.title.value + '</strong><br>' + 
                   '<small class="text-muted">#' + hit._highlightResult.tag.value + '</small>' +
                   '</div>' +
+                '</div>' +
                 '</a>' +
               '</div>'
     }
