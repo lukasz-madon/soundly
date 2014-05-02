@@ -93,6 +93,7 @@
 	height: 60px;
 	background: #fff;
 	z-index: 9999;
+	vertical-align:middle;
 	-webkit-transition-property: bottom;
 	-webkit-transition-duration: .3s;
 	-webkit-transition-timing-function: ease;
@@ -105,6 +106,10 @@
 	transition-property: bottom;
 	transition-duration: .3s;
 	transition-timing-function: ease;
+}
+
+.slide-player .player-content  {
+	width: 400px;
 }
 
 .show-up {
@@ -121,3 +126,37 @@ body #sm2-container embed {
  left:-9999em;
  top:-9999em;
 }
+
+.slider {
+  width: 300px;
+}
+
+.slider > .dragger {
+  background: #ecf0f1;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  border: 1px solid #496805;
+  width: 14px;
+  height: 14px;
+}
+
+.slider > .dragger:hover {
+  background: #2c3e50;
+}
+
+.slider > .track, .slider > .highlight-track {
+  background: #ccc;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  border: 1px solid #2c3e50;
+  height: 4px;
+}
+
+.slider > .highlight-track {
+	background-color: #ecf0f1;	
+	border-color: #2c3e50;
+}
+
+
