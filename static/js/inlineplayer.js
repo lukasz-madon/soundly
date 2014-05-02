@@ -27,6 +27,9 @@ function InlinePlayer() {
   this.lastSoundTitle = null;
   this.lastSoundId = 0;
   this.soundCount = 0;
+  this.currentPosition = 0;
+  this.duration = 0;
+  this.firstPlaying = true;
 
   this.config = {
     playNext: false, // stop after one sound, or play through list until end
@@ -52,6 +55,22 @@ function InlinePlayer() {
   } : function(o, evtName, evtHandler) {
     return o.detachEvent('on'+evtName,evtHandler);
   });
+
+  this.msToTimestamp = function(milliseconds) {
+    var totalSeconds = Math.round(milliseconds / 1000);
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = totalSeconds - minutes * 60;
+    if(isNaN(minutes)) {
+        minutes = '';
+    }
+    if(isNaN(seconds)) {
+        return '';
+    }
+    if(seconds < 10) {
+        seconds = '0' + seconds;
+    }
+    return minutes + ':' + seconds;
+  }
 
   this.classContains = function(o,cStr) {
 	return (typeof(o.className)!='undefined'?o.className.match(new RegExp('(\\s|^)'+cStr+'(\\s|$)')):false);
@@ -118,8 +137,35 @@ function InlinePlayer() {
           pl.handleClick({'target':pl.links[nextLink]});
         }
       }
-    }
+    },
 
+    whileplaying: function() {
+      var pos = self.msToTimestamp(self.position());
+      var duration = self.msToTimestamp(self.lastSound.duration);
+      if (pos !== self.currentPosition){
+        document.getElementById('position').innerHTML = pos;        
+      }
+      if (duration !== self.duration) {
+        document.getElementById('duration').innerHTML = duration;
+      }
+    }
+  }
+
+  this.position = function(pos) {
+      if(self.lastSound) {
+          if(pos || pos === 0) {
+              //limit to bounds
+              pos = Math.min(self.lastSound.duration, pos);
+              pos = Math.max(0, pos);
+              //setter
+              return self.lastSound.setPosition(pos);
+          } else {
+              //getter
+              return self.lastSound.position;
+          }
+      } else {
+          return 0;
+      }
   }
 
   this.stopEvent = function(e) {
@@ -182,6 +228,7 @@ function InlinePlayer() {
        onpause:self.events.pause,
        onresume:self.events.resume,
        onfinish:self.events.finish,
+       whileplaying:self.events.whileplaying,
        type:(o.type||null)
       });
       // tack on some custom data
@@ -196,9 +243,14 @@ function InlinePlayer() {
 
     self.lastSound = thisSound; // reference for next call
     self.lastSoundTitle = o.innerText || o.textContent;
-    // TODO refatroc global state
-    document.getElementById('music_titile').innerHTML = self.lastSoundTitle;
+    // TODO refactor global state
+    document.getElementById('music_titile').innerHTML = self.lastSoundTitle;      
     self.lastSoundId = o.getAttribute('data-id');
+    if (self.firstPlaying) {
+      document.getElementById("player").className += " show-up";
+      console.log(document.getElementById("player"));
+      self.firstPlaying = false;
+    }
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();
     } else {
@@ -233,21 +285,18 @@ function InlinePlayer() {
     }
     sm._writeDebug('inlinePlayer.init(): Found '+foundItems+' relevant items.');
   }
-
-  //this.init();
-
 }
 
 var inlinePlayer = null;
 
 soundManager.setup({
   // disable or enable debug output
-  debugMode: false,
+  debugMode: true,
   // use HTML5 audio for MP3/MP4, if available
   preferFlash: false,
   useFlashBlock: true,
   // path to directory containing SM2 SWF
-  url: '../../swf/',
+  url: '../swf/',
   // optional: enable MPEG-4/AAC support (requires flash 9)
   flashVersion: 9
 });

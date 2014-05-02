@@ -80,6 +80,11 @@
       </div>
     </div>
   </div>
+  <div id="player" class="slide-player">
+    <div class="cointener">
+      <a id="player-play" href="#">play</a> ----- slider ------ <span id="position">0:00</span>/<span id="duration">0:00</span>
+    </div>
+  </div>
 {% endblock %}
 {% block script %}
   {{ super() }}
@@ -115,6 +120,8 @@ $(document).ready(function() {
     }
     $hits.html(html);
     inlinePlayer.init();
+    //$('#player-play').click(inlinePlayer.handleClick);
+
   }
   $('#q').keyup(function() {
     index.search($(this).val(), searchCallback, { hitsPerPage: 30 });

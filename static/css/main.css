@@ -24,6 +24,14 @@
   }
 }
 
+/* ff border fix */
+a:focus
+{
+  -moz-outline-style: none;
+}
+a:focus { outline:none }
+
+
 /* bootstrap override TODO refactor */
 .navbar {
 	border-radius: 0px;
