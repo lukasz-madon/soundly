@@ -108,6 +108,7 @@ def profile():
         db.session.add(g.user)
         db.session.commit()
         flash("Email was changed", "success")
+        return redirect(url_for("index"))
     else:
         flash_errors(form)
     return render_template("profile.html", form=form)
