@@ -111,6 +111,7 @@ def profile():
         return redirect(url_for("index"))
     else:
         flash_errors(form)
+    form.email.data = g.user.email
     return render_template("profile.html", form=form)
 
 

@@ -86,15 +86,27 @@
   <div id="player" class="slide-player">
     <div class="container">
       <div class="player-content center-block">
+        <table style="vertical-align:middle">
+          <tbody>
+            <tr>
+              <td>
+                <a id="player-play" href="#"><i class="fa fa-play fa-lg"></i></a> 
+              </td>
+              <td>
+                <input type="text" data-slider="true">
+              </td>
+              <td>
+                <span id="position">0:00</span>/<span id="duration">0:00</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div class="row">
           <div class="col-xs-1">
-            <a id="player-play" href="#"><i class="fa fa-play fa-lg"></i></a> 
           </div>
           <div class="col-xs-9">
-            <input type="text" data-slider="true">
           </div>
           <div class="col-xs-1">
-            <span id="position">0:00</span>/<span id="duration">0:00</span>
           </div>
         </div>
       </div>
