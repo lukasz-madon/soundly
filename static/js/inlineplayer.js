@@ -143,13 +143,22 @@ function InlinePlayer() {
       var pos = self.msToTimestamp(self.position());
       var duration = self.msToTimestamp(self.lastSound.duration);
       if (pos !== self.currentPosition){
+        self.currentPosition = pos;
         document.getElementById('position').innerHTML = pos;        
       }
       if (duration !== self.duration) {
+        self.duration = duration;
         document.getElementById('duration').innerHTML = duration;
       }
+      var ratio = self.position() / self.lastSound.duration;
+      $('#slider').simpleSlider('setRatio', ratio);
     }
   }
+
+  this.seek = function(ratio) {
+    var pos = self.lastSound.duration * ratio;
+    self.position(pos);
+  };
 
   this.position = function(pos) {
       if(self.lastSound) {
@@ -247,8 +256,7 @@ function InlinePlayer() {
     document.getElementById('music_titile').innerHTML = self.lastSoundTitle;      
     self.lastSoundId = o.getAttribute('data-id');
     if (self.firstPlaying) {
-      document.getElementById("player").className += " show-up";
-      console.log(document.getElementById("player"));
+      document.getElementById('player').className += ' show-up';
       self.firstPlaying = false;
     }
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
@@ -291,7 +299,7 @@ var inlinePlayer = null;
 
 soundManager.setup({
   // disable or enable debug output
-  debugMode: true,
+  debugMode: false,
   // use HTML5 audio for MP3/MP4, if available
   preferFlash: false,
   useFlashBlock: true,
@@ -306,5 +314,11 @@ soundManager.setup({
 soundManager.onready(function() {
   // soundManager.createSound() etc. may now be called
   inlinePlayer = new InlinePlayer();
+  $('#slider').bind('slider:changed', function (event, data) {
+    // has to do it like that because simple slider always bubble the event.
+    if(data.trigger === 'domDrag') {
+      inlinePlayer.seek(data.ratio);    
+    }
+  });
 });
 
