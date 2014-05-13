@@ -87,8 +87,12 @@ def privacy():
     return render_template("privacy.html")
 
 @app.route("/landing-beta")
-def landing():
+def landing_beta():
     return render_template("landing-beta-white.html")
+
+@app.route("/landing-page")
+def landing():
+    return render_template("landing.html")
 
 @app.route("/home")
 def home():
