@@ -41,13 +41,15 @@ worker_queue = Queue(connection=conn)
 # def allowed_file(filename):
 #     return "." in filename and filename.rsplit(".", 1)[1] in app.config["ALLOWED_EXTENSIONS"]
 
-
 if os.environ.get("HEROKU") is not None:
     import logging
     stream_handler = logging.StreamHandler()
     app.logger.addHandler(stream_handler)
     app.logger.setLevel(logging.INFO)
     app.logger.info("starting app")
+
+if os.environ.get("DEBUG", False):
+    app.config["DEBUG"] = True
 
 flow = OAuth2WebServerFlow(client_id=app.config["GOOGLE_CLIENT_ID"],
                            client_secret=app.config["GOOGLE_CLIENT_SECRET"],
@@ -70,38 +72,47 @@ def index():
     return render_template("index.html", ALGOLIASEARCH_APPLICATION_ID=app.config["ALGOLIASEARCH_APPLICATION_ID"],
     ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"])
 
+
 @app.route("/about")
 def about():
     return render_template("about.html")
+
 
 @app.route("/faq")
 def faq():
     return render_template("faq.html")
 
+
 @app.route("/terms")
 def terms():
     return render_template("terms.html")
+
 
 @app.route("/privacy")
 def privacy():
     return render_template("privacy.html")
 
+
 @app.route("/landing-beta")
 def landing_beta():
     return render_template("landing-beta-white.html")
+
 
 @app.route("/landing-page")
 def landing():
     return render_template("landing.html")
 
+
 @app.route("/home")
 def home():
     return render_template("landing-beta.html")
+
 
 @app.route("/dashboard")
 @auth_required
 def dashboard():
     return render_template("dashboard.html", videos=g.user.videos)
+
 
 @app.route("/profile", methods = ["POST", "GET"])
 @auth_required
@@ -140,12 +151,15 @@ def authorized():
     # CSRF
     try:
         if request.args["state"] != session["state"]:
+            app.logger.error("possible CSRF")
             abort(400)
     except KeyError:
+        app.logger.error("incorrect CSRF protection")
         abort(401)
     session.pop("state", None)
     code = request.args.get("code")
     if not code:
+        app.logger.error("Google API did not return code")
         abort(403)
     try:
         credentials = flow.step2_exchange(code)
@@ -166,6 +180,7 @@ def authorized():
     # refresh token is send only once, needed for auto token refreshing 
     credentials.refresh_token = user.refresh_token
     session["credentials"] = credentials
+    app.logger.info("User %s is authenticated", user.id)
     return redirect(url_for("index"))
 
 
@@ -186,7 +201,7 @@ def sign_s3():
     put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
     signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
     signature = quote(signature.strip()).replace("/", "%2F")
-    app.logger.info("signing for %s with signature %s", put_request, signature)
+    app.logger.info("User %s signing for %s with signature %s", g.user.id, put_request, signature)
     url = "https://%s.s3.amazonaws.com/%s" % (S3_BUCKET, object_name)
 
     return jsonify({
@@ -212,7 +227,7 @@ def process_video():
     categoryId = 20
     privacyStatus = request.json["privacy_status"]
     override_audio = request.json["override_audio"]    
-    app.logger.info("processing request: %s", request.json)
+    app.logger.info("User %s processing request: %s", g.user.id, request.json)
     worker_queue.enqueue(process_video_request, session["credentials"], video_url, music_url, music_id, g.user.id,
         title, description, tags, categoryId, privacyStatus, override_audio)
     # Check if the file is one of the allowed types/extensions
@@ -223,6 +238,4 @@ def process_video():
 
 
 if __name__ == "__main__":
-    if os.environ.get("DEBUG") is not None:
-        app.config["DEBUG"] = True
     app.run()
