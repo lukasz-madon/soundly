@@ -3,6 +3,7 @@
   {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename = 'css/inlineplayer.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename = 'css/flashblock.css') }}" />
+  <link href="//vjs.zencdn.net/4.7/video-js.css" rel="stylesheet">
 {% endblock %}
 {% block content %}
   <div class="row">
@@ -40,6 +41,9 @@
         <span id="upload-error"></span>
         <div class="well">
         <h5>Your pick: <strong><span id="music_titile"></span></strong></h5>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#editorModal">
+          Edit & Publish
+        </button>
           <form class="form-horizontal">
             <fieldset>
               <div class="form-group">
@@ -80,6 +84,24 @@
       </div>
     </div>
   </div>
+  <!-- Modal -->
+  <div class="modal fade" id="editorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">Edit music</h4>
+          <iframe width="640" height="400" src="https://www.youtube.com/embed/X-b2Zrr8BEk" frameborder="0" allowfullscreen>
+          </iframe>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Publish</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 {% block footer %}
   {{ super() }}
@@ -101,14 +123,7 @@
             </tr>
           </tbody>
         </table>
-        <div class="row">
-          <div class="col-xs-1">
-          </div>
-          <div class="col-xs-9">
-          </div>
-          <div class="col-xs-1">
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
@@ -120,6 +135,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename = 'js/simple-slider.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename = 'js/s3upload.js') }}"></script>
 <script src="https://d3ibatyzauff7b.cloudfront.net/assets/algolia/algoliasearch.min.js" type="text/javascript"></script>
+<script src="//vjs.zencdn.net/4.7/video.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
   var client = new AlgoliaSearch('{{ ALGOLIASEARCH_APPLICATION_ID }}', '{{ ALGOLIASEARCH_API_KEY_SEARCH }}');
@@ -157,7 +173,7 @@ $(document).ready(function() {
 });
 </script>
 <script type="text/javascript">
-  var s3_video_url = null;
+  var s3_video_url = null;  // oh em dzi global var!
   function s3_upload(){
     var title = this.files[0].name.split('.')[0];
     var capTitle = title.charAt(0).toUpperCase() + title.slice(1);
@@ -172,6 +188,7 @@ $(document).ready(function() {
         },
         onFinishS3Put: function(public_url) {
           s3_video_url = public_url;
+          videojs('videoPlayer').src({ type: 'video/flv', src: public_url }); // type needs to be set
           $('#status').html('Upload completed');
         },
         onError: function(status) {
