@@ -68,3 +68,8 @@ a:focus { outline:none }
 table a, .table a {
   text-decoration: none;
 }
+
+.modal-container {
+  padding-left: 15px;
+  padding-right: 15px;
+}

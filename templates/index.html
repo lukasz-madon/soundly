@@ -30,7 +30,7 @@
     </div>
     <div class="col-lg-4">
       <div data-spy="affix" data-offset-top="70" data-offset-bottom="60">
-        <h2>Upload Video</h2>
+        <h2>Pick Video</h2>
         <input type="file" name="file" id="file">
         <br>
         <div class="progress">
@@ -39,46 +39,10 @@
           </div>
         </div>
         <span id="upload-error"></span>
-        <div class="well">
-        <h5>Your pick: <strong><span id="music_titile"></span></strong></h5>
         <button class="btn btn-primary" data-toggle="modal" data-target="#editorModal">
           Edit & Publish
         </button>
-          <form class="form-horizontal">
-            <fieldset>
-              <div class="form-group">
-                <div class="col-lg-12">
-                  <input type="text" class="form-control" id="title" placeholder="Title">
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-lg-12">
-                  <textarea class="form-control" rows="3" id="description" placeholder="Description"></textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-xs-4">
-                  <a class="btn btn-primary" id="publish">Publish</a> 
-                </div>
-                <div class="col-xs-4">
-                  <div class="checkbox">
-                    <label>
-                      <input id="override_audio" type="checkbox" checked><small>Override audio</small>
-                    </label>
-                  </div>
-                </div>
-                <div class="col-xs-4">
-                  <select class="form-control" id="privacyStatus">
-                    <option>public</option>
-                    <option>unlisted</option>
-                    <option>private</option>
-                  </select>
-                </div>
-              </div>
-            <p class="text-muted"> <small>Any second thoughts about music? No? Publish it!</small></p>
-            </fieldset>
-          </form>
-        </div>
+ 
         <div id="ok"></div>
         <small>While you're waiting try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a></small>
       </div>
@@ -93,8 +57,54 @@
             <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
           </button>
           <h4 class="modal-title" id="myModalLabel">Edit music</h4>
-          <iframe width="640" height="400" src="https://www.youtube.com/embed/X-b2Zrr8BEk" frameborder="0" allowfullscreen>
-          </iframe>
+        </div>
+        <div class="modal-container">
+          <div class="row">
+            <div class="col-lg-8">
+              <iframe width="640" height="400" src="https://www.youtube.com/embed/X-b2Zrr8BEk" frameborder="0" allowfullscreen>
+              </iframe>
+              <div>audio channel</div>
+            </div>
+            <div class="col-lg-4">
+             <div class="well">
+              <h5>Your pick: <strong><span id="music_titile"></span></strong></h5>
+                <form class="form-horizontal">
+                  <fieldset>
+                    <div class="form-group">
+                      <div class="col-lg-12">
+                        <input type="text" class="form-control" id="title" placeholder="Title">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-lg-12">
+                        <textarea class="form-control" rows="3" id="description" placeholder="Description"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-xs-4">
+                        <a class="btn btn-primary" id="publish">Publish</a> 
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="checkbox">
+                          <label>
+                            <input id="override_audio" type="checkbox" checked><small>Override audio</small>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <select class="form-control" id="privacyStatus">
+                          <option>public</option>
+                          <option>unlisted</option>
+                          <option>private</option>
+                        </select>
+                      </div>
+                    </div>
+                  <p class="text-muted"> <small>Any second thoughts about music? No? Publish it!</small></p>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary">Publish</button>
