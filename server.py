@@ -68,9 +68,21 @@ admin.add_view(AdminModelView(Video, db.session))
 @auth_required
 def index():
     detect_default_email()
-    # result = youtube_service.channels().list(part="snippet", mine="true").execute(http=get_auth_http())
+    auth_http = session["credentials"].authorize(httplib2.Http())
+    channel_result = youtube_service.channels().list(part="contentDetails", mine="true").execute(http=auth_http)
+    if len(channel_result["items"]) > 1:
+        app.logger.info("More than 1 channel for %s user %s", user.id, channel_result)
+    uploads_list_id = channel_result["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
+    playlistitems_list_request = youtube_service.playlistItems().list(
+        playlistId=uploads_list_id,
+        part="snippet",
+        maxResults=50
+      )
+    playlistitems_list_response = playlistitems_list_request.execute(http=auth_http)
+    videos = [(item["snippet"]["title"], item["snippet"]["resourceId"]["videoId"]) 
+            for item in playlistitems_list_response["items"]]
     return render_template("index.html", ALGOLIASEARCH_APPLICATION_ID=app.config["ALGOLIASEARCH_APPLICATION_ID"],
-    ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"])
+    ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"], videos=videos)
 
 
 @app.route("/about")
