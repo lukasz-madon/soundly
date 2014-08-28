@@ -76,7 +76,7 @@ def index():
     playlistitems_list_request = youtube_service.playlistItems().list(
         playlistId=uploads_list_id,
         part="snippet",
-        maxResults=50
+        maxResults=10
       )
     playlistitems_list_response = playlistitems_list_request.execute(http=auth_http)
     videos = [(item["snippet"]["title"], item["snippet"]["resourceId"]["videoId"]) 
