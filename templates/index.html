@@ -134,6 +134,8 @@
 <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script>
   Soundly.default_youtube_id = '{{ videos[0][1] }}';
+  Soundly.current_youtube_id = Soundly.default_youtube_id;
+  $('#title').val('{{ videos[0][0] }}');
   var params = { allowScriptAccess: 'always' };
   var atts = { id: 'myytplayer' };
   swfobject.embedSWF('http://www.youtube.com/v/' + Soundly.default_youtube_id + 
@@ -207,17 +209,13 @@ $(document).ready(function() {
       $('#file').on('change', s3_upload);
       $('#publish').click(function(){
         if (inlinePlayer.lastSound === null) {
-          alert('First pick the best music');
-          return;
-        }
-        if (s3_video_url === null) {
-          alert('You need to upload the video first');
+          alert('First, pick the best music.');
           return;
         }
         var data = { 
           title: $('#title').val(),   //TODO validation here as well?
           description: $('#description').val(),
-          video_url: s3_video_url,
+          video_id: Soundly.current_youtube_id,
           music_id: inlinePlayer.lastSoundId,  
           music_url: inlinePlayer.lastSound.url,
           override_audio: $("#override_audio").is(':checked'),
@@ -239,9 +237,10 @@ $(document).ready(function() {
       $('.video-link').click(function() {
         var video_id = $(this).data('id');
         ytplayer.loadVideoById(video_id);
+        Soundly.current_youtube_id = video_id;
         $('.video-link').removeClass('active');
         $(this).addClass('active');
-        e.preventDefault();
+        $('#title').val($(this).text());
       });
   });
 </script>
