@@ -8,7 +8,7 @@
 {% block content %}
   <div class="row">
     <div class="col-lg-8">
-      <h2>Preview</h2>
+      <h3>Preview</h3>
       <div id="ytapiplayer">
         You need Flash player 8+ and JavaScript enabled to view this video.
       </div>
@@ -34,7 +34,7 @@
     </div>
     <div class="col-lg-4">
       <div data-spy="affix" data-offset-top="70" data-offset-bottom="60">
-      <h2>Pick Youtube Video</h2>
+      <h3>Pick Youtube Video</h3>
        <!--    <input type="file" name="file" id="file">
         <br>
         <div class="progress">
@@ -93,7 +93,6 @@
            </form>
          </div>
         <div id="ok"></div>
-        <small>While you're waiting try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a></small>
       </div>
     </div>
   </div>
@@ -181,7 +180,7 @@ $(document).ready(function() {
 });
 </script>
 <script type="text/javascript">
-  var s3_video_url = null;  // oh em dzi global var!
+/*  var s3_video_url = null;  // oh em dzi global var!
   function s3_upload(){
     var title = this.files[0].name.split('.')[0];
     var capTitle = title.charAt(0).toUpperCase() + title.slice(1);
@@ -203,10 +202,10 @@ $(document).ready(function() {
           $('#upload-error').html('Upload error: ' + status);
         }
     });
-  }
+  }*/
 
   $(document).ready(function() {
-      $('#file').on('change', s3_upload);
+/*      $('#file').on('change', s3_upload);*/
       $('#publish').click(function(){
         if (inlinePlayer.lastSound === null) {
           alert('First, pick the best music.');
@@ -228,10 +227,11 @@ $(document).ready(function() {
         });
         // Just for fun :)
         if(Math.random() < 0.5) {
-          $('#ok').html('Your video will be available on your channels shortly.<br> <img class="img-responsive" src="http://d24w6bsrhbeh9d.cloudfront.net/photo/a44rgWQ_460sa.gif">');
+          $('#ok').html('Your video will be available on your channel shortly.<br> <img class="img-responsive" src="http://d24w6bsrhbeh9d.cloudfront.net/photo/a44rgWQ_460sa.gif">');
         } else {
-          $('#ok').html('Your video will be available on your channels shortly.<br> <img class="img-responsive" src="http://wearesocialmedia.gr/wp-content/uploads/2013/11/3879-animated_gif-chuck_norris-dodgeball-thumbs_up.gif">');
+          $('#ok').html('Your video will be available on your channel shortly.<br> <img class="img-responsive" src="http://wearesocialmedia.gr/wp-content/uploads/2013/11/3879-animated_gif-chuck_norris-dodgeball-thumbs_up.gif">');
         }
+        $('#ok').append('<small>Try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a></small>');
           
       });
       $('.video-link').click(function() {

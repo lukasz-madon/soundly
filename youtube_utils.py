@@ -12,6 +12,7 @@ from apiclient.discovery import build
 from werkzeug.utils import secure_filename
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import pafy
 
 import settings
 from models import Music, Video
@@ -74,11 +75,13 @@ def resumable_upload(insert_request, title, music_id, user_id):
         print "Sleeping %f seconds and then retrying..." % sleep_seconds
         time.sleep(sleep_seconds)
 
-def process_video_request(credentials , video_url, music_url, music_id, user_id, title, description, tags, 
+def process_video_request(credentials , video_id, music_url, music_id, user_id, title, description, tags, 
     categoryId, privacyStatus, override_audio):
-    video_path = os.path.basename(urlsplit(video_url)[2])
-    base, ext = os.path.splitext(video_path)
-    output_video = secure_filename(video_path)
+    """ processing video using ffmpeg """
+    best_video = pafy.new(video_id).getbest()
+    video_url = best_video.url
+    output_video = secure_filename("%s.%s" % (video_id, best_video.extension)) 
+    # base, ext = os.path.splitext(video_path)
     # check how to hande all corner cases for input audio streams
     # code = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1", 
     #               "-map", "1:0", "-codec", "copy", "-y", output_video])

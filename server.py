@@ -196,30 +196,30 @@ def authorized():
     return redirect(url_for("index"))
 
 
-@app.route("/sign-s3/")
-@auth_required
-def sign_s3():
-    # TODO validate user input. Is object_name not too long?
-    AWS_ACCESS_KEY = app.config["AWS_ACCESS_KEY_ID"]
-    AWS_SECRET_KEY = app.config["AWS_SECRET_ACCESS_KEY"]
-    S3_BUCKET = app.config["S3_BUCKET"]
-    # object name on S3 are unicode but hmac don't like it. Possbile bug?
-    object_name = quote(request.args.get("s3_object_name").encode('ascii', 'ignore'))
-    mime_type = request.args.get("s3_object_type")
+# @app.route("/sign-s3/")
+# @auth_required
+# def sign_s3():
+#     # TODO validate user input. Is object_name not too long?
+#     AWS_ACCESS_KEY = app.config["AWS_ACCESS_KEY_ID"]
+#     AWS_SECRET_KEY = app.config["AWS_SECRET_ACCESS_KEY"]
+#     S3_BUCKET = app.config["S3_BUCKET"]
+#     # object name on S3 are unicode but hmac don't like it. Possbile bug?
+#     object_name = quote(request.args.get("s3_object_name").encode('ascii', 'ignore'))
+#     mime_type = request.args.get("s3_object_type")
 
-    expires = int(time.time()) + 60  # 60 sec for starting request should be enough 
-    amz_headers = "x-amz-acl:public-read"  # TODO public -> private view of the files or just add 24h expiry 
+#     expires = int(time.time()) + 60  # 60 sec for starting request should be enough 
+#     amz_headers = "x-amz-acl:public-read"  # TODO public -> private view of the files or just add 24h expiry 
 
-    put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
-    signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
-    signature = quote(signature.strip()).replace("/", "%2F")
-    app.logger.info("User %s signing for %s with signature %s", g.user.id, put_request, signature)
-    url = "https://%s.s3.amazonaws.com/%s" % (S3_BUCKET, object_name)
+#     put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
+#     signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+#     signature = quote(signature.strip()).replace("/", "%2F")
+#     app.logger.info("User %s signing for %s with signature %s", g.user.id, put_request, signature)
+#     url = "https://%s.s3.amazonaws.com/%s" % (S3_BUCKET, object_name)
 
-    return jsonify({
-        "signed_request": "%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s" % (url, AWS_ACCESS_KEY, expires, signature),
-         "url": url
-      })
+#     return jsonify({
+#         "signed_request": "%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s" % (url, AWS_ACCESS_KEY, expires, signature),
+#          "url": url
+#       })
 
 
 @app.route("/process-video", methods=["POST"])
@@ -230,7 +230,7 @@ def process_video():
         abort(400)
     # TODO: solve https problem for ffmpeg (ffmpeg -protocols). Tried --enable-openssl, --enable-gpl
     # possible solution is to create custom buildpack and compile with-openssl or diff ssl lib. 
-    video_url = request.json["video_url"].replace("https", "http", 1)  # temp fix
+    video_id = request.json["video_id"]
     music_id = int(request.json["music_id"])
     music_url = request.json["music_url"]
     title = request.json["title"]
@@ -240,7 +240,7 @@ def process_video():
     privacyStatus = request.json["privacy_status"]
     override_audio = request.json["override_audio"]    
     app.logger.info("User %s processing request: %s", g.user.id, request.json)
-    worker_queue.enqueue(process_video_request, session["credentials"], video_url, music_url, music_id, g.user.id,
+    worker_queue.enqueue(process_video_request, session["credentials"], video_id, music_url, music_id, g.user.id,
         title, description, tags, categoryId, privacyStatus, override_audio)
     # Check if the file is one of the allowed types/extensions
     # if not file or not allowed_file(file.filename):
