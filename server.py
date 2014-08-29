@@ -81,6 +81,9 @@ def index():
     playlistitems_list_response = playlistitems_list_request.execute(http=auth_http)
     videos = [(item["snippet"]["title"], item["snippet"]["resourceId"]["videoId"]) 
             for item in playlistitems_list_response["items"]]
+    if not videos:
+        flash("You have no Youtube videos. Upload something!", "warning")
+        videos = [("Take your startup to the next level", "X-b2Zrr8BEk")] 
     return render_template("index.html", ALGOLIASEARCH_APPLICATION_ID=app.config["ALGOLIASEARCH_APPLICATION_ID"],
     ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"], videos=videos)
 
