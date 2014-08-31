@@ -42,19 +42,19 @@
             <span id="status"></span>
           </div>
         </div>
-        <span id="upload-error"></span> -->
+        <span id="upload-error"></span> video.privacy_status -->
          <table class="table table-striped table-hover ">
              <tbody>
-          {% for item in videos %}
+          {% for video in videos %}
             <tr>
               <td>{{ loop.index }}</td>
-              <td class="video-link" data-id="{{ item[1] }}">{{ item[0] }}</td>
+              <td class="video-link" data-id="{{ video.id }}">{{ video.title }}</td>
             </tr>
           {% endfor %}
           </tbody>
         </table> 
         <div class="well">
-         <h5>Your pick: <strong><span id="music_titile"></span></strong></h5>
+         <h5>Music: <strong><span id="music_titile"></span></strong></h5>
            <form class="form-horizontal">
              <fieldset>
                <div class="form-group">
@@ -132,9 +132,9 @@
 <script src="//vjs.zencdn.net/4.7/video.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script>
-  Soundly.default_youtube_id = '{{ videos[0][1] }}';
+  Soundly.default_youtube_id = '{{ videos[0].id }}';
   Soundly.current_youtube_id = Soundly.default_youtube_id;
-  $('#title').val('{{ videos[0][0] }}');
+  $('#title').val('{{ videos[0].title }}');
   var params = { allowScriptAccess: 'always' };
   var atts = { id: 'myytplayer' };
   swfobject.embedSWF('http://www.youtube.com/v/' + Soundly.default_youtube_id + 

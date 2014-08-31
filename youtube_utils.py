@@ -41,6 +41,15 @@ RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, httplib.NotConnected,
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 
+
+class VideoMeta(object):
+    def __init__(self, youtube_id, title, description, privacy_status):
+        self.id = youtube_id
+        self.title = title
+        self.description = description
+        self.privacy_status = privacy_status
+
+
 def resumable_upload(insert_request, title, music_id, user_id):
     print "User %s Started uploading: %s" % (user_id, title)
     response = None

@@ -35,7 +35,7 @@ a:focus { outline:none }
 /* bootstrap override TODO refactor */
 .navbar {
 	border-radius: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 5px;
 }
 
 @media (min-width: 768px) {

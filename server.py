@@ -19,7 +19,7 @@ import httplib2
 from worker import conn
 from models import db, User, Music, Video
 from admin import AdminModelView
-from youtube_utils import process_video_request, youtube_service
+from youtube_utils import process_video_request, youtube_service, VideoMeta
 from utils import detect_default_email, auth_required
 from forms import EmailForm, flash_errors
 
@@ -75,15 +75,23 @@ def index():
     uploads_list_id = channel_result["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
     playlistitems_list_request = youtube_service.playlistItems().list(
         playlistId=uploads_list_id,
-        part="snippet",
+        part="snippet,status",
         maxResults=10
       )
     playlistitems_list_response = playlistitems_list_request.execute(http=auth_http)
-    videos = [(item["snippet"]["title"], item["snippet"]["resourceId"]["videoId"]) 
-            for item in playlistitems_list_response["items"]]
+    videos = []
+    for video in playlistitems_list_response["items"]:
+        title = video["snippet"]["title"]
+        youtube_id = video["snippet"]["resourceId"]["videoId"]
+        description = video["snippet"]["description"]
+        privacy_status = video["status"]["privacyStatus"]
+        v = VideoMeta(youtube_id, title, description, privacy_status)
+        videos.append(v)
+
     if not videos:
-        flash("You have no Youtube videos. Upload something!", "warning")
-        videos = [("Take your startup to the next level", "X-b2Zrr8BEk")] 
+        # add video of tutorial?
+        flash("You have no Youtube videos. Upload something using youtube.com!", "warning")
+        videos = [("", "X-b2Zrr8BEk")] 
     return render_template("index.html", ALGOLIASEARCH_APPLICATION_ID=app.config["ALGOLIASEARCH_APPLICATION_ID"],
     ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"], videos=videos)
 
