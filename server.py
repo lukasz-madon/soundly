@@ -90,7 +90,7 @@ def index():
 
     if not videos:
         # add video of tutorial?
-        flash("You have no Youtube videos. Upload something using youtube.com!", "warning")
+        flash("You have no Youtube videos. Upload something using <a href='https://www.youtube.com/'>youtube.com</a>.", "warning")
         videos = [("", "X-b2Zrr8BEk")] 
     return render_template("index.html", ALGOLIASEARCH_APPLICATION_ID=app.config["ALGOLIASEARCH_APPLICATION_ID"],
     ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"], videos=videos)

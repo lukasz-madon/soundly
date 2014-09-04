@@ -48,7 +48,8 @@
           {% for video in videos %}
             <tr>
               <td>{{ loop.index }}</td>
-              <td class="video-link" data-id="{{ video.id }}">{{ video.title }}</td>
+              <td class="video-link" data-id="{{ video.id }}" data-description="{{ video.description }}">{{ video.title }}
+              </td>
             </tr>
           {% endfor %}
           </tbody>
@@ -135,6 +136,7 @@
   Soundly.default_youtube_id = '{{ videos[0].id }}';
   Soundly.current_youtube_id = Soundly.default_youtube_id;
   $('#title').val('{{ videos[0].title }}');
+  $('#description').val('{{ videos[0].description }}');
   var params = { allowScriptAccess: 'always' };
   var atts = { id: 'myytplayer' };
   swfobject.embedSWF('http://www.youtube.com/v/' + Soundly.default_youtube_id + 
@@ -241,6 +243,7 @@ $(document).ready(function() {
         $('.video-link').removeClass('active');
         $(this).addClass('active');
         $('#title').val($(this).text());
+        $('#description').val($(this).data('description'));
       });
   });
 </script>
