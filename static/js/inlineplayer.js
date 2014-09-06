@@ -30,6 +30,40 @@ function InlinePlayer() {
   this.currentPosition = 0;
   this.duration = 0;
   this.firstPlaying = true;
+  this.wavesurfer = Object.create(WaveSurfer);
+  this.wavesurfer.init({
+      container: document.querySelector('#audio_channel'), //TODO refactor
+      waveColor: 'violet',
+      progressColor: 'purple',
+      backend: 'AudioElement',
+      height: 50
+  });
+  this.peaks = [
+        0.01, 0.02, 0.011, 0.017, 0.016, 0.007, 0.015, 0.01, 0.011,
+        0.01, 0.025, 0.013, 0.01, 0.3, 0.3, 0., 0.32, 0.2, 0.2, 0.2, 0.18,
+        0.30, 0.1, 0.24, 0.1, 0.2, 0.23, 0.2, 0.23, 0., 0.2, 0.21, 0.23,
+        0.25, 0.26, 0.2, 0.28, 0.2, 0.24, 0.22, 0.21, 0.17, 0.25, 0.25,
+        0.26, 0.18, 0.22, 0.17, 0.24, 0.22, 0.09, 0.12, 0.2, 0.13, 0.22,
+        0.2, 0.20, 0.29, 0.25, 0.31, 0.25, 0.26, 0.20, 0.37, 0.29, 0.,
+        0.34, 0.2, 0.26, 0.17, 0.2, 0., 0.29, 0., 0.1, 0.18, 0.29, 0.2,
+        0.27, 0.18, 0.19, 0.24, 0.24, 0.21, 0.26, 0.19, 0.18, 0.23, 0.3,
+        0.3, 0.3, 0.29, 0.24, 0.3, 0.3, 0.15, 0.1, 0.23, 0.2, 0.23, 0.18,
+        0.2, 0.2, 0.30, 0.2, 0.20, 0., 0.29, 0.3, 0.1, 0.14, 0.1, 0.,
+        0.27, 0.23, 0.29, 0.18, 0.20, 0.1, 0.3, 0.23, 0.27, 0.19, 0.2,
+        0.19, 0.22, 0.19, 0.12, 0.23, 0.21, 0.12, 0.1, 0.1, 0.1, 0.15,
+        0.24, 0.1, 0.1, 0.1, 0.1, 0.14, 0.13, 0.10, 0.11, 0.13, 0.1, 0.10,
+        0.10, 0.1, 0.14, 0.13, 0.12, 0.1, 0.1, 0.14, 0.13, 0.14, 0.12,
+        0.1, 0.12, 0.1, 0.16, 0.1, 0.1, 0.16, 0.15, 0.1, 0.13, 0.15, 0.1,
+        0.13, 0.16, 0.15, 0.12, 0.14, 0.13, 0.13, 0.14, 0.13, 0.17, 0.16,
+        0.17, 0.14, 0.1, 0.16, 0.1, 0.15, 0.14, 0.08, 0.1, 0.11, 0.1,
+        0.09, 0.11, 0.1, 0.11, 0.10, 0.10, 0.11, 0.10, 0.0, 0.08, 0.07,
+        0.05, 0.04, 0.023, 0.007, 0.007, 0.007, 0.015, 0.00, 0.008, 0.007,
+        0.007, 0.007, 0.007, 0.0, 0.010
+    ];
+
+  this.wavesurfer.on('ready', function () {
+      self.wavesurfer.play();
+  });
 
   this.config = {
     playNext: false, // stop after one sound, or play through list until end
@@ -255,6 +289,8 @@ function InlinePlayer() {
     // TODO refactor global state
     document.getElementById('music_titile').innerHTML = self.lastSoundTitle;      
     self.lastSoundId = o.getAttribute('data-id');
+    self.wavesurfer.load(self.lastSound.url, self.peaks);
+    //
     if (self.firstPlaying) {
       document.getElementById('player').className += ' show-up';
       self.firstPlaying = false;

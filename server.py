@@ -85,13 +85,10 @@ def index():
         youtube_id = video["snippet"]["resourceId"]["videoId"]
         description = video["snippet"]["description"]
         privacy_status = video["status"]["privacyStatus"]
-        v = VideoMeta(youtube_id, title, description, privacy_status)
-        videos.append(v)
-
+        videos.append(VideoMeta(youtube_id, title, description, privacy_status))
     if not videos:
         # add video of tutorial?
-        flash("You have no Youtube videos. Upload something using <a href='https://www.youtube.com/'>youtube.com</a>.", "warning")
-        videos = [("", "X-b2Zrr8BEk")] 
+        flash("You have no Youtube videos. Upload as unlisted video using <a class='white' href='https://www.youtube.com/'>youtube.com</a>.", "warning") 
     return render_template("index.html", ALGOLIASEARCH_APPLICATION_ID=app.config["ALGOLIASEARCH_APPLICATION_ID"],
     ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"], videos=videos)
 

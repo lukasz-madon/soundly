@@ -70,9 +70,8 @@ table a, .table a {
   text-decoration: none;
 }
 
-.modal-container {
-  padding-left: 15px;
-  padding-right: 15px;
+.white, .white a {
+  color: #fff;
 }
 
 .video-link {
