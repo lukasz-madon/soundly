@@ -81,9 +81,9 @@ def index():
     playlistitems_list_response = playlistitems_list_request.execute(http=auth_http)
     videos = []
     for video in playlistitems_list_response["items"]:
-        title = video["snippet"]["title"]
+        title = video["snippet"]["title"].replace("\n", " ")
+        description = video["snippet"]["description"].replace("\n", " ")
         youtube_id = video["snippet"]["resourceId"]["videoId"]
-        description = video["snippet"]["description"]
         privacy_status = video["status"]["privacyStatus"]
         videos.append(VideoMeta(youtube_id, title, description, privacy_status))
     if not videos:

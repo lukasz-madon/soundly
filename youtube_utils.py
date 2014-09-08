@@ -111,7 +111,7 @@ def process_video_request(credentials , video_id, music_url, music_id, user_id, 
         body=dict(
           snippet=dict(
             title=title,
-            description=description + "\nMusic provided by http://soundly.io",
+            description=description if "http://soundly.io" in description else description + "\nMusic provided by http://soundly.io",
             tags=tags,
             categoryId=categoryId
           ),
