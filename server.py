@@ -171,12 +171,15 @@ def authorized():
     # CSRF
     try:
         if request.args["state"] != session["state"]:
-            app.logger.error("possible CSRF")
+            app.logger.error("possible CSRF. Request token is different than session token")
             abort(400)
     except KeyError:
-        app.logger.error("incorrect CSRF protection")
+        app.logger.error("no CSRF token")  # TODO incorrect error handling? Sometime code/state is wrong
+        app.logger.error(request)
+        app.logger.error(session)
         abort(401)
-    session.pop("state", None)
+    finally:
+        session.pop("state", None)
     code = request.args.get("code")
     if not code:
         app.logger.error("Google API did not return code")
