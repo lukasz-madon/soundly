@@ -85,8 +85,6 @@ table a, .table a {
 }
 
 .audio-time {
-  border: 1px solid #dce4ec;
-  border-radius: 4px;
   font-size: 10px;
-  width: 40px;
+  width: 30px;
 }

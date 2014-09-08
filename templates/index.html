@@ -15,8 +15,8 @@
       <div id="audio_channel">
       </div>
       <div id="audio_settings">
-        <input type="text" class="audio-time" id="audio_start" placeholder="0:00">
-        <input type="text" class="audio-time pull-right" id="audio_end" placeholder="0:00">
+        <span class="audio-time" id="audio_start">0:00</span>
+        <span class="audio-time pull-right" id="audio_end"></span>
       </div>
       <form class="search">
         <input id="q" autocomplete="off" autocorrect="off" type="text" class="form-control" placeholder="Music Search" spellcheck="false">
@@ -96,6 +96,7 @@
 {% block script %}
   {{ super() }}
 <script src="{{ url_for('static', filename = 'js/waveform.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/helpers.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/soundmanager2.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/inlineplayer.js') }}"></script>
 <script src="https://d3ibatyzauff7b.cloudfront.net/assets/algolia/algoliasearch.min.js"></script>
@@ -111,7 +112,14 @@
 
   function onYouTubePlayerReady(playerId) {
       ytplayer = document.getElementById("myytplayer");
+      ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
+      $('#audio_end').text(ytplayer.getDuration().toMMSS());
   };
+  function onytplayerStateChange(newState) {
+    if (newState === 1) { // playing
+      $('#audio_end').text(ytplayer.getDuration().toMMSS());
+    }
+  }
 $(document).ready(function() {
   $('#title').val('{{ videos[0].title if videos else "" }}');
   $('#description').val('{{ videos[0].description if videos else "" }}');
