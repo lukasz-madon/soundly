@@ -34,13 +34,6 @@ KVSessionExtension(store, app)
 
 worker_queue = Queue(connection=conn)
 
-# # These are the extension that we are accepting to be uploaded
-# app.config["ALLOWED_EXTENSIONS"] = set(["wmv", "mov", "avi", "mpg", "mpeg", "flv"])
-
-# # For a given file, return whether it"s an allowed type or not
-# def allowed_file(filename):
-#     return "." in filename and filename.rsplit(".", 1)[1] in app.config["ALLOWED_EXTENSIONS"]
-
 if os.environ.get("HEROKU") is not None:
     import logging
     stream_handler = logging.StreamHandler()
@@ -56,12 +49,10 @@ flow = OAuth2WebServerFlow(client_id=app.config["GOOGLE_CLIENT_ID"],
                            scope=app.config["GOOGLE_API_SCOPE"])
 user_info_service = build("oauth2", "v2")
 
-
 admin = Admin(app)
 admin.add_view(AdminModelView(User, db.session))
 admin.add_view(AdminModelView(Music, db.session))
 admin.add_view(AdminModelView(Video, db.session))
-
 
 ### Views ###
 @app.route("/")
@@ -79,8 +70,9 @@ def index():
         maxResults=10
       )
     playlistitems_list_response = playlistitems_list_request.execute(http=auth_http)
+    playlist = (item for item in playlistitems_list_response["items"] if item["status"]["privacyStatus"] != "private")
     videos = []
-    for video in playlistitems_list_response["items"]:
+    for video in playlist:
         title = video["snippet"]["title"].replace("\n", " ")
         description = video["snippet"]["description"].replace("\n", " ")
         youtube_id = video["snippet"]["resourceId"]["videoId"]
@@ -168,7 +160,9 @@ def logout():
 
 @app.route("/login/google/oauthcallback")
 def authorized():
-    # CSRF
+    # CSRF 
+    # There is a possible race condition when user click two times too fast or two different
+    # TODO check if already authorized
     try:
         if request.args["state"] != session["state"]:
             app.logger.error("possible CSRF. Request token is different than session token")
@@ -176,7 +170,7 @@ def authorized():
     except KeyError:
         app.logger.error("no CSRF token")  # TODO incorrect error handling? Sometime code/state is wrong
         app.logger.error(request)
-        app.logger.error(session)
+        app.logger.error(session["credentials"])
         abort(401)
     finally:
         session.pop("state", None)
@@ -205,32 +199,6 @@ def authorized():
     session["credentials"] = credentials
     app.logger.info("User %s is authenticated", user.id)
     return redirect(url_for("index"))
-
-
-# @app.route("/sign-s3/")
-# @auth_required
-# def sign_s3():
-#     # TODO validate user input. Is object_name not too long?
-#     AWS_ACCESS_KEY = app.config["AWS_ACCESS_KEY_ID"]
-#     AWS_SECRET_KEY = app.config["AWS_SECRET_ACCESS_KEY"]
-#     S3_BUCKET = app.config["S3_BUCKET"]
-#     # object name on S3 are unicode but hmac don't like it. Possbile bug?
-#     object_name = quote(request.args.get("s3_object_name").encode('ascii', 'ignore'))
-#     mime_type = request.args.get("s3_object_type")
-
-#     expires = int(time.time()) + 60  # 60 sec for starting request should be enough 
-#     amz_headers = "x-amz-acl:public-read"  # TODO public -> private view of the files or just add 24h expiry 
-
-#     put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
-#     signature = base64.encodestring(hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
-#     signature = quote(signature.strip()).replace("/", "%2F")
-#     app.logger.info("User %s signing for %s with signature %s", g.user.id, put_request, signature)
-#     url = "https://%s.s3.amazonaws.com/%s" % (S3_BUCKET, object_name)
-
-#     return jsonify({
-#         "signed_request": "%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s" % (url, AWS_ACCESS_KEY, expires, signature),
-#          "url": url
-#       })
 
 
 @app.route("/process-video", methods=["POST"])

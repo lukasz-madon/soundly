@@ -78,3 +78,15 @@ table a, .table a {
   cursor: pointer;
   cursor: hand; 
 }
+
+.search {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.audio-time {
+  border: 1px solid #dce4ec;
+  border-radius: 4px;
+  font-size: 10px;
+  width: 40px;
+}

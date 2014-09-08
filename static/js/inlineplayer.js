@@ -107,6 +107,10 @@ function InlinePlayer() {
     // handlers for sound events as they're started/stopped/played
 
     play: function() {
+      //global youtube player
+      ytplayer.stopVideo();
+      ytplayer.seekTo(0);
+      ytplayer.playVideo();
       pl.removeClass(this._data.oLink,this._data.className);
       this._data.className = pl.css.sPlaying;
       pl.addClass(this._data.oLink,this._data.className);
@@ -118,12 +122,15 @@ function InlinePlayer() {
     },
 
     pause: function() {
+      ytplayer.pauseVideo();
+
       pl.removeClass(this._data.oLink,this._data.className);
       this._data.className = pl.css.sPaused;
       pl.addClass(this._data.oLink,this._data.className);
     },
 
     resume: function() {
+      ytplayer.playVideo();
       pl.removeClass(this._data.oLink,this._data.className);
       this._data.className = pl.css.sPlaying;
       pl.addClass(this._data.oLink,this._data.className);      
@@ -267,8 +274,14 @@ function InlinePlayer() {
   }
 
   this.stopSound = function(oSound) {
-    soundManager.stop(oSound.id);
-    soundManager.unload(oSound.id);
+    if (oSound) {
+      soundManager.stop(oSound.id);
+      soundManager.unload(oSound.id);
+    } else {
+      if (self.lastSound) {
+        self.stopSound(self.lastSound);
+      }
+    }
   }
 
   this.init = function() {

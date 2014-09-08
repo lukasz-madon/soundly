@@ -14,20 +14,23 @@
       </div>
       <div id="audio_channel">
       </div>
-        <form>
-          <input id="q" autocomplete="off" autocorrect="off" type="text" class="form-control" placeholder="Music Search" spellcheck="false">
-        </form>
-        <br>
-       <div id="player-grid" class="row">
-       </div> 
-       <small>You must choose, but choose wisely. </small>
+      <div id="audio_settings">
+        <input type="text" class="audio-time" id="audio_start" placeholder="0:00">
+        <input type="text" class="audio-time pull-right" id="audio_end" placeholder="0:00">
+      </div>
+      <form class="search">
+        <input id="q" autocomplete="off" autocorrect="off" type="text" class="form-control" placeholder="Music Search" spellcheck="false">
+      </form>
+      <div id="player-grid" class="row">
+      </div> 
+      <small>You must choose, but choose wisely. </small>
     </div>
     <div class="col-md-4">
       <div data-spy="affix" data-offset-top="70" data-offset-bottom="60">
       <h3>Pick Youtube Video</h3>
          <table class="table table-striped table-hover ">
              <tbody>
-          {% for video in videos if video.privacy_status != "private" %}
+          {% for video in videos %}
             <tr>
               <td>{{ loop.index }}</td>
               <td class="video-link" data-id="{{ video.id }}" data-description="{{ video.description }}">{{ video.title }}
@@ -199,6 +202,7 @@ $(document).ready(function() {
       
   });
   $('.video-link').click(function() {
+    inlinePlayer.stopSound();
     var video_id = $(this).data('id');
     ytplayer.loadVideoById(video_id);
     Soundly.current_youtube_id = video_id;
