@@ -7,7 +7,7 @@
 {% endblock %}
 {% block content %}
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col-md-8">
       <h3>Preview</h3>
       <div id="ytapiplayer">
         You have no videos or Flash or JavaScript is disabled.
@@ -33,7 +33,7 @@
        </div> 
        <small>You must choose, but choose wisely. </small>
     </div>
-    <div class="col-lg-4">
+    <div class="col-md-4">
       <div data-spy="affix" data-offset-top="70" data-offset-bottom="60">
       <h3>Pick Youtube Video</h3>
        <!--    <input type="file" name="file" id="file">
@@ -98,43 +98,28 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock %}  
 {% block footer %}
   {{ super() }}
   <div id="player" class="slide-player">
     <div class="container">
-      <div class="player-content center-block">
-        <table style="vertical-align:middle">
-          <tbody>
-            <tr>
-<!--               <td>
-                <a id="player-play" href="#"><i class="fa fa-play fa-lg"></i></a> 
-              </td> -->
-              <td>
-                <input id="slider" type="text" data-slider="true">
-              </td>
-              <td>
-                <span id="position">0:00</span>/<span id="duration">0:00</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-8">player</div>
       </div>
     </div>
   </div>
 {% endblock %}
 {% block script %}
   {{ super() }}
-<script src="{{ url_for('static', filename = 'js/wavesurfer.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/waveform.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/soundmanager2.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/inlineplayer.js') }}"></script>
-<script src="{{ url_for('static', filename = 'js/simple-slider.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/s3upload.js') }}"></script>
 <script src="https://d3ibatyzauff7b.cloudfront.net/assets/algolia/algoliasearch.min.js"></script>
 <script src="//vjs.zencdn.net/4.7/video.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-<script>
+<script type="text/javascript">
+$(document).ready(function() {
   Soundly.default_youtube_id = '{{ videos[0].id if videos else "" }}';
   Soundly.current_youtube_id = Soundly.default_youtube_id;
   $('#title').val('{{ videos[0].title if videos else "" }}');
@@ -147,9 +132,33 @@
   function onYouTubePlayerReady(playerId) {
       ytplayer = document.getElementById("myytplayer");
   };
-</script>
-<script type="text/javascript">
-$(document).ready(function() {
+
+  var waveform = new Waveform({
+    container: document.getElementById('audio_channel'),
+    data: [0.01, 0.02, 0.011, 0.017, 0.016, 0.007, 0.015, 0.01, 0.011,
+        0.01, 0.025, 0.013, 0.01, 0.3, 0.3, 0., 0.32, 0.2, 0.2, 0.2, 0.18,
+        0.30, 0.1, 0.24, 0.1, 0.2, 0.23, 0.2, 0.23, 0., 0.2, 0.21, 0.23,
+        0.25, 0.26, 0.2, 0.28, 0.2, 0.24, 0.22, 0.21, 0.17, 0.25, 0.25,
+        0.26, 0.18, 0.22, 0.17, 0.24, 0.22, 0.09, 0.12, 0.2, 0.13, 0.22,
+        0.2, 0.20, 0.29, 0.25, 0.31, 0.25, 0.26, 0.20, 0.37, 0.29, 0.,
+        0.34, 0.2, 0.26, 0.17, 0.2, 0., 0.29, 0., 0.1, 0.18, 0.29, 0.2,
+        0.27, 0.18, 0.19, 0.24, 0.24, 0.21, 0.26, 0.19, 0.18, 0.23, 0.3,
+        0.3, 0.3, 0.29, 0.24, 0.3, 0.3, 0.15, 0.1, 0.23, 0.2, 0.23, 0.18,
+        0.2, 0.2, 0.30, 0.2, 0.20, 0., 0.29, 0.3, 0.1, 0.14, 0.1, 0.,
+        0.27, 0.23, 0.29, 0.18, 0.20, 0.1, 0.3, 0.23, 0.27, 0.19, 0.2,
+        0.19, 0.22, 0.19, 0.12, 0.23, 0.21, 0.12, 0.1, 0.1, 0.1, 0.15,
+        0.24, 0.1, 0.1, 0.1, 0.1, 0.14, 0.13, 0.10, 0.11, 0.13, 0.1, 0.10,
+        0.10, 0.1, 0.14, 0.13, 0.12, 0.1, 0.1, 0.14, 0.13, 0.14, 0.12,
+        0.1, 0.12, 0.1, 0.16, 0.1, 0.1, 0.16, 0.15, 0.1, 0.13, 0.15, 0.1,
+        0.13, 0.16, 0.15, 0.12, 0.14, 0.13, 0.13, 0.14, 0.13, 0.17, 0.16,
+        0.17, 0.14, 0.1, 0.16, 0.1, 0.15, 0.14, 0.08, 0.1, 0.11, 0.1,
+        0.09, 0.11, 0.1, 0.11, 0.10, 0.10, 0.11, 0.10, 0.0, 0.08, 0.07,
+        0.05, 0.04, 0.023, 0.007, 0.007, 0.007, 0.015, 0.00, 0.008, 0.007,
+        0.007, 0.007, 0.007, 0.0, 0.010],
+    innerColor: '#3B8686',
+    height: 50
+  });
+
   var client = new AlgoliaSearch('{{ ALGOLIASEARCH_APPLICATION_ID }}', '{{ ALGOLIASEARCH_API_KEY_SEARCH }}');
   var index = client.initIndex('music');
   var $hits = $('#player-grid');
