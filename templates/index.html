@@ -8,7 +8,7 @@
 {% block content %}
   <div class="row">
     <div class="col-md-8">
-      <h3>Preview</h3>
+      <h4>Preview</h4>
       <div id="ytapiplayer">
         You have no videos or Flash or JavaScript is disabled.
       </div>
@@ -27,7 +27,7 @@
     </div>
     <div class="col-md-4">
       <div data-spy="affix" data-offset-top="70" data-offset-bottom="60">
-      <h3>Pick Youtube Video</h3>
+      <h4>Pick Youtube Video</h4>
          <table class="table table-striped table-hover ">
              <tbody>
           {% for video in videos %}
@@ -95,130 +95,25 @@
 {% endblock %}
 {% block script %}
   {{ super() }}
+  <script>
+  var Soundly = {
+    current_video: {
+      id: '{{ videos[0].id if videos else null }}',
+      title: '{{ videos[0].title if videos else "" }}',
+      description: '{{ videos[0].description if videos else "" }}',
+      privacy_status: '{{ videos[0].privacy_status if videos else "" }}'
+    },
+    Algolia: {
+      app_id: '{{ ALGOLIASEARCH_APPLICATION_ID }}',
+      api_key: '{{ ALGOLIASEARCH_API_KEY_SEARCH }}'
+    }
+  }; // global object for storing some state. Proto hack.
+  </script>
+<script src="https://d3ibatyzauff7b.cloudfront.net/assets/algolia/algoliasearch.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script src="{{ url_for('static', filename = 'js/waveform.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/helpers.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/soundmanager2.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/inlineplayer.js') }}"></script>
-<script src="https://d3ibatyzauff7b.cloudfront.net/assets/algolia/algoliasearch.min.js"></script>
-<script src="//vjs.zencdn.net/4.7/video.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-<script type="text/javascript">
-  Soundly.default_youtube_id = '{{ videos[0].id if videos else "" }}';
-  Soundly.current_youtube_id = Soundly.default_youtube_id;
-  var params = { allowScriptAccess: 'always' };
-  var atts = { id: 'myytplayer' };
-  swfobject.embedSWF('http://www.youtube.com/v/' + Soundly.default_youtube_id + 
-    '?enablejsapi=1&playerapiid=ytplayer&version=3', 'ytapiplayer', '100%', '400', '8', null, null, params, atts);
-
-  function onYouTubePlayerReady(playerId) {
-      ytplayer = document.getElementById("myytplayer");
-      ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
-      $('#audio_end').text(ytplayer.getDuration().toMMSS());
-  };
-  function onytplayerStateChange(newState) {
-    if (newState === 1) { // playing
-      $('#audio_end').text(ytplayer.getDuration().toMMSS());
-    }
-  }
-$(document).ready(function() {
-  $('#title').val('{{ videos[0].title if videos else "" }}');
-  $('#description').val('{{ videos[0].description if videos else "" }}');
-
-  var waveform = new Waveform({
-    container: document.getElementById('audio_channel'),
-    data: [0.01, 0.02, 0.011, 0.017, 0.016, 0.007, 0.015, 0.01, 0.011,
-        0.01, 0.025, 0.013, 0.01, 0.3, 0.3, 0., 0.32, 0.2, 0.2, 0.2, 0.18,
-        0.30, 0.1, 0.24, 0.1, 0.2, 0.23, 0.2, 0.23, 0., 0.2, 0.21, 0.23,
-        0.25, 0.26, 0.2, 0.28, 0.2, 0.24, 0.22, 0.21, 0.17, 0.25, 0.25,
-        0.26, 0.18, 0.22, 0.17, 0.24, 0.22, 0.09, 0.12, 0.2, 0.13, 0.22,
-        0.2, 0.20, 0.29, 0.25, 0.31, 0.25, 0.26, 0.20, 0.37, 0.29, 0.,
-        0.34, 0.2, 0.26, 0.17, 0.2, 0., 0.29, 0., 0.1, 0.18, 0.29, 0.2,
-        0.27, 0.18, 0.19, 0.24, 0.24, 0.21, 0.26, 0.19, 0.18, 0.23, 0.3,
-        0.3, 0.3, 0.29, 0.24, 0.3, 0.3, 0.15, 0.1, 0.23, 0.2, 0.23, 0.18,
-        0.2, 0.2, 0.30, 0.2, 0.20, 0., 0.29, 0.3, 0.1, 0.14, 0.1, 0.,
-        0.27, 0.23, 0.29, 0.18, 0.20, 0.1, 0.3, 0.23, 0.27, 0.19, 0.2,
-        0.19, 0.22, 0.19, 0.12, 0.23, 0.21, 0.12, 0.1, 0.1, 0.1, 0.15,
-        0.24, 0.1, 0.1, 0.1, 0.1, 0.14, 0.13, 0.10, 0.11, 0.13, 0.1, 0.10,
-        0.10, 0.1, 0.14, 0.13, 0.12, 0.1, 0.1, 0.14, 0.13, 0.14, 0.12,
-        0.1, 0.12, 0.1, 0.16, 0.1, 0.1, 0.16, 0.15, 0.1, 0.13, 0.15, 0.1,
-        0.13, 0.16, 0.15, 0.12, 0.14, 0.13, 0.13, 0.14, 0.13, 0.17, 0.16,
-        0.17, 0.14, 0.1, 0.16, 0.1, 0.15, 0.14, 0.08, 0.1, 0.11, 0.1,
-        0.09, 0.11, 0.1, 0.11, 0.10, 0.10, 0.11, 0.10, 0.0, 0.08, 0.07,
-        0.05, 0.04, 0.023, 0.007, 0.007, 0.007, 0.015, 0.00, 0.008, 0.007,
-        0.007, 0.007, 0.007, 0.0, 0.010],
-    innerColor: '#3B8686',
-    height: 50
-  });
-
-  var client = new AlgoliaSearch('{{ ALGOLIASEARCH_APPLICATION_ID }}', '{{ ALGOLIASEARCH_API_KEY_SEARCH }}');
-  var index = client.initIndex('music');
-  var $hits = $('#player-grid');
-  // validation on DB side so no XSS
-  function searchCallback(success, content) {
-    if (!success || $('#q').val() != content.query) {
-      return;
-    }
-    var html = '';
-    for (var i = 0; i < content.hits.length; ++i) {
-      var hit = content.hits[i];
-      html += '<div class="player-item  col-xs-12 col-sm-4">' +
-                '<a class="thumbnail" href="' + hit.url + '" data-id="' + hit.id + '"">' +
-                '<div class="row">' +
-                  '<div class="col-xs-2"><i class="fa"></i></div>' +
-                  '<div class="col-xs-10 txt text-right">' + 
-                  hit._highlightResult.artist.value + '<br>' +
-                  '<strong>' + hit._highlightResult.title.value + '</strong><br>' + 
-                  '<small class="text-muted">#' + hit._highlightResult.tag.value + '</small>' +
-                  '</div>' +
-                '</div>' +
-                '</a>' +
-              '</div>'
-    }
-    $hits.html(html);
-    inlinePlayer.init();
-  }
-  $('#q').keyup(function() {
-    index.search($(this).val(), searchCallback, { hitsPerPage: 30 });
-  }).trigger('keyup').focus();
-
-  $('#publish').click(function(){
-    if (inlinePlayer.lastSound === null) {
-      alert('First, pick the best music.');
-      return;
-    }
-    var data = { 
-      title: $('#title').val(),   //TODO validation here as well? No problem with XSS right now 
-      description: $('#description').val(),
-      video_id: Soundly.current_youtube_id,
-      music_id: inlinePlayer.lastSoundId,  
-      music_url: inlinePlayer.lastSound.url,
-      override_audio: $("#override_audio").is(':checked'),
-      privacy_status: $("#privacyStatus option:selected").text()
-    };
-    $.ajax('process-video', {
-      data : JSON.stringify(data),
-      contentType : 'application/json',
-      type : 'POST'
-    });
-    // Just for fun :)
-    if(Math.random() < 0.5) {
-      $('#ok').html('Your video will be on your channel shortly.<br> <img class="img-responsive" src="http://d24w6bsrhbeh9d.cloudfront.net/photo/a44rgWQ_460sa.gif">');
-    } else {
-      $('#ok').html('Your video will be available on your channel shortly.<br> <img class="img-responsive" src="http://wearesocialmedia.gr/wp-content/uploads/2013/11/3879-animated_gif-chuck_norris-dodgeball-thumbs_up.gif">');
-    }
-    $('#ok').append('<small>Try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a></small>');
-      
-  });
-  $('.video-link').click(function() {
-    inlinePlayer.stopSound();
-    var video_id = $(this).data('id');
-    ytplayer.loadVideoById(video_id);
-    Soundly.current_youtube_id = video_id;
-    $('.video-link').removeClass('active');
-    $(this).addClass('active');
-    $('#title').val($(this).text());
-    $('#description').val($(this).data('description'));
-  });
-});
-</script>
+<script src="{{ url_for('static', filename = 'js/main.js') }}"></script>
 {% endblock %}
