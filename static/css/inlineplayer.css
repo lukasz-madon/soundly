@@ -127,7 +127,8 @@ body #sm2-container embed {
 }
 
 .slider {
-  width: 300px;
+  width: 250px;
+  display: inline-block;
 }
 
 .slider > .dragger {

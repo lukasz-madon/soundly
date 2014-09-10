@@ -10,13 +10,22 @@
     <div class="col-md-8">
       <h4>Preview</h4>
       <div id="ytapiplayer">
-        You have no videos or Flash or JavaScript is disabled.
+        You have no videos or Flash/JavaScript is disabled.
       </div>
       <div id="audio_channel">
       </div>
       <div id="audio_settings">
-        <span class="audio-time" id="audio_start">0:00</span>
-        <span class="audio-time pull-right" id="audio_end"></span>
+        <div class="row">
+          <div class="col-xs-3">
+            <span class="audio-time pull-left" id="audio_start">0:00</span>
+          </div>
+          <div class="col-xs-6">
+            <input class="center-block" id="override_audio" type="text" data-slider="true" value="1.0"> Just Music.
+          </div>
+          <div class="col-xs-3">
+            <span class="audio-time pull-right" id="audio_end"></span>
+          </div>
+        </div>
       </div>
       <form class="search">
         <input id="q" autocomplete="off" autocorrect="off" type="text" class="form-control" placeholder="Music Search" spellcheck="false">
@@ -40,7 +49,6 @@
           </tbody>
         </table> 
         <div class="well">
-         <h5>Music: <strong><span id="music_titile"></span></strong></h5>
            <form class="form-horizontal">
              <fieldset>
                <div class="form-group">
@@ -54,13 +62,6 @@
                  </div>
                </div>
                <div class="form-group">
-                 <div class="col-xs-5">
-                   <div class="checkbox">
-                     <label>
-                       <input id="override_audio" type="checkbox" checked><small>Override audio</small>
-                     </label>
-                   </div>
-                 </div>
                  <div class="col-xs-7">
                    <select class="form-control" id="privacyStatus">
                      <option>public</option>
@@ -68,13 +69,15 @@
                      <option>private</option>
                    </select>
                  </div>
-               </div>
-               <div class="form-group">
-                <div class="col-xs-6">
-                  <a class="btn btn-primary" id="publish">Publish</a> 
+                <div class="col-xs-5">
+                  <a class="btn btn-primary pull-right" id="publish">Publish</a> 
                 </div>
-               </div>
-             <p class="text-muted"> <small>Any second thoughts about music? No? Publish it!</small></p>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-12">
+                  <small class="text-muted">Any second thoughts about music? No? Publish it!</small>
+                </div>
+              </div>
              </fieldset>
            </form>
          </div>
@@ -88,7 +91,9 @@
   <div id="player" class="slide-player">
     <div class="container">
       <div class="row">
-        <div class="col-sm-4 col-sm-offset-8">player</div>
+        <div class="col-sm-4 col-sm-offset-8">
+          <h5>Music: <strong><span id="music_titile"></span></strong></h5>
+        </div>
       </div>
     </div>
   </div>
@@ -107,11 +112,12 @@
       app_id: '{{ ALGOLIASEARCH_APPLICATION_ID }}',
       api_key: '{{ ALGOLIASEARCH_API_KEY_SEARCH }}'
     }
-  }; // global object for storing some state. Proto hack.
+  }; // global object for storing some state. temp hack, I hope :)
   </script>
 <script src="https://d3ibatyzauff7b.cloudfront.net/assets/algolia/algoliasearch.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script src="{{ url_for('static', filename = 'js/waveform.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/simple-slider.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/helpers.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/soundmanager2.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/inlineplayer.js') }}"></script>

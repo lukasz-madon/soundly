@@ -170,7 +170,7 @@ def authorized():
     except KeyError:
         app.logger.error("no CSRF token")  # TODO incorrect error handling? Sometime code/state is wrong
         app.logger.error(request)
-        app.logger.error(session["credentials"])
+        app.logger.error(session.get("credentials"))
         abort(401)
     finally:
         session.pop("state", None)
@@ -207,6 +207,7 @@ def process_video():
     json = request.json
     if not json:
         abort(400)
+    # TODO: VALIDATION!!!
     # TODO: solve https problem for ffmpeg (ffmpeg -protocols). Tried --enable-openssl, --enable-gpl
     # possible solution is to create custom buildpack and compile with-openssl or diff ssl lib. 
     video_id = request.json["video_id"]

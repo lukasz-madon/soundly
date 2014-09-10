@@ -5,6 +5,7 @@ swfobject.embedSWF('http://www.youtube.com/v/' + Soundly.current_video.id +
 
 function onYouTubePlayerReady(playerId) {
     ytplayer = document.getElementById("myytplayer");
+    ytplayer.setVolume(0);
     ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
     $('#audio_end').text(ytplayer.getDuration().toMMSS());
 };
@@ -16,6 +17,9 @@ function onytplayerStateChange(newState) {
 $(document).ready(function() {
   $('#title').val(Soundly.current_video.title);
   $('#description').val(Soundly.current_video.description);
+  $("#override_audio").bind("slider:changed", function (event, data) {
+    // data.value;
+  });
 
   var waveform = new Waveform({
     container: document.getElementById('audio_channel'),
@@ -85,7 +89,7 @@ $(document).ready(function() {
       video_id: Soundly.current_video.id,
       music_id: inlinePlayer.lastSoundId,  
       music_url: inlinePlayer.lastSound.url,
-      override_audio: $("#override_audio").is(':checked'),
+      override_audio: $("#audio_override").val(),
       privacy_status: $("#privacyStatus option:selected").text()
     };
     $.ajax('process-video', {
