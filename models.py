@@ -69,3 +69,4 @@ class Video(db.Model, ModelMixin):
     views = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     music = db.relationship("Music", backref="video")
+    created_on = db.Column(db.DateTime, default=datetime.datetime.utcnow)
