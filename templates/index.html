@@ -20,7 +20,8 @@
             <span class="audio-time pull-left" id="audio_start">0:00</span>
           </div>
           <div class="col-xs-6">
-            <input class="center-block" id="override_audio" type="text" data-slider="true" value="1.0"> Just Music.
+            <input class="center-block" id="override_audio" type="text" data-slider="true" value="1.0"> 
+            <span id="override_audio_desc">Just Music.</span>
           </div>
           <div class="col-xs-3">
             <span class="audio-time pull-right" id="audio_end"></span>
@@ -89,13 +90,7 @@
 {% block footer %}
   {{ super() }}
   <div id="player" class="slide-player">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-4 col-sm-offset-8">
-          <h5>Music: <strong><span id="music_titile"></span></strong></h5>
-        </div>
-      </div>
-    </div>
+    <h5>Music: <strong><span id="music_titile"></span></strong></h5>
   </div>
 {% endblock %}
 {% block script %}
@@ -107,6 +102,9 @@
       title: '{{ videos[0].title if videos else "" }}',
       description: '{{ videos[0].description if videos else "" }}',
       privacy_status: '{{ videos[0].privacy_status if videos else "" }}'
+    },
+    current_audio: {
+      volume: 0.0
     },
     Algolia: {
       app_id: '{{ ALGOLIASEARCH_APPLICATION_ID }}',

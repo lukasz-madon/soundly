@@ -89,7 +89,9 @@
 .slide-player {
 	position: fixed;
 	bottom: -60px;
-	width: 100%;
+	width: 33.33%;
+	background-color: rgba(255, 255, 255, 0.9);
+	right: 0px;
 	height: 60px;
 	z-index: 9999;
 	vertical-align:middle;
@@ -127,7 +129,7 @@ body #sm2-container embed {
 }
 
 .slider {
-  width: 250px;
+  width: 200px;
   display: inline-block;
 }
 

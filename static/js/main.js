@@ -18,7 +18,13 @@ $(document).ready(function() {
   $('#title').val(Soundly.current_video.title);
   $('#description').val(Soundly.current_video.description);
   $("#override_audio").bind("slider:changed", function (event, data) {
-    // data.value;
+    Soundly.current_audio.volume = data.value;
+    if(data.value < 0.9) {
+      $('#override_audio_desc').text("Music & original.")
+    } else {
+      $('#override_audio_desc').text("Just Music.")
+    }
+    ytplayer.setVolume(100 - data.value * 100); 
   });
 
   var waveform = new Waveform({
