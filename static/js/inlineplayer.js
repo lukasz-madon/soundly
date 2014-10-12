@@ -150,7 +150,7 @@ function InlinePlayer() {
     whileplaying: function() {
       var pos = self.msToTimestamp(self.position());
       var duration = self.msToTimestamp(self.lastSound.duration);
-      if (pos !== self.currentPosition){
+      if (pos !== self.currentPosition) {  // there is a reason for that. don't remember 
         self.currentPosition = pos;
       }
       if (duration !== self.duration) {
