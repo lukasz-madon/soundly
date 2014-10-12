@@ -150,13 +150,14 @@ function InlinePlayer() {
     whileplaying: function() {
       var pos = self.msToTimestamp(self.position());
       var duration = self.msToTimestamp(self.lastSound.duration);
-      if (pos !== self.currentPosition) {  // there is a reason for that. don't remember 
+      if (pos !== self.currentPosition) {  // there is a reason for that. don't remember. null till load finish?
         self.currentPosition = pos;
       }
       if (duration !== self.duration) {
         self.duration = duration;
+        $('#audio_end').text(self.duration);
+        //var ratio = self.position() / self.lastSound.duration;
       }
-      var ratio = self.position() / self.lastSound.duration;
     }
   }
 

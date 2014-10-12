@@ -7,11 +7,10 @@ function onYouTubePlayerReady(playerId) {
     ytplayer = document.getElementById("myytplayer");
     ytplayer.setVolume(0);
     ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
-    $('#audio_end').text(ytplayer.getDuration().toMMSS());
+    
 };
 function onytplayerStateChange(newState) {
   if (newState === 1) { // playing
-    $('#audio_end').text(ytplayer.getDuration().toMMSS());
   }
 }
 $(document).ready(function() {
