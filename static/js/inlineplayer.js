@@ -152,11 +152,11 @@ function InlinePlayer() {
       var duration = self.msToTimestamp(self.lastSound.duration);
       if (pos !== self.currentPosition) {  // there is a reason for that. don't remember. null till load finish?
         self.currentPosition = pos;
+        // draw here a bar for audio channel graph 
       }
       if (duration !== self.duration) {
         self.duration = duration;
         $('#audio_end').text(self.duration);
-        //var ratio = self.position() / self.lastSound.duration;
       }
     }
   }

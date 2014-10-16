@@ -6,7 +6,7 @@
 {% block navbar %}
 {% endblock %}
 {% block content %}
-<a class="sing-up flash animated" href="{{ url_for('google_login') }}">Sing up</a>
+<a title="Get in there!" class="sing-up flash animated" href="{{ url_for('google_login') }}">Sing up</a>
 <div class="logo text-center">
   <img class="img-responsive push" src="{{ url_for('static', filename = 'img/logo.png') }}">
   <h2>Music for your trailer.</h2>
@@ -72,7 +72,7 @@
   </div>
 </div>
 <div class="center">
-  <a class="btn btn-success" href="{{ url_for('google_login') }}">Sing up for free</a>
+  <a title="Get in there!" class="btn btn-success" href="{{ url_for('google_login') }}">Sing up for free</a>
   Here will be demo of a statup that used it to make a demo of the product and a game dev that made a trailer.
 </div>
 {% endblock %}

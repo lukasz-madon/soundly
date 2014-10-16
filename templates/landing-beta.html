@@ -6,7 +6,7 @@
 {% block navbar %}
 {% endblock %}
 {% block content %}
-<a class="sing-up flash animated" href="{{ url_for('google_login') }}">Sing up</a>
+<a data-toggle="tooltip" data-placement="left" title="" data-original-title="Get in there!" class="sing-up flash animated" href="{{ url_for('google_login') }}">Sing up</a>
 <div class="logo text-center">
   <img class="img-responsive push" src="{{ url_for('static', filename = 'img/logo-beta.png') }}">
   <h2>Music for your trailer.</h2>
@@ -62,12 +62,16 @@
   </div>
 </div>
 <div class="center">
-  <a class="btn btn-success" href="{{ url_for('google_login') }}">Sing up for free</a>
+  <a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Get in there!" class="btn btn-success" href="{{ url_for('google_login') }}">Sing up for free</a>
 </div>
 {% endblock %}
 {% block script %}
   {{ super() }}
   <script type="text/javascript">
+  $(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+
   function isElementInViewport(elem) {
       var $elem = $(elem);
       // Get the scroll position of the page.
