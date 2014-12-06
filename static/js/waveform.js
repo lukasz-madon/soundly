@@ -1,5 +1,5 @@
 (function() {
-  var JSONP, Waveform,
+  var Waveform,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.Waveform = Waveform = (function() {
@@ -149,110 +149,8 @@
       return newData;
     };
 
-    Waveform.prototype.optionsForSyncedStream = function(options) {
-      var innerColorWasSet, that;
-      if (options == null) {
-        options = {};
-      }
-      innerColorWasSet = false;
-      that = this;
-      return {
-        whileplaying: this.redraw,
-        whileloading: function() {
-          var stream;
-          if (!innerColorWasSet) {
-            stream = this;
-            that.innerColor = function(x, y) {
-              if (x < stream.position / stream.durationEstimate) {
-                return options.playedColor || "rgba(255,  102, 0, 0.8)";
-              } else if (x < stream.bytesLoaded / stream.bytesTotal) {
-                return options.loadedColor || "rgba(0, 0, 0, 0.8)";
-              } else {
-                return options.defaultColor || "rgba(0, 0, 0, 0.4)";
-              }
-            };
-            innerColorWasSet = true;
-          }
-          return this.redraw;
-        }
-      };
-    };
-
-    Waveform.prototype.dataFromSoundCloudTrack = function(track) {
-      var _this = this;
-      return JSONP.get("http://www.waveformjs.org/w", {
-        url: track.waveform_url
-      }, function(data) {
-        return _this.update({
-          data: data
-        });
-      });
-    };
-
     return Waveform;
 
-  })();
-
-  JSONP = (function() {
-    var config, counter, encode, head, jsonp, key, load, query, setDefaults, window;
-    load = function(url) {
-      var done, head, script;
-      script = document.createElement("script");
-      done = false;
-      script.src = url;
-      script.async = true;
-      script.onload = script.onreadystatechange = function() {
-        if (!done && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
-          done = true;
-          script.onload = script.onreadystatechange = null;
-          if (script && script.parentNode) {
-            return script.parentNode.removeChild(script);
-          }
-        }
-      };
-      if (!head) {
-        head = document.getElementsByTagName("head")[0];
-      }
-      return head.appendChild(script);
-    };
-    encode = function(str) {
-      return encodeURIComponent(str);
-    };
-    jsonp = function(url, params, callback, callbackName) {
-      var key, query, uniqueName;
-      query = ((url || "").indexOf("?") === -1 ? "?" : "&");
-      callbackName = callbackName || config["callbackName"] || "callback";
-      uniqueName = callbackName + "_json" + (++counter);
-      params = params || {};
-      for (key in params) {
-        if (params.hasOwnProperty(key)) {
-          query += encode(key) + "=" + encode(params[key]) + "&";
-        }
-      }
-      window[uniqueName] = function(data) {
-        callback(data);
-        try {
-          delete window[uniqueName];
-        } catch (_error) {}
-        return window[uniqueName] = null;
-      };
-      load(url + query + callbackName + "=" + uniqueName);
-      return uniqueName;
-    };
-    setDefaults = function(obj) {
-      var config;
-      return config = obj;
-    };
-    counter = 0;
-    head = void 0;
-    query = void 0;
-    key = void 0;
-    window = this;
-    config = {};
-    return {
-      get: jsonp,
-      init: setDefaults
-    };
   })();
 
 }).call(this);

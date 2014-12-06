@@ -1,4 +1,4 @@
-
+// isolate later on with amd or whatever
 swfobject.embedSWF('http://www.youtube.com/v/' + Soundly.current_video.id + 
   '?enablejsapi=1&playerapiid=ytplayer&version=3', 'ytapiplayer', '100%', '400', '8', null, null
   , { allowScriptAccess: 'always' }, { id: 'myytplayer' });

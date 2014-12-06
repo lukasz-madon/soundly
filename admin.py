@@ -9,4 +9,3 @@ class AdminModelView(ModelView):
     def is_accessible(self):
         user = get_auth_user()
         return user is not None and user.is_admin
-        

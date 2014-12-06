@@ -1,9 +1,14 @@
-import os, string, time, base64, hmac
+import os
+import string
+import time
+import base64
+import hmac
 from hashlib import sha1
 from random import SystemRandom
 from urllib import quote
 
-from flask import Flask, render_template, request, url_for, redirect, session, jsonify, g, flash, abort
+from flask import (Flask, render_template, request, url_for, redirect,
+                   session, jsonify, g, flash, abort)
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.admin import Admin
 from flaskext.kvsession import KVSessionExtension
@@ -54,35 +59,62 @@ admin.add_view(AdminModelView(User, db.session))
 admin.add_view(AdminModelView(Music, db.session))
 admin.add_view(AdminModelView(Video, db.session))
 
-### Views ###
+
+# Views
 @app.route("/")
 @auth_required
 def index():
     detect_default_email()
+    # TODO remove http call from index
     auth_http = session["credentials"].authorize(httplib2.Http())
-    channel_result = youtube_service.channels().list(part="contentDetails", mine="true").execute(http=auth_http)
+    channel_result = youtube_service.channels().list(
+        part="contentDetails",
+        mine="true").execute(
+        http=auth_http)
     if len(channel_result["items"]) > 1:
-        app.logger.info("More than 1 channel for %s user %s", user.id, channel_result)
-    uploads_list_id = channel_result["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
+        app.logger.info(
+            "More than 1 channel for %s user %s",
+            user.id,
+            channel_result)
+
+    uploads_list_id = channel_result["items"][0][
+        "contentDetails"]["relatedPlaylists"]["uploads"]
     playlistitems_list_request = youtube_service.playlistItems().list(
         playlistId=uploads_list_id,
         part="snippet,status",
         maxResults=10
-      )
-    playlistitems_list_response = playlistitems_list_request.execute(http=auth_http)
-    playlist = (item for item in playlistitems_list_response["items"] if item["status"]["privacyStatus"] != "private")
+    )
+    playlistitems_list_response = playlistitems_list_request.execute(
+        http=auth_http)
+    playlist = (item for item in playlistitems_list_response[
+                "items"] if item["status"]["privacyStatus"] != "private")
+
     videos = []
     for video in playlist:
         title = video["snippet"]["title"].replace("\n", " ")
         description = video["snippet"]["description"].replace("\n", " ")
+        if "http://soundly.io" not in description:
+            description += "\nMusic provided by http://soundly.io"
         youtube_id = video["snippet"]["resourceId"]["videoId"]
         privacy_status = video["status"]["privacyStatus"]
-        videos.append(VideoMeta(youtube_id, title, description, privacy_status))
+        videos.append(
+            VideoMeta(
+                youtube_id,
+                title,
+                description,
+                privacy_status))
+
     if not videos:
         # add video of tutorial?
-        flash("You have no Youtube videos. Upload as unlisted video using <a class='white' href='https://www.youtube.com/'>youtube.com</a>.", "warning") 
-    return render_template("index.html", ALGOLIASEARCH_APPLICATION_ID=app.config["ALGOLIASEARCH_APPLICATION_ID"],
-    ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"], videos=videos)
+        flash(
+            "You have no Youtube videos. Upload as unlisted video using "
+            "<a class='white' href='https://www.youtube.com/'>youtube.com</a>.",
+            "warning")
+    return render_template(
+        "index.html",
+        ALGOLIASEARCH_APPLICATION_ID=app.config["ALGOLIASEARCH_APPLICATION_ID"],
+        ALGOLIASEARCH_API_KEY_SEARCH=app.config["ALGOLIASEARCH_API_KEY_SEARCH"],
+        videos=videos)
 
 
 @app.route("/about")
@@ -126,7 +158,7 @@ def dashboard():
     return render_template("dashboard.html", videos=g.user.videos)
 
 
-@app.route("/profile", methods = ["POST", "GET"])
+@app.route("/profile", methods=["POST", "GET"])
 @auth_required
 def profile():
     form = EmailForm()
@@ -145,8 +177,11 @@ def profile():
 @app.route("/login/google")
 def google_login():
     # CSRF
-    session["state"] = "".join(rand.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
-    flow.redirect_uri=url_for("authorized", _external=True)
+    session["state"] = "".join(
+        rand.choice(
+            string.ascii_uppercase +
+            string.digits) for x in xrange(32))
+    flow.redirect_uri = url_for("authorized", _external=True)
     auth_uri = flow.step1_get_authorize_url()
     return redirect(auth_uri + "&state=%s" % (session["state"],))
 
@@ -160,15 +195,17 @@ def logout():
 
 @app.route("/login/google/oauthcallback")
 def authorized():
-    # CSRF 
-    # There is a possible race condition when user click two times too fast or two different
+    # There is a possible race condition when user click two times too
+    # fast or two different
     # TODO check if already authorized
     try:
         if request.args["state"] != session["state"]:
-            app.logger.error("possible CSRF. Request token is different than session token")
+            app.logger.error(
+                "possible CSRF. Request token is different than session token")
             abort(400)
     except KeyError:
-        app.logger.error("no CSRF token")  # TODO incorrect error handling? Sometime code/state is wrong
+        # TODO incorrect error handling? Sometime code/state is wrong
+        app.logger.error("no CSRF token")
         app.logger.error(request)
         app.logger.error(session.get("credentials"))
         abort(401)
@@ -194,7 +231,7 @@ def authorized():
         user.refresh_token = credentials.refresh_token
         db.session.add(user)
         db.session.commit()
-    # refresh token is send only once, needed for auto token refreshing 
+    # refresh token is send only once, needed for auto token refreshing
     credentials.refresh_token = user.refresh_token
     session["credentials"] = credentials
     app.logger.info("User %s is authenticated", user.id)
@@ -208,25 +245,37 @@ def process_video():
     if not json:
         abort(400)
     # TODO: VALIDATION!!!
-    # TODO: solve https problem for ffmpeg (ffmpeg -protocols). Tried --enable-openssl, --enable-gpl
-    # possible solution is to create custom buildpack and compile with-openssl or diff ssl lib. 
     video_id = request.json["video_id"]
     music_id = int(request.json["music_id"])
     music_url = request.json["music_url"]
     title = request.json["title"]
     description = request.json["description"]
     tags = ["soundly.io"]
-    categoryId = 20
+    categoryId = 20  # gaming? not sure if this still works
     privacyStatus = request.json["privacy_status"]
-    override_audio = request.json["override_audio"]    
+    # this will change when % volume will be implemented
+    override_audio = request.json.get("override_audio", True)
+
     app.logger.info("User %s processing request: %s", g.user.id, request.json)
-    worker_queue.enqueue(process_video_request, session["credentials"], video_id, music_url, music_id, g.user.id,
-        title, description, tags, categoryId, privacyStatus, override_audio)
+    worker_queue.enqueue(
+        process_video_request,
+        session["credentials"],
+        video_id,
+        music_url,
+        music_id,
+        g.user.id,
+        title,
+        description,
+        tags,
+        categoryId,
+        privacyStatus,
+        override_audio)
     # Check if the file is one of the allowed types/extensions
     # if not file or not allowed_file(file.filename):
-    #     return jsonify({"error": "wrong file format. Supported formats %s" % app.config["ALLOWED_EXTENSIONS"]}), 400
+    #     return jsonify({"error": "wrong file format.
+    # Supported formats %s" % app.config["ALLOWED_EXTENSIONS"]}), 400
     # TODO check bad chars, never trust user input
-    return jsonify({ "message": "background job is on!" })    
+    return jsonify({"message": "background job is on!"})
 
 
 if __name__ == "__main__":

@@ -14,7 +14,8 @@ class ModelMixin(object):
 
     @property
     def to_dict(self):
-        return dict((col, getattr(self, col)) for col in self.__table__.columns.keys())
+        return dict(
+            (col, getattr(self, col)) for col in self.__table__.columns.keys())
 
 
 class User(db.Model, ModelMixin):
