@@ -67,6 +67,7 @@ def process_video_request(
         title, description, tags, categoryId, privacyStatus, override_audio
     ):
     """ processing video using ffmpeg """
+    # TODO Possible bug cause by this. get single format.
     best_video = pafy.new(video_id).getbest()
     video_url = best_video.url
     output_video = secure_filename("%s.%s" % (video_id, best_video.extension))
