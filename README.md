@@ -4,7 +4,7 @@
 
 All python dependencies are specified in requirements.txt and managed with pip using virtualenv
 
-### DB 
+### DB
 1. install postgres with homebrew (check with heroku tutorial first for changes/diff way)
 1. 'brew install postgressql'
 1. follow instructions (/usr/local/opt/postgresql/bin/createuser -s postgres maybe needed to add one superuser)
@@ -31,22 +31,30 @@ Add config for AWS and Google API
 
 ```ffmpeg -i "http://s3-us-west-2.amazonaws.com/test.co/trailer.wmv" -i "http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3" -codec copy -y ~/Downloads/output.wmv ```
 
-### Architecture 
+```
+ffmpeg -i jingiel_bacterion_v2.mp3 -i trailer.wmv -filter_complex "[0:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,volume=0.5[a1];[1:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,volume=0.8[a2];[a1][a2]amerge,pan=stereo:c0<c0+c2:c1<c1+c3[out]" -map 1:v -map "[out]" -c:v copy -shortest out_vid3.wmv
+```
+
+```
+ffmpeg -i jingiel_bacterion_v2.mp3 -i trailer.wmv  -filter_complex "[0:a]volume=0.390625[a1];[1:a]volume=0.781250[a2];[a1][a2]amerge,pan=stereo:c0<c0+c2:c1<c1+c3[out]" -map 1:v -map "[out]" -c:v copy -c:a libfdk_aac -shortest output.wmv
+```
+
+### Architecture
 
 - Redis for worker -> web app queue, caching and storing session
 - Postgres for data
 - Python for backend (Flask)
-- ffmpeg for codecs 
-- Frontend based on Jinja2 + Bootstrap, Jquery and some js (possibly use of Angular for video/music editor etc)  
+- ffmpeg for codecs
+- Frontend based on Jinja2 + Bootstrap, Jquery and some js (possibly use of Angular for video/music editor etc)
 - hosting heroku (maybe barebone AWS or Digital Ocean)
 - DNS and domain gandi.net
-- for searching Algolia maybe or elastic search? 
-- New Relict for performance 
+- for searching Algolia maybe or elastic search?
+- New Relict for performance
 - Other add-ons for logging etc
 
 ### Gotchas
 
-Some users can have google oAuth but no channel or think they have a channel but it's not merge with oAuth -> don't upload 
+Some users can have google oAuth but no channel or think they have a channel but it's not merge with oAuth -> don't upload
 
 Inconsistent oauth between google and youtube http://stackoverflow.com/questions/20447149/google-oauth2-login-get-youtube-nickname-and-real-email-address/
 
@@ -57,7 +65,7 @@ when logged in with gmail account
 {u'family_name': u'Smith', u'name': u'Jhon Smith', u'picture': u'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50', u'locale': u'pl', u'email': u'jhons@gmail.com', u'given_name': u'Jhon', u'id': u'112344912000935801269', u'verified_email': True}
 ```
 
-when logged in with youtube 
+when logged in with youtube
 
 ```
 {u'picture': u'https://lh3.googleusercontent.com/-q1Smh9d8d0g/AAAAAAAAAAM/AAAAAAAAAAA/3YaY0XeTIPc/photo.jpg?sz=50', u'name': u'AwesomeStudios', u'locale': u'pl', u'email': u'awesomestudios-3347@pages.plusgoogle.com', u'link': u'https://plus.google.com/109358000285879682859', u'id': u'109358000285879682859', u'verified_email': True}

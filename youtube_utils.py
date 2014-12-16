@@ -86,7 +86,7 @@ def process_video_request(
         output_video]
         logger.info(cmd)
         code = sp.call(cmd)
-    # TODO need better error informations (redis?)
+    # TODO need better error informations (redis? field in table next to video)
     if code:
         logger.error("error - cannot encode the file")
         return
