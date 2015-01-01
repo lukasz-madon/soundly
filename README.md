@@ -14,9 +14,8 @@ All python dependencies are specified in requirements.txt and managed with pip u
 
 ### Config
 
-All secret configs e.g. API key are stored in heroku config. locally keep them in ~/.bash_profile (don't forget to `source` console). No sensitive data in git!
+All secret configs e.g. API key are stored in heroku config. locally keep them in ~/.zshrc (don't forget to `source` console). No sensitive data in git!
 
-bash_profile
 ```
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
     . $(brew --prefix)/etc/bash_completion
@@ -28,6 +27,23 @@ export DEBUG='1'
 Add config for AWS and Google API
 
 ### Adding music to video
+
+First version of the app will replace, add, mix music and change volume. Youtube has a few different streams that can be used.
+It's not clear if there is one format that will always be present and the app shouldn't depend on that. We need to handle most of the formats:
+
+```
+>>> import pafy
+>>> url = "https://www.youtube.com/watch?v=bMt47wvK6u0"
+>>> video = pafy.new(url)
+>>> video.allstreams
+[normal:mp4@1280x720, normal:webm@640x360, normal:mp4@640x360, normal:flv@320x240, normal:3gp@320x240, normal:3gp@176x144, video:m4v@1280x720, video:webm@720x480, video:m4v@854x480, video:webm@640x480, video:m4v@640x360, video:webm@480x360, video:m4v@426x240, video:webm@360x240, video:m4v@256x144, audio:m4a@128k, audio:ogg@128k]
+```
+
+Pipeline
+```
+yt-video(mp4, webm, flv, 3gp) + yt-audio() + soundly-mp3 -> output-video-for-youtube (what format?)
+
+```
 
 ```ffmpeg -i "http://s3-us-west-2.amazonaws.com/test.co/trailer.wmv" -i "http://s3-us-west-2.amazonaws.com/test.co/jingiel_bacterion_v2.mp3" -codec copy -y ~/Downloads/output.wmv ```
 
@@ -51,6 +67,7 @@ ffmpeg -i jingiel_bacterion_v2.mp3 -i trailer.wmv  -filter_complex "[0:a]volume=
 - for searching Algolia maybe or elastic search?
 - New Relict for performance
 - Other add-ons for logging etc
+- Move to golang
 
 ### Gotchas
 
@@ -58,17 +75,15 @@ Some users can have google oAuth but no channel or think they have a channel but
 
 Inconsistent oauth between google and youtube http://stackoverflow.com/questions/20447149/google-oauth2-login-get-youtube-nickname-and-real-email-address/
 
-
 when logged in with gmail account
 ```
-
-{u'family_name': u'Smith', u'name': u'Jhon Smith', u'picture': u'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50', u'locale': u'pl', u'email': u'jhons@gmail.com', u'given_name': u'Jhon', u'id': u'112344912000935801269', u'verified_email': True}
+{u'family_name': u'Smith', u'name': u'Jhon Smith', u'picture': u'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50', u'locale': u'pl', u'email': u'jhons@gmail.com', u'given_name': u'Jhon', u'id': u'112344912000935801268', u'verified_email': True}
 ```
 
 when logged in with youtube
 
 ```
-{u'picture': u'https://lh3.googleusercontent.com/-q1Smh9d8d0g/AAAAAAAAAAM/AAAAAAAAAAA/3YaY0XeTIPc/photo.jpg?sz=50', u'name': u'AwesomeStudios', u'locale': u'pl', u'email': u'awesomestudios-3347@pages.plusgoogle.com', u'link': u'https://plus.google.com/109358000285879682859', u'id': u'109358000285879682859', u'verified_email': True}
+{u'picture': u'https://lh3.googleusercontent.com/-q1Smh9d8d0g/AAAAAAAAAAM/AAAAAAAAAAA/3YaY0XeTIPc/photo.jpg?sz=50', u'name': u'AwesomeStudios', u'locale': u'pl', u'email': u'awesomestudios-3347@pages.plusgoogle.com', u'link': u'https://plus.google.com/109358000285879682859', u'id': u'109358000285879682858', u'verified_email': True}
 
 ```
 Example credentials
@@ -123,7 +138,6 @@ Example credentials
  }
 
 ```
-
 You can get views from youtube data api v2.0 `https://gdata.youtube.com/feeds/api/videos/MSrTnWDTdwI?v=2&alt=json` as json from client side which is nice, but need to store in DB to calculate the price later on.
 
 Youtube categories
