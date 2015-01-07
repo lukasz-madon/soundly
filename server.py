@@ -94,7 +94,7 @@ def index():
         title = video["snippet"]["title"].replace("\n", " ")
         description = video["snippet"]["description"].replace("\n", " ")
         if "http://soundly.io" not in description:
-            description += "\nMusic provided by http://soundly.io"
+            description += " Music provided by http://soundly.io"
         youtube_id = video["snippet"]["resourceId"]["videoId"]
         privacy_status = video["status"]["privacyStatus"]
         videos.append(
@@ -103,7 +103,7 @@ def index():
                 title,
                 description,
                 privacy_status))
-
+    print videos
     if not videos:
         # add video of tutorial?
         flash(
@@ -254,7 +254,7 @@ def process_video():
     categoryId = 20  # gaming? not sure if this still works
     privacyStatus = request.json["privacy_status"]
     # this will change when % volume will be implemented
-    override_audio = request.json.get("override_audio", True)
+    override_audio = float(request.json["override_audio"])
 
     app.logger.info("User %s processing request: %s", g.user.id, request.json)
     worker_queue.enqueue(

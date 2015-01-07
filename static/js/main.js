@@ -1,5 +1,5 @@
 // isolate later on with amd or whatever
-swfobject.embedSWF('http://www.youtube.com/v/' + Soundly.current_video.id + 
+swfobject.embedSWF('http://www.youtube.com/v/' + Soundly.current_video.id +
   '?enablejsapi=1&playerapiid=ytplayer&version=3', 'ytapiplayer', '100%', '400', '8', null, null
   , { allowScriptAccess: 'always' }, { id: 'myytplayer' });
 
@@ -7,7 +7,6 @@ function onYouTubePlayerReady(playerId) {
     ytplayer = document.getElementById("myytplayer");
     ytplayer.setVolume(0);
     ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
-    
 };
 function onytplayerStateChange(newState) {
   if (newState === 1) { // playing
@@ -23,7 +22,7 @@ $(document).ready(function() {
     } else {
       $('#override_audio_desc').text("Just Music.")
     }
-    ytplayer.setVolume(100 - data.value * 100); 
+    ytplayer.setVolume(100 - data.value * 100);
   });
 
   var waveform = new Waveform({
@@ -67,9 +66,9 @@ $(document).ready(function() {
                 '<a class="thumbnail" href="' + hit.url + '" data-id="' + hit.id + '"">' +
                 '<div class="row">' +
                   '<div class="col-xs-2"><i class="fa"></i></div>' +
-                  '<div class="col-xs-10 txt text-right">' + 
+                  '<div class="col-xs-10 txt text-right">' +
                   hit._highlightResult.artist.value + '<br>' +
-                  '<strong>' + hit._highlightResult.title.value + '</strong><br>' + 
+                  '<strong>' + hit._highlightResult.title.value + '</strong><br>' +
                   '<small class="text-muted">#' + hit._highlightResult.tag.value + '</small>' +
                   '</div>' +
                 '</div>' +
@@ -88,13 +87,13 @@ $(document).ready(function() {
       alert('First, pick the best music.');
       return;
     }
-    var data = { 
-      title: $('#title').val(),   //TODO validation here as well? No problem with XSS right now 
+    var data = {
+      title: $('#title').val(),   //TODO validation? No problem with XSS right now, and should be use global Soundly here
       description: $('#description').val(),
       video_id: Soundly.current_video.id,
-      music_id: inlinePlayer.lastSoundId,  
+      music_id: inlinePlayer.lastSoundId,
       music_url: inlinePlayer.lastSound.url,
-      override_audio: $("#audio_override").val(),
+      override_audio: $("#override_audio").val(),
       privacy_status: $("#privacyStatus option:selected").text()
     };
     $.ajax('process-video', {
@@ -109,7 +108,6 @@ $(document).ready(function() {
       $('#ok').html('Your video will be available on your channel shortly.<br> <img class="img-responsive" src="http://wearesocialmedia.gr/wp-content/uploads/2013/11/3879-animated_gif-chuck_norris-dodgeball-thumbs_up.gif">');
     }
     $('#ok').append('<small>Try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a></small>');
-      
   });
   $('.video-link').click(function() {
     inlinePlayer.stopSound();

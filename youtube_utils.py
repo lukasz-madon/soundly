@@ -61,6 +61,9 @@ class VideoMeta(object):
         self.description = description
         self.privacy_status = privacy_status
 
+    def __repr__(self):
+        return "%s %s;%s;%s" %(self.id, self.title, self.description, self.privacy_status)
+
 
 def process_video_request(
         credentials, video_id, music_url, music_id, user_id,
@@ -75,14 +78,14 @@ def process_video_request(
     # check how to hande all corner cases for input audio streams
     # c = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1",
     #               "-map", "1:0", "-codec", "copy", "-y", output_video])
-    if override_audio:
+    if override_audio > 0.9: # temp. need to add volume
         o_cmd = ["ffmpeg", "-i", music_url, "-i", video_url, "-codec", "copy",
          "-y", "-shortest", output_video]
         logger.info(o_cmd)
         code = sp.call(o_cmd)
     else:
         cmd = ["ffmpeg", "-i", music_url, "-i", video_url, "-filter_complex",
-        "amix=duration=shortest", "-vcodec", "copy", "-y", "-shortest",
+        "amix=duration=shortest", "-vcodec", "copy", "-y", "-shortest", "-strict -2",
         output_video]
         logger.info(cmd)
         code = sp.call(cmd)
