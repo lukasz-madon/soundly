@@ -79,8 +79,8 @@ def process_video_request(
     # c = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1",
     #               "-map", "1:0", "-codec", "copy", "-y", output_video])
     if override_audio > 0.9: # temp. need to add volume
-        o_cmd = ["ffmpeg", "-i", music_url, "-i", video_url, "-codec", "copy",
-         "-y", "-shortest", output_video]
+        o_cmd = ["ffmpeg", "-i", music_url, "-i", video_url, "-vcodec", "copy",
+         "-y", "-shortest", "-strict -2", output_video]
         logger.info(o_cmd)
         code = sp.call(o_cmd)
     else:

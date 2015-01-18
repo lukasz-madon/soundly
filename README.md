@@ -17,12 +17,8 @@ All python dependencies are specified in requirements.txt and managed with pip u
 All secret configs e.g. API key are stored in heroku config. locally keep them in ~/.zshrc (don't forget to `source` console). No sensitive data in git!
 
 ```
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-    . $(brew --prefix)/etc/bash_completion
-fi
 export FLASK_SECRET_KEY='the quick brown fox jumps over the lazy dog'
 export DEBUG='1'
-
 ```
 Add config for AWS and Google API
 
@@ -39,9 +35,9 @@ It's not clear if there is one format that will always be present and the app sh
 [normal:mp4@1280x720, normal:webm@640x360, normal:mp4@640x360, normal:flv@320x240, normal:3gp@320x240, normal:3gp@176x144, video:m4v@1280x720, video:webm@720x480, video:m4v@854x480, video:webm@640x480, video:m4v@640x360, video:webm@480x360, video:m4v@426x240, video:webm@360x240, video:m4v@256x144, audio:m4a@128k, audio:ogg@128k]
 ```
 
-Pipeline
+Pipeline with all possible formats, but we assume mp4 for now.
 ```
-yt-video(mp4, webm, flv, 3gp) + yt-audio() + soundly-mp3 -> output-video-for-youtube (what format?)
+yt-video(mp4, webm, flv, 3gp) + yt-audio() + soundly-mp3 -> output-video-for-youtube
 
 ```
 
@@ -67,7 +63,7 @@ ffmpeg -i jingiel_bacterion_v2.mp3 -i trailer.wmv  -filter_complex "[0:a]volume=
 - for searching Algolia maybe or elastic search?
 - New Relict for performance
 - Other add-ons for logging etc
-- Move to golang
+- Move to golang?
 
 ### Gotchas
 
@@ -84,7 +80,6 @@ when logged in with youtube
 
 ```
 {u'picture': u'https://lh3.googleusercontent.com/-q1Smh9d8d0g/AAAAAAAAAAM/AAAAAAAAAAA/3YaY0XeTIPc/photo.jpg?sz=50', u'name': u'AwesomeStudios', u'locale': u'pl', u'email': u'awesomestudios-3347@pages.plusgoogle.com', u'link': u'https://plus.google.com/109358000285879682859', u'id': u'109358000285879682858', u'verified_email': True}
-
 ```
 Example credentials
 ```
@@ -136,7 +131,6 @@ Example credentials
  	'refresh_token': u'1D...on-zcI',
  	'user_agent': None
  }
-
 ```
 You can get views from youtube data api v2.0 `https://gdata.youtube.com/feeds/api/videos/MSrTnWDTdwI?v=2&alt=json` as json from client side which is nice, but need to store in DB to calculate the price later on.
 
