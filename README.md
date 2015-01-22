@@ -11,6 +11,7 @@ All python dependencies are specified in requirements.txt and managed with pip u
 1. create user dbuser(P@ssw0rd) using superuser postgres
 1. http://stackoverflow.com/questions/13784340/how-to-run-postgres-locally
 1. brew install redis
+1. brew install ffmpeg (should be 2.5)
 
 ### Config
 
@@ -152,4 +153,20 @@ Youtube categories
     <option value="28">Science &amp; Technology</option>
     <option value="17">Sports</option>
     <option value="19">Travel &amp; Events</option>
+```
+
+## ffmpeg version (local)
+```
+(venv)➜  soundly git:(master) ffmpeg -version
+ffmpeg version 2.5 Copyright (c) 2000-2014 the FFmpeg developers
+built on Dec  8 2014 10:02:02 with llvm-gcc 4.2.1 (LLVM build 2336.11.00)
+configuration: --prefix=/Volumes/Ramdisk/sw --enable-gpl --enable-pthreads --enable-version3 --enable-libspeex --enable-libvpx --disable-decoder=libvpx --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-avfilter --enable-libopencore_amrwb --enable-libopencore_amrnb --enable-filters --enable-libgsm --enable-libvidstab --enable-libx265 --arch=x86_64 --enable-runtime-cpudetect
+libavutil      54. 15.100 / 54. 15.100
+libavcodec     56. 13.100 / 56. 13.100
+libavformat    56. 15.102 / 56. 15.102
+libavdevice    56.  3.100 / 56.  3.100
+libavfilter     5.  2.103 /  5.  2.103
+libswscale      3.  1.101 /  3.  1.101
+libswresample   1.  1.100 /  1.  1.100
+libpostproc    53.  3.100 / 53.  3.100
 ```
