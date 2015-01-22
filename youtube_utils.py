@@ -76,19 +76,15 @@ def process_video_request(
     output_video = secure_filename("%s.%s" % (video_id, best_video.extension))
     # base, ext = os.path.splitext(video_path)
     # check how to hande all corner cases for input audio streams
-    # c = sp.call(["ffmpeg", "-i", video_url, "-i", music_url, "-map", "0:1",
-    #               "-map", "1:0", "-codec", "copy", "-y", output_video])
-    if override_audio > 0.9: # temp. need to add volume
-        o_cmd = ["ffmpeg", "-i", music_url, "-i", video_url, "-vcodec", "copy",
-         "-y", "-shortest", "-strict -2", output_video]
-        logger.info(o_cmd)
-        code = sp.call(o_cmd)
-    else:
-        cmd = ["ffmpeg", "-i", music_url, "-i", video_url, "-filter_complex",
-        "amix=duration=shortest", "-vcodec", "copy", "-y", "-shortest", "-strict -2",
-        output_video]
-        logger.info(cmd)
-        code = sp.call(cmd)
+    video_sound = 1 - override_audio
+    music = '[0:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,volume=%f[a1];' % override_audio
+    video = '[1:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,volume=%f[a2];' % video_sound
+    cmd_params = music + video + '[a1][a2]amerge,pan=stereo:c0<c0+c2:c1<c1+c3[out]'
+    cmd = ["ffmpeg", "-i", music_url, "-i", video_url, "-filter_complex",
+    cmd_params, "-map", "1:v", "-map", "[out]", "-c:v", "copy", "-y", "-shortest", "-strict", "-2",
+    output_video]
+    logger.info(" ".join(cmd))
+    code = sp.call(cmd)
     # TODO need better error informations (redis? field in table next to video)
     if code:
         logger.error("error - cannot encode the file")
