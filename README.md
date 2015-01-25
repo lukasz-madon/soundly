@@ -170,3 +170,8 @@ libswscale      3.  1.101 /  3.  1.101
 libswresample   1.  1.100 /  1.  1.100
 libpostproc    53.  3.100 / 53.  3.100
 ```
+
+## ffmpeg version (heroku)
+```
+
+```
