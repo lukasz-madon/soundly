@@ -176,5 +176,5 @@ https://discussion.heroku.com/t/opencv-and-statically-compiled-python/105/2
 
 ## ffmpeg version (heroku)
 ```
-
+./configure --enable-shared --disable-asm --prefix=/app/vendor/ffmpeg
 ```
