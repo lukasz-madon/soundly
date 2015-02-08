@@ -171,6 +171,9 @@ libswresample   1.  1.100 /  1.  1.100
 libpostproc    53.  3.100 / 53.  3.100
 ```
 
+Bulding ffmpeg on heroku
+https://discussion.heroku.com/t/opencv-and-statically-compiled-python/105/2
+
 ## ffmpeg version (heroku)
 ```
 
