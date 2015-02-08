@@ -176,5 +176,15 @@ https://discussion.heroku.com/t/opencv-and-statically-compiled-python/105/2
 
 ## ffmpeg version (heroku)
 ```
-./configure --enable-shared --disable-asm --prefix=/app/vendor/ffmpeg
+ffmpeg version git-2015-02-07-29fd303 Copyright (c) 2000-2015 the FFmpeg developers
+  built with gcc 4.4.3 (Ubuntu 4.4.3-4ubuntu5.1)
+  configuration: --enable-shared --disable-asm --prefix=/app/vendor/ffmpeg
+  libavutil      54. 18.100 / 54. 18.100
+  libavcodec     56. 21.102 / 56. 21.102
+  libavformat    56. 19.100 / 56. 19.100
+  libavdevice    56.  4.100 / 56.  4.100
+  libavfilter     5.  9.103 /  5.  9.103
+  libswscale      3.  1.101 /  3.  1.101
+  libswresample   1.  1.100 /  1.  1.100
+Hyper fast Audio and Video encoder
 ```
