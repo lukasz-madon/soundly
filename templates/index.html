@@ -20,8 +20,10 @@
             <span class="audio-time pull-left" id="audio_start">0:00</span>
           </div>
           <div class="col-xs-6">
-            <input class="center-block" id="override_audio" type="text" data-slider="true" value="1.0">
-            <span id="override_audio_desc">Just Music.</span>
+            <span id="music_volume_desc">Music volume</span>
+            <input class="center-block" id="music_volume" type="text" data-slider="true" value="1.0"><br>
+            <span id="audio_volume_desc">Audio volume</span>
+            <input class="center-block" id="audio_volume" type="text" data-slider="true" value="0.0">
           </div>
           <div class="col-xs-3">
             <span class="audio-time pull-right" id="audio_end"></span>
@@ -105,9 +107,8 @@
       description: '{{ videos[0].description if videos else "" }}',
       privacy_status: '{{ videos[0].privacy_status if videos else "" }}'
     },
-    current_audio: {
-      volume: 0.0
-    },
+    audio_volume: 0.0,
+    music_volume: 1.0,
     Algolia: {
       app_id: '{{ ALGOLIASEARCH_APPLICATION_ID }}',
       api_key: '{{ ALGOLIASEARCH_API_KEY_SEARCH }}'

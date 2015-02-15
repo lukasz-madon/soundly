@@ -67,7 +67,7 @@ class VideoMeta(object):
 
 def process_video_request(
         credentials, video_id, music_url, music_id, user_id,
-        title, description, tags, categoryId, privacyStatus, override_audio
+        title, description, tags, categoryId, privacyStatus, audio_volume, music_volume
     ):
     """ processing video using ffmpeg """
     # TODO test all cases.
@@ -76,9 +76,8 @@ def process_video_request(
     output_video = secure_filename("%s.%s" % (video_id, best_video.extension))
     # base, ext = os.path.splitext(video_path)
     # check how to hande all corner cases for input audio streams
-    video_sound = 1.0  # we don't change video audio volume
-    music = '[0:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,volume=%f[a1];' % override_audio
-    video = '[1:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,volume=%f[a2];' % video_sound
+    music = '[0:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,volume=%f[a1];' % music_volume
+    video = '[1:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,volume=%f[a2];' % audio_volume
     cmd_params = music + video + '[a1][a2]amerge,pan=stereo:c0<c0+c2:c1<c1+c3[out]'
     cmd = ["ffmpeg", "-i", music_url, "-i", video_url, "-filter_complex",
     cmd_params, "-map", "1:v", "-map", "[out]", "-c:v", "copy", "-y", "-shortest", "-strict", "-2",

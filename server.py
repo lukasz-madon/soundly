@@ -254,7 +254,8 @@ def process_video():
     categoryId = 20  # gaming? not sure if this still works
     privacyStatus = request.json["privacy_status"]
     # this will change when % volume will be implemented
-    override_audio = float(request.json["override_audio"])
+    audio_volume = float(request.json["audio_volume"])
+    music_volume = float(request.json["music_volume"])
 
     app.logger.info("User %s processing request: %s", g.user.id, request.json)
     worker_queue.enqueue(
@@ -269,7 +270,8 @@ def process_video():
         tags,
         categoryId,
         privacyStatus,
-        override_audio)
+        audio_volume,
+        music_volume)
     # Check if the file is one of the allowed types/extensions
     # if not file or not allowed_file(file.filename):
     #     return jsonify({"error": "wrong file format.

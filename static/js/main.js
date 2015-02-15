@@ -15,14 +15,13 @@ function onytplayerStateChange(newState) {
 $(document).ready(function() {
   $('#title').val(Soundly.current_video.title);
   $('#description').val(Soundly.current_video.description);
-  $("#override_audio").bind("slider:changed", function (event, data) {
-    Soundly.current_audio.volume = data.value;
-    if(data.value < 0.9) {
-      $('#override_audio_desc').text("Music & original.")
-    } else {
-      $('#override_audio_desc').text("Just Music.")
-    }
-    ytplayer.setVolume(100 - data.value * 100);
+  $('#audio_volume').bind('slider:changed', function (event, data) {
+    Soundly.audio_volume = data.value;
+    ytplayer.setVolume(data.value * 100);
+  });
+  $('#music_volume').bind('slider:changed', function (event, data) {
+    Soundly.music_volume = data.value;
+    inlinePlayer.setVolume(data.value * 100);
   });
 
   var waveform = new Waveform({
@@ -88,12 +87,13 @@ $(document).ready(function() {
       return;
     }
     var data = {
-      title: $('#title').val(),   //TODO validation? No problem with XSS right now, and should be use global Soundly here
+      title: $('#title').val(),  //TODO validation? No problem with XSS right now
       description: $('#description').val(),
       video_id: Soundly.current_video.id,
       music_id: inlinePlayer.lastSoundId,
       music_url: inlinePlayer.lastSound.url,
-      override_audio: $("#override_audio").val(),
+      music_volume: Soundly.music_volume,
+      audio_volume: Soundly.audio_volume,
       privacy_status: $("#privacyStatus option:selected").text()
     };
     $.ajax('process-video', {
@@ -109,6 +109,7 @@ $(document).ready(function() {
     }
     $('#ok').append('<small>Try <a href="http://flapmmo.com/" target="_blank"> Flappy Bird MMO </a></small>');
   });
+
   $('.video-link').click(function() {
     inlinePlayer.stopSound();
     var video_id = $(this).data('id');

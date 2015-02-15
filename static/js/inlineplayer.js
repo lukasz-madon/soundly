@@ -285,6 +285,12 @@ function InlinePlayer() {
     }
   }
 
+  this.setVolume = function(volume) {
+    if (self.lastSound) {
+      soundManager.setVolume(self.lastSound.id, volume)
+    }
+  }
+
   this.init = function() {
     sm._writeDebug('inlinePlayer.init()');
     var oLinks = document.getElementsByTagName('a');
@@ -322,10 +328,9 @@ soundManager.setup({
   flashVersion: 9
 });
 
-// ----
-
 soundManager.onready(function() {
   // soundManager.createSound() etc. may now be called
   inlinePlayer = new InlinePlayer();
+  inlinePlayer.init();
 });
 
