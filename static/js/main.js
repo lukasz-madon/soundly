@@ -24,7 +24,7 @@ $(document).ready(function() {
     inlinePlayer.setVolume(data.value * 100);
   });
 
-  var waveform = new Waveform({
+  window.waveform = new Waveform({
     container: document.getElementById('audio_channel'),
     data: [0.01, 0.02, 0.011, 0.017, 0.016, 0.007, 0.015, 0.01, 0.011,
         0.01, 0.025, 0.013, 0.01, 0.3, 0.3, 0., 0.32, 0.2, 0.2, 0.2, 0.18,

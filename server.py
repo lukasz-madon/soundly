@@ -103,7 +103,6 @@ def index():
                 title,
                 description,
                 privacy_status))
-    print videos
     if not videos:
         # add video of tutorial?
         flash(

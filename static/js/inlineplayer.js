@@ -148,11 +148,14 @@ function InlinePlayer() {
     },
 
     whileplaying: function() {
-      var pos = self.msToTimestamp(self.position());
+      var pos = self.position();
+      var currPos = self.msToTimestamp(pos);
+      var barLocation = pos / self.lastSound.duration;
+      // draw bar for audio channel graph 
+      window.waveform.redraw(barLocation);
       var duration = self.msToTimestamp(self.lastSound.duration);
-      if (pos !== self.currentPosition) {  // there is a reason for that. don't remember. null till load finish?
-        self.currentPosition = pos;
-        // draw here a bar for audio channel graph 
+      if (currPos !== self.currentPosition) {  // there is a reason for that. don't remember. null till load finish?
+        self.currentPosition = currPos;
       }
       if (duration !== self.duration) {
         self.duration = duration;

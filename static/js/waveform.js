@@ -54,10 +54,10 @@
       } else {
         this.setDataInterpolated(options.data);
       }
-      return this.redraw();
+      return this.redraw(0.0);
     };
 
-    Waveform.prototype.redraw = function() {
+    Waveform.prototype.redraw = function(percent) {
       var d, i, middle, t, _i, _len, _ref, _results;
       this.clear();
       if (typeof this.innerColor === "function") {
@@ -79,6 +79,10 @@
         this.context.fillRect(t * i, middle - middle * d, t, middle * d * 2);
         _results.push(i++);
       }
+      // draw bar
+      this.context.fillStyle = "#1a242f";
+      var x = this.width * percent * 0.999; // scale it 
+      this.context.fillRect(x, 0, 2, this.height);
       return _results;
     };
 
