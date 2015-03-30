@@ -65,7 +65,8 @@ admin.add_view(AdminModelView(Video, db.session))
 @auth_required
 def index():
     detect_default_email()
-    # TODO remove http call from index
+    # TODO remove http call from index. We need to make these calls
+    # Async and fetch with ajax
     auth_http = session["credentials"].authorize(httplib2.Http())
     channel_result = youtube_service.channels().list(
         part="contentDetails",
@@ -88,7 +89,6 @@ def index():
         http=auth_http)
     playlist = (item for item in playlistitems_list_response[
                 "items"] if item["status"]["privacyStatus"] != "private")
-
     videos = []
     for video in playlist:
         title = video["snippet"]["title"].replace("\n", " ")
