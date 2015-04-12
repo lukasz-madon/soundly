@@ -1,8 +1,13 @@
-### mine
+# mine #
+########
 venv
 *.pyc
 .tmp
 
+# frontend #
+############
+node_modules
+build
 
 # Compiled source #
 ###################

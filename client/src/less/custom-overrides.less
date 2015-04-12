@@ -1,0 +1,21 @@
+//Override Variables in scaffolding.less
+@primary-1-color: @teal-700;
+@primary-2-color: @teal-500;
+@primary-3-color: @teal-100;
+@accent-1-color: @pink-A200;
+@accent-2-color: @pink-A400;
+@accent-3-color: @pink-A100;
+
+.navbar-default {
+  background-color: @primary-1-color;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+  color: @white;
+  background-color: @primary-2-color;
+}
+/* bootstrap override TODO refactor */
+.navbar {
+  border-radius: 0px;
+  margin-bottom: 5px;
+}
