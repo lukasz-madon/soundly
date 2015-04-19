@@ -1,11 +1,27 @@
 var React = require('react');
 var mui = require('material-ui');
+var VideoList = require('./videolist.jsx');
+var PublishForm = require('./publishform.jsx');
+var Preview = require('./preview.jsx');
+var Search = require('./search.jsx');
 
 var Music  = React.createClass({
   render: function() {
     return (
-      <div>
-        Music
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8">
+            <Preview />
+            <Search />
+          </div>
+          <div className="col-md-4">
+            <div data-spy="affix" data-offset-top="70" data-offset-bottom="60">
+              <VideoList />
+              <PublishForm />
+              <div id="ok"></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

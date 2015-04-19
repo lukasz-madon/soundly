@@ -4,11 +4,12 @@
   var Router = require('react-router');
   var Route = Router.Route;
   var NotFoundRoute = Router.NotFoundRoute;
-  var DefaultRoute = Router.DefaultRoute;
+  var Redirect = Router.Redirect;
 
   var Main = require('./components/main.jsx');
   var Music = require('./components/music.jsx');
   var Dashboard = require('./components/dashboard.jsx');
+  var NotFound = require('./components/notfound.jsx');
 
   //Needed for React Developer Tools
   window.React = React;
@@ -22,15 +23,14 @@
 
   var routes = (
     <Route handler={Main} path="/">
-      <DefaultRoute handler={Music} />
+      <Redirect from="/" to="music" />
       <Route name="music" handler={Music} />
       <Route name="dashboard" handler={Dashboard} />
-      {/*<NotFoundRoute handler={NotFound}/> */}
+      <NotFoundRoute handler={NotFound}/>
     </Route>
   );
-
-  Router.run(routes, Router.HistoryLocation, function (Handler) {
-    React.render(<Handler/>, document.getElementById('content'));
+  Router.run(routes, function (Handler) {
+    React.render(<Handler />, document.getElementById('content'));
   });
 
 })();

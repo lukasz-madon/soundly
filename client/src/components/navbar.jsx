@@ -5,6 +5,9 @@ var Link = Router.Link;
 
 
 var Navbar = React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
   render: function() {
     return (
       <div className="navbar navbar-default">
@@ -21,10 +24,10 @@ var Navbar = React.createClass({
           </div>
           <div className="navbar-collapse collapse navbar-responsive-collapse">
             <ul className="nav navbar-nav">
-              <li>
+              <li className={this.context.router.isActive('music') ? 'active' : ''}>
                 <Link to="music">Music</Link>
               </li>
-              <li className="">
+              <li className={this.context.router.isActive('dashboard') ? 'active' : ''}>
                 <Link to="dashboard">Dashboard</Link>
               </li>
             </ul>
