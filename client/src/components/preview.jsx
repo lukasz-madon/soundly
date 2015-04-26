@@ -1,4 +1,5 @@
 var React = require('react');
+var mui = require('material-ui');
 
 var Preview = React.createClass({
   render: function() {
