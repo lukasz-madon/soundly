@@ -29,6 +29,7 @@ class User(db.Model, ModelMixin):
     profile_url = db.Column(db.String(128))
     image_url = db.Column(db.String(128))
     created_on = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    #TODO(lukaszma) too short -> 67
     refresh_token = db.Column(db.String(64))
     videos = db.relationship("Video", backref="user", lazy="dynamic")
 
