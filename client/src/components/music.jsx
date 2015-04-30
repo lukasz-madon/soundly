@@ -15,11 +15,9 @@ var Music  = React.createClass({
             <Search />
           </div>
           <div className="col-md-4">
-            <div data-spy="affix" data-offset-top="70" data-offset-bottom="60">
-              <VideoList />
-              <PublishForm />
-              <div id="ok"></div>
-            </div>
+            <VideoList />
+            <PublishForm />
+            <div id="ok"></div>
           </div>
         </div>
       </div>

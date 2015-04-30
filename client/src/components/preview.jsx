@@ -2,6 +2,11 @@ var React = require('react');
 var mui = require('material-ui');
 
 var Preview = React.createClass({
+  componentDidMount: function() {
+    swfobject.embedSWF('http://www.youtube.com/v/' + 'X-b2Zrr8BEk' +
+      '?enablejsapi=1&playerapiid=ytplayer&version=3', 'ytapiplayer', '100%', '400', '8', null, null
+  , { allowScriptAccess: 'always' }, { id: 'myytplayer' });
+  },
   render: function() {
     return (
       <div>
