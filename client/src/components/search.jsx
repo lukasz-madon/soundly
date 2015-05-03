@@ -11,25 +11,25 @@ var Search = React.createClass({
                   }
                 },
                 { url: 'bar.com',
-                  id: 1,
+                  id: 2,
                   _highlightResult: {
                     artist: { value: 'barart' }, title : { value: 'bartitle' }, tag : { value: 'tagbar' }
                   }
                 },
                 { url: 'baz.com',
-                  id: 1,
+                  id: 3,
                   _highlightResult: {
                     artist: { value: 'bazart' }, title : { value: 'baztitle' }, tag : { value: 'tagbaz' }
                   }
                 },
                 { url: 'bax.com',
-                  id: 1,
+                  id: 4,
                   _highlightResult: {
                     artist: { value: 'baxart' }, title : { value: 'baztitle' }, tag : { value: 'tagbaz' }
                   }
                 }];
     var items = hits.map(function(hit) {
-      return <SearchItem hit={hit} />;
+      return <SearchItem key={hit.id} hit={hit} />;
     });
     return (
       <div>

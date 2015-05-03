@@ -9,7 +9,7 @@ var PublishFrom = React.createClass({
       { payload: '3', text: 'Private' },
     ];
     return (
-      <mui.Paper innerClassName="pad-container">
+      <div>
         <div className="row">
            <div className="col-lg-12">
              <mui.TextField floatingLabelText="Title" />
@@ -33,7 +33,7 @@ var PublishFrom = React.createClass({
             <small className="text-muted">Any second thoughts about music? No? Publish it!</small>
           </div>
         </div>
-      </mui.Paper>
+      </div>
     );
   }
 });

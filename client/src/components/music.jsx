@@ -15,9 +15,12 @@ var Music  = React.createClass({
             <Search />
           </div>
           <div className="col-md-4">
-            <VideoList />
-            <PublishForm />
-            <div id="ok"></div>
+            <h5>Pick Youtube Video</h5>
+            <mui.Paper innerClassName="pad-container">
+              <VideoList />
+              <PublishForm />
+              <div id="ok"></div>
+            </mui.Paper>
           </div>
         </div>
       </div>

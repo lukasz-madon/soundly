@@ -3,12 +3,12 @@ var mui = require('material-ui');
 var Router = require('react-router');
 var Link = Router.Link;
 
-
 var Navbar = React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
   render: function() {
+    var iconMenuItems = ["a"];
     return (
       <div className="navbar navbar-default">
         <div className="container">
@@ -32,6 +32,12 @@ var Navbar = React.createClass({
               </li>
             </ul>
             <ul className="nav navbar-nav navbar-right user-bar">          
+              <li>
+                <a href="/logout">Hi test</a>
+              </li>
+              <li> 
+                <img className="img-rounded channel-thumbnail" src="https://lh3.googleusercontent.com/-q1Smh9d8d0g/AAAAAAAAAAM/AAAAAAAAAAA/3YaY0XeTIPc/photo.jpg" /> 
+              </li>
               <li> 
                 <a href="/logout">Logout</a>
               </li>

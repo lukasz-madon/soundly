@@ -1,21 +1,21 @@
 var React = require('react');
 var mui = require('material-ui');
+var AudioChannel = require('./audiochannel.jsx');
 
 var Preview = React.createClass({
   componentDidMount: function() {
-    swfobject.embedSWF('http://www.youtube.com/v/' + 'X-b2Zrr8BEk' +
-      '?enablejsapi=1&playerapiid=ytplayer&version=3', 'ytapiplayer', '100%', '400', '8', null, null
-  , { allowScriptAccess: 'always' }, { id: 'myytplayer' });
+    swfobject.embedSWF('http://www.youtube.com/v/' + 'q29OYUenJ8c' +
+      '?enablejsapi=1&playerapiid=ytplayer&version=3', 'ytapiplayer', '100%', '400', '8', null, null,
+       { allowScriptAccess: 'always' }, { id: 'myytplayer' });
   },
   render: function() {
     return (
       <div>
-        <h4>Preview</h4>
+        <h5>Preview</h5>
         <div id="ytapiplayer">
           You have no videos or Flash/JavaScript is disabled.
         </div>
-        <div id="audio_channel">
-        </div>
+        <AudioChannel />
         <div id="audio_settings">
           <div className="row">
             <div className="col-xs-1">
