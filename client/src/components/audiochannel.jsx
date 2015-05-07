@@ -35,6 +35,7 @@ var AudioChannel = React.createClass({
     );
   }
 });
+//TODO move and refactor
 __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 var Waveform;
 Waveform.name = 'Waveform';
@@ -114,7 +115,7 @@ Waveform.prototype.redraw = function(percent) {
   }
   // draw bar
   this.context.fillStyle = "#1a242f";
-  var x = this.width * percent * 0.999; // scale it 
+  var x = this.width * percent * 0.999; // scale it
   this.context.fillRect(x, 0, 2, this.height);
   return _results;
 };

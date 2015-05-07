@@ -3,6 +3,21 @@ var mui = require('material-ui');
 
 var Dashboard = React.createClass({
   render: function() {
+    var vid = [{
+                url: 'https://www.youtube.com/watch?v=pXEN57rFnIM',
+                title: 'Samantha Fox - Naughty Girls Need Love Too',
+                music: 'awesome tune',
+                views: 123
+              },
+              {
+                url: 'https://www.youtube.com/watch?v=TS-G4UQTfUo',
+                title: 'Caravan',
+                music: 'awesome tune2',
+                views: 1234233
+              }];
+    var videos = vid.map(function(video, index){
+      return <VideoItem key={index} id={index} {...video} />
+    });
     return (
       <div className="container">
         <div className="row">
@@ -19,18 +34,26 @@ var Dashboard = React.createClass({
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td><a href="" target="_blank"> item.title </a></td>
-                <td> m.title </td>
-                <td className="views" data-url=""> item.views </td>
-                <td>free in beta</td>
-              </tr>
+              {videos}
             </tbody>
           </table> 
           </div>
         </div>
       </div>
+    );
+  }
+});
+
+var VideoItem = React.createClass({
+  render: function() {
+    return (
+      <tr>
+        <td>{this.props.index}</td>
+        <td><a href={this.props.url} target="_blank"> {this.props.title} </a></td>
+        <td> {this.props.music} </td>
+        <td className="views" data-url="">{this.props.views}</td>
+        <td>free in beta</td>
+      </tr>
     );
   }
 });

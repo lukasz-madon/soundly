@@ -35,8 +35,8 @@ var Navbar = React.createClass({
               <li>
                 <a href="/logout">Hi test</a>
               </li>
-              <li> 
-                <img className="img-rounded channel-thumbnail" src="https://lh3.googleusercontent.com/-q1Smh9d8d0g/AAAAAAAAAAM/AAAAAAAAAAA/3YaY0XeTIPc/photo.jpg" /> 
+              <li>
+                <img className="img-rounded channel-thumbnail" src="https://lh3.googleusercontent.com/-q1Smh9d8d0g/AAAAAAAAAAM/AAAAAAAAAAA/3YaY0XeTIPc/photo.jpg" />
               </li>
               <li> 
                 <a href="/logout">Logout</a>
