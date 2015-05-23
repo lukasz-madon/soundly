@@ -1,6 +1,7 @@
-var React = require('react');
+import React from 'react';
 
-var NotFound = React.createClass({
+
+let NotFound = React.createClass({
   render: function() {
     return (
       <div className="container">
@@ -10,4 +11,4 @@ var NotFound = React.createClass({
   }
 });
 
-module.exports = NotFound;
+export default NotFound;

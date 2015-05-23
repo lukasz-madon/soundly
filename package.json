@@ -2,9 +2,11 @@
   "browserify": {
     "transform": [
       [
-        "reactify",
+        "babelify",
         {
-          "es6": true
+          "optional": [
+            "es7.asyncFunctions"
+          ]
         }
       ]
     ]
@@ -19,15 +21,16 @@
     "gulp-sourcemaps": "^1.2.8",
     "gulp-util": "^3.0.1",
     "pretty-hrtime": "^0.2.2",
-    "reactify": "^0.17.1",
     "require-dir": "^0.1.0",
     "underscore": "^1.7.0",
     "vinyl-source-stream": "^1.0.0",
-    "watchify": "^2.2.1"
+    "watchify": "^2.2.1",
+    "babelify": "~6.1.1"
   },
   "dependencies": {
     "material-ui": "^0.7.0",
     "react": "^0.13.1",
-    "react-tap-event-plugin": "^0.1.3"
+    "react-tap-event-plugin": "^0.1.3",
+    "flummox": "~4.0.0-alpha2"
   }
 }

@@ -1,13 +1,12 @@
-var React = require('react');
-var mui = require('material-ui');
-var Router = require('react-router');
-var RouteHandler = Router.RouteHandler;
+import mui from 'material-ui';
+import React from 'react';
+import Router, { RouteHandler } from 'react-router';
 
-var Navbar = require('./navbar.jsx');
-var Footer = require('./footer.jsx');
+import Navbar from './navbar.jsx';
+import Footer from './footer.jsx';
 
 
-var Main = React.createClass({
+let Main = React.createClass({
   render: function() {
     return (
       <div>
@@ -17,7 +16,6 @@ var Main = React.createClass({
       </div>
     );
   }
-
 });
 
-module.exports = Main;
+export default Main;

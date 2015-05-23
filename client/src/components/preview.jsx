@@ -1,11 +1,13 @@
-var React = require('react');
-var mui = require('material-ui');
-var AudioChannel = require('./audiochannel.jsx');
+import mui from 'material-ui';
+import React from 'react';
 
-var Preview = React.createClass({
+import AudioChannel from './audiochannel.jsx';
+
+let Preview = React.createClass({
   componentDidMount: function() {
-    swfobject.embedSWF('http://www.youtube.com/v/' + 'q29OYUenJ8c' +
-      '?enablejsapi=1&playerapiid=ytplayer&version=3', 'ytapiplayer', '100%', '400', '8', null, null,
+    let vidId = 'q29OYUenJ8c';
+    swfobject.embedSWF(`http://www.youtube.com/v/${vidId}?enablejsapi=1&playerapiid=ytplayer&version=3`, 
+      'ytapiplayer', '100%', '400', '8', null, null,
        { allowScriptAccess: 'always' }, { id: 'myytplayer' });
   },
   render: function() {
@@ -49,4 +51,4 @@ var Preview = React.createClass({
   }
 });
 
-module.exports = Preview;
+export default Preview;

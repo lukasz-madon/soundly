@@ -1,9 +1,10 @@
-var React = require('react');
-var mui = require('material-ui');
+import mui from 'material-ui';
+import React from 'react';
 
-var VideoList = React.createClass({
+
+let VideoList = React.createClass({
   render: function() {
-    var foo = [{
+    let foo = [{
                 id: 'pXEN57rFnIM',
                 title: 'Samantha Fox - Naughty Girls Need Love Too',
                 description: 'Music video by Samantha Fox performing Naughty Girls Need Love Too. (C) 1988 Zomba Records Limited',
@@ -33,7 +34,7 @@ var VideoList = React.createClass({
                 title: 'Foo8',
                 description: 'Foo8desc'
               }];
-    var videos = foo.map(function(video, index){
+    let videos = foo.map((video, index) => {
       return (
         <tr key={video.id}>
           <td>{index + 1}</td>
@@ -53,4 +54,4 @@ var VideoList = React.createClass({
   }
 });
 
-module.exports = VideoList;
+export default VideoList;

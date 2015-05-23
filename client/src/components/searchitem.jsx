@@ -1,7 +1,7 @@
-var React = require('react');
-var mui = require('material-ui');
+import mui from 'material-ui';
+import React from 'react';
 
-var SearchItem = React.createClass({
+let SearchItem = React.createClass({
   render: function() {
     return (
       <div className="player-item col-xs-12 col-sm-4">
@@ -24,4 +24,4 @@ var SearchItem = React.createClass({
   }
 });
 
-module.exports = SearchItem;
+export default SearchItem;

@@ -1,14 +1,14 @@
-var React = require('react');
-var mui = require('material-ui');
-var Router = require('react-router');
-var Link = Router.Link;
+import mui from 'material-ui';
+import React from 'react';
+import Router, { Link } from 'react-router';
 
-var Navbar = React.createClass({
+
+let Navbar = React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
   render: function() {
-    var iconMenuItems = ["a"];
+    let iconMenuItems = ["a"];
     return (
       <div className="navbar navbar-default">
         <div className="container">
@@ -46,7 +46,7 @@ var Navbar = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 });
 
-module.exports = Navbar;
+export default Navbar;

@@ -1,6 +1,6 @@
-var React = require('react');
+import React from 'react';
 
-var Footer = React.createClass({
+let Footer = React.createClass({
   render: function() {
     return (
       <footer id="footer">
@@ -25,4 +25,4 @@ var Footer = React.createClass({
   }
 });
 
-module.exports = Footer;
+export default Footer;

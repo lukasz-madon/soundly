@@ -1,10 +1,11 @@
-var React = require('react');
-var mui = require('material-ui');
-var SearchItem = require('./searchitem.jsx');
+import mui from 'material-ui';
+import React from 'react';
 
-var Search = React.createClass({
+import SearchItem from './searchitem.jsx';
+
+let Search = React.createClass({
   render: function() {
-    var hits = [{ url: 'foo.com',
+    let hits = [{ url: 'foo.com',
                   id: 1,
                   _highlightResult: {
                     artist: { value: 'fooart' }, title : { value: 'footitle' }, tag : { value: 'tagfoo' }
@@ -28,9 +29,7 @@ var Search = React.createClass({
                     artist: { value: 'baxart' }, title : { value: 'baztitle' }, tag : { value: 'tagbaz' }
                   }
                 }];
-    var items = hits.map(function(hit) {
-      return <SearchItem key={hit.id} hit={hit} />;
-    });
+    let items = hits.map((hit) => <SearchItem key={hit.id} hit={hit} /> );
     return (
       <div>
         <mui.TextField className="search" hintText="Search Music..." />
@@ -43,4 +42,4 @@ var Search = React.createClass({
   }
 });
 
-module.exports = Search;
+export default Search;

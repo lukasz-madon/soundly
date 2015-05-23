@@ -1,9 +1,9 @@
-var React = require('react');
-var mui = require('material-ui');
+import mui from 'material-ui';
+import React from 'react';
 
-var PublishFrom = React.createClass({
+let PublishFrom = React.createClass({
   render: function() {
-    var menuItems = [
+    let menuItems = [
       { payload: '1', text: 'Public' },
       { payload: '2', text: 'Unlisted' },
       { payload: '3', text: 'Private' },
@@ -38,4 +38,4 @@ var PublishFrom = React.createClass({
   }
 });
 
-module.exports = PublishFrom;
+export default PublishFrom;

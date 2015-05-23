@@ -1,3 +1,4 @@
+//TODO(lukaszma) This need a rewrite in d3? maybe
 var React = require('react');
 
 var AudioChannel = React.createClass({
@@ -36,11 +37,11 @@ var AudioChannel = React.createClass({
   }
 });
 //TODO move and refactor
-__bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+let __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 var Waveform;
-Waveform.name = 'Waveform';
 
 function Waveform(options) {
+  this.name = 'Waveform';
   this.redraw = __bind(this.redraw, this);
   this.container = options.container;
   this.canvas = options.canvas;

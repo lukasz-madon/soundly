@@ -1,11 +1,13 @@
-var React = require('react');
-var mui = require('material-ui');
-var VideoList = require('./videolist.jsx');
-var PublishForm = require('./publishform.jsx');
-var Preview = require('./preview.jsx');
-var Search = require('./search.jsx');
+import mui from 'material-ui';
+import React from 'react';
 
-var Music  = React.createClass({
+import VideoList from './videolist.jsx';
+import PublishForm from './publishform.jsx';
+import Preview from './preview.jsx';
+import Search from './search.jsx';
+
+
+let Music = React.createClass({
   render: function() {
     return (
       <div className="container">
@@ -28,4 +30,4 @@ var Music  = React.createClass({
   }
 });
 
-module.exports = Music;
+export default Music;

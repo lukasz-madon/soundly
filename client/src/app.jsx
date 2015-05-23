@@ -1,36 +1,30 @@
-(function () {
-  var React = require('react');
-  var injectTapEventPlugin = require('react-tap-event-plugin');
-  var Router = require('react-router');
-  var Route = Router.Route;
-  var NotFoundRoute = Router.NotFoundRoute;
-  var Redirect = Router.Redirect;
+import React from 'react';
+import Router, { Route, NotFoundRoute, Redirect } from 'react-router';
 
-  var Main = require('./components/main.jsx');
-  var Music = require('./components/music.jsx');
-  var Dashboard = require('./components/dashboard.jsx');
-  var NotFound = require('./components/notfound.jsx');
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
-  //Needed for React Developer Tools
-  window.React = React;
+import AppAction from './actions/appActions';
+import Dashboard from './components/dashboard.jsx';
+import Main from './components/main.jsx';
+import Music from './components/music.jsx';
+import NotFound from './components/notfound.jsx';
 
-  //Needed for onTouchTap
-  //Can go away when react 1.0 release
-  //Check this repo:
-  //https://github.com/zilverline/react-tap-event-plugin
-  injectTapEventPlugin();
+//Needed for React Developer Tools
+window.React = React;
+
+//Needed for onTouchTap
+//Can go away when react 1.0 release
+//Check this repo:
+//https://github.com/zilverline/react-tap-event-plugin
+injectTapEventPlugin();
 
 
-  var routes = (
-    <Route handler={Main} path="/">
-      <Redirect from="/" to="music" />
-      <Route name="music" handler={Music} />
-      <Route name="dashboard" handler={Dashboard} />
-      <NotFoundRoute handler={NotFound}/>
-    </Route>
-  );
-  Router.run(routes, function (Handler) {
-    React.render(<Handler />, document.getElementById('content'));
-  });
-
-})();
+let routes = (
+  <Route handler={Main} path="/">
+    <Redirect from="/" to="music" />
+    <Route name="music" handler={Music} />
+    <Route name="dashboard" handler={Dashboard} />
+    <NotFoundRoute handler={NotFound}/>
+  </Route>
+);
+Router.run(routes, (Handler) => React.render(<Handler />, document.getElementById('content')) );

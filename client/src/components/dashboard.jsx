@@ -1,9 +1,9 @@
-var React = require('react');
-var mui = require('material-ui');
+import mui from 'material-ui';
+import React from 'react';
 
-var Dashboard = React.createClass({
+let Dashboard = React.createClass({
   render: function() {
-    var vid = [{
+    let vid = [{
                 url: 'https://www.youtube.com/watch?v=pXEN57rFnIM',
                 title: 'Samantha Fox - Naughty Girls Need Love Too',
                 music: 'awesome tune',
@@ -15,9 +15,7 @@ var Dashboard = React.createClass({
                 music: 'awesome tune2',
                 views: 1234233
               }];
-    var videos = vid.map(function(video, index){
-      return <VideoItem key={index} id={index} {...video} />
-    });
+    let videos = vid.map((video, index) => <VideoItem key={index} id={index} {...video} />);
     return (
       <div className="container">
         <div className="row">
@@ -44,7 +42,7 @@ var Dashboard = React.createClass({
   }
 });
 
-var VideoItem = React.createClass({
+let VideoItem = React.createClass({
   render: function() {
     return (
       <tr>
@@ -58,4 +56,4 @@ var VideoItem = React.createClass({
   }
 });
 
-module.exports = Dashboard;
+export default Dashboard;
