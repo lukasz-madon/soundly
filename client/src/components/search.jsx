@@ -2,8 +2,24 @@ import mui from 'material-ui';
 import React from 'react';
 
 import SearchItem from './searchitem.jsx';
+import Player from './player.jsx';
+
 
 let Search = React.createClass({
+  getInitialState: function(){
+    return {
+      player: {
+        open: false
+      }
+    };
+  },
+  handleClick: function(searchItem) {
+    this.setState({
+      player: {
+        open: true
+      }
+    });
+  },
   render: function() {
     let hits = [{ url: 'foo.com',
                   id: 1,
@@ -29,7 +45,7 @@ let Search = React.createClass({
                     artist: { value: 'baxart' }, title : { value: 'baztitle' }, tag : { value: 'tagbaz' }
                   }
                 }];
-    let items = hits.map((hit) => <SearchItem key={hit.id} hit={hit} /> );
+    let items = hits.map((hit) => <SearchItem onClick={this.handleClick} key={hit.id} hit={hit} /> );
     return (
       <div>
         <mui.TextField className="search" hintText="Search Music..." />
@@ -37,6 +53,7 @@ let Search = React.createClass({
            {items}
         </div>
         <small>You must choose, but choose wisely. </small>
+        <Player isOpen={this.state.player.open} />
       </div>
     );
   }

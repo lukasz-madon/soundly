@@ -2,11 +2,15 @@ import mui from 'material-ui';
 import React from 'react';
 
 let SearchItem = React.createClass({
+  handleClick: function () {
+    this.props.onClick(this);
+  },
+  //href={this.props.hit.url}
   render: function() {
     return (
       <div className="player-item col-xs-12 col-sm-4">
-        <mui.Paper zDepth={1} innerClassName="player-item-content">
-          <a href={this.props.hit.url} data-id={this.props.hit.id}>
+        <mui.Paper zDepth={1} innerClassName="player-item-content" onClick={this.handleClick}>
+          <a data-id={this.props.hit.id}>
             <div className="row">
               <div className="col-xs-2">
                 <i className="fa"></i>
