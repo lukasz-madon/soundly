@@ -11,8 +11,7 @@ let Search = React.createClass({
     return {
       player: {
         open: false
-      },
-      query: ''
+      }
     };
   },
   handleClick: function(searchItem) {
@@ -22,15 +21,11 @@ let Search = React.createClass({
       }
     });
   },
-  _handleQuery(event) {
-    this.setState({ query: event.target.value });
-  },
   render: function() {
     return (
       <div>
-        <mui.TextField className="search" hintText="Search Music..." onChange={this._handleQuery} />
         <FluxComponent connectToStores={'search'}>
-          <SearchList onChildClick={this.handleClick} query={this.state.query}/>
+          <SearchList onChildClick={this.handleClick} />
         </FluxComponent>
         <small>You must choose, but choose wisely. </small>
         <Player isOpen={this.state.player.open} />
@@ -41,13 +36,22 @@ let Search = React.createClass({
 
 let SearchList = React.createClass({
   componentWillMount() {
-    this.props.flux.getActions('search').getMusicSearchResult(this.props.query);
+    this.search('');
+  },
+  search(query) {
+    this.props.flux.getActions('search').getMusicSearchResult(query);
+  },
+  _handleQuery(event) {
+    let query = event.target.value;
+    this.search(query);
   },
   render: function() {
-    console.log(this.props);
     return (
-      <div id="player-grid" className="row">
-        {this.props.hits.map((hit) => <SearchItem onClick={this.props.onChildClick} key={hit.id} hit={hit} /> )}
+      <div>
+        <mui.TextField className="search" hintText="Search Music..." onChange={this._handleQuery} />
+        <div id="player-grid" className="row">
+          {this.props.hits.map((hit) => <SearchItem onClick={this.props.onChildClick} key={hit.id} hit={hit} /> )}
+        </div>
       </div>
     );
   }

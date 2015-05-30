@@ -7,18 +7,20 @@ let SearchItem = React.createClass({
   },
   //href={this.props.hit.url}
   render: function() {
+    let { hit } = this.props;
     return (
       <div className="player-item col-xs-12 col-sm-4">
         <mui.Paper zDepth={1} innerClassName="player-item-content" onClick={this.handleClick}>
-          <a data-id={this.props.hit.id}>
+          <a>
             <div className="row">
               <div className="col-xs-2">
                 <i className="fa"></i>
               </div>
               <div className="col-xs-10 txt text-right">
-                <span>{this.props.hit._highlightResult.artist.value}</span><br />
-                <strong>{this.props.hit._highlightResult.title.value}</strong><br />
-                <small className="text-muted">#{this.props.hit._highlightResult.tag.value}</small>
+                <span dangerouslySetInnerHTML={{ __html: hit._highlightResult.artist.value }}></span><br />
+                <strong dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}></strong><br />
+                <small className="text-muted">#</small>
+                <small className="text-muted" dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}></small>
               </div>
             </div>
           </a>
