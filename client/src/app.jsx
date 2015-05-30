@@ -1,9 +1,12 @@
 import React from 'react';
 import Router, { Route, NotFoundRoute, Redirect } from 'react-router';
+import { Flummox } from 'flummox';
+import FluxComponent from 'flummox/component';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import AppAction from './actions/appActions';
+import SearchActions from './actions/searchActions.js';
+import SearchStore from './stores/searchStore.js';
 import Dashboard from './components/dashboard.jsx';
 import Main from './components/main.jsx';
 import Music from './components/music.jsx';
@@ -18,8 +21,18 @@ window.React = React;
 //https://github.com/zilverline/react-tap-event-plugin
 injectTapEventPlugin();
 
+class Flux extends Flummox {
+  constructor() {
+    super();
 
-let routes = (
+    this.createActions('search', SearchActions);
+    this.createStore('search', SearchStore, this);
+  }
+}
+
+const flux = new Flux();
+
+const routes = (
   <Route handler={Main} path="/">
     <Redirect from="/" to="music" />
     <Route name="music" handler={Music} />
@@ -27,4 +40,10 @@ let routes = (
     <NotFoundRoute handler={NotFound}/>
   </Route>
 );
-Router.run(routes, (Handler) => React.render(<Handler />, document.getElementById('content')) );
+
+Router.run(routes, (Handler) => React.render(
+	<FluxComponent flux={flux}>
+    <Handler />
+  </FluxComponent>,
+  document.getElementById('content'))
+);
