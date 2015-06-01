@@ -7,36 +7,37 @@ import Player from './player.jsx';
 
 
 let Search = React.createClass({
-  getInitialState: function(){
-    return {
-      player: {
-        open: false
-      }
-    };
-  },
-  handleClick: function(searchItem) {
-    this.setState({
-      player: {
-        open: true
-      }
-    });
-  },
   render: function() {
     return (
       <div>
         <FluxComponent connectToStores={'search'}>
-          <SearchList onChildClick={this.handleClick} />
+          <SearchInner />
         </FluxComponent>
         <small>You must choose, but choose wisely. </small>
-        <Player isOpen={this.state.player.open} />
       </div>
     );
   }
 });
 
-let SearchList = React.createClass({
+let SearchInner = React.createClass({
+  getInitialState: function(){
+    return {
+      player: {
+        open: false,
+        url: ''
+      }
+    };
+  },
   componentWillMount() {
     this.search('');
+  },
+  handleClick: function(searchItem) {
+    this.setState({
+      player: {
+        open: true,
+        url: searchItem.props.hit.url
+      }
+    });
   },
   search(query) {
     this.props.flux.getActions('search').getMusicSearchResult(query);
@@ -50,8 +51,9 @@ let SearchList = React.createClass({
       <div>
         <mui.TextField className="search" hintText="Search Music..." onChange={this._handleQuery} />
         <div id="player-grid" className="row">
-          {this.props.hits.map((hit) => <SearchItem onClick={this.props.onChildClick} key={hit.id} hit={hit} /> )}
+          {this.props.hits.map((hit) => <SearchItem onClick={this.handleClick} key={hit.id} hit={hit} /> )}
         </div>
+        <Player isOpen={this.state.player.open} />
       </div>
     );
   }

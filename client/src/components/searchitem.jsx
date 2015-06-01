@@ -1,11 +1,11 @@
 import mui from 'material-ui';
 import React from 'react';
 
+
 let SearchItem = React.createClass({
   handleClick: function () {
     this.props.onClick(this);
   },
-  //href={this.props.hit.url}
   render: function() {
     let { hit } = this.props;
     return (
@@ -20,7 +20,7 @@ let SearchItem = React.createClass({
                 <span dangerouslySetInnerHTML={{ __html: hit._highlightResult.artist.value }}></span><br />
                 <strong dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}></strong><br />
                 <small className="text-muted">#</small>
-                <small className="text-muted" dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}></small>
+                <small className="text-muted" dangerouslySetInnerHTML={{ __html: hit._highlightResult.tag.value }}></small>
               </div>
             </div>
           </a>

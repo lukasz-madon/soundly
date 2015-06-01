@@ -1,57 +1,50 @@
 import mui from 'material-ui';
 import React from 'react';
+import FluxComponent from 'flummox/component';
 
 
 let VideoList = React.createClass({
   render: function() {
-    let foo = [{
-                id: 'pXEN57rFnIM',
-                title: 'Samantha Fox - Naughty Girls Need Love Too',
-                description: 'Music video by Samantha Fox performing Naughty Girls Need Love Too. (C) 1988 Zomba Records Limited',
-              },
-              {
-                id: 'TS-G4UQTfUo',
-                title: 'Caravan',
-                description: ''
-              },
-              {
-                id: 'Foo1',
-                title: 'Foo1',
-                description: 'Foo1desc'
-              },
-              {
-                id: 'Foo2',
-                title: 'Foo2',
-                description: 'Foo2desc'
-              },
-              {
-                id: 'Foo3',
-                title: 'Foo3',
-                description: 'Foo3desc'
-              },
-              {
-                id: 'Foo8',
-                title: 'Foo8',
-                description: 'Foo8desc'
-              }];
-    let videos = foo.map((video, index) => {
-      return (
-        <tr key={video.id}>
-          <td>{index + 1}</td>
-          <td className="video-link" data-id={video.id} data-description={video.description}>
-            {video.title}
-          </td>
-        </tr>
-      );
-    });
+    return (
+      <FluxComponent connectToStores={'video'}>
+        <VideoListInner />
+      </FluxComponent>
+    );
+  }
+});
+
+let VideoListInner = React.createClass({
+  componentWillMount() {
+    this.props.flux.getActions('video').getVideos();
+  },
+  handleClick(video) {
+    this.props.flux.getActions('video').setCurrentVideo(video);
+  },
+  render: function() {
     return (
       <table className="table table-striped table-hover video-list">
         <tbody>
-          {videos}
+          {this.props.videos.map((video, i) => <VideoItem video={video} index={i} key={video.id} onClick={this.handleClick}/>)}
         </tbody>
       </table>
     );
   }
+});
+
+let VideoItem = React.createClass({
+  handleClick() {
+    this.props.onClick(this.props.video);
+  },
+  render: function() {
+      return (
+        <tr onClick={this.handleClick}>
+          <td>{this.props.index + 1}</td>
+          <td className="video-link">
+            {this.props.video.title}
+          </td>
+        </tr>
+      );
+    }
 });
 
 export default VideoList;

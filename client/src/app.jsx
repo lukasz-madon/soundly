@@ -6,7 +6,9 @@ import FluxComponent from 'flummox/component';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import SearchActions from './actions/searchActions.js';
+import VideoActions from './actions/videoActions.js';
 import SearchStore from './stores/searchStore.js';
+import VideoStore from './stores/VideoStore.js';
 import Dashboard from './components/dashboard.jsx';
 import Main from './components/main.jsx';
 import Music from './components/music.jsx';
@@ -24,9 +26,10 @@ injectTapEventPlugin();
 class Flux extends Flummox {
   constructor() {
     super();
-
     this.createActions('search', SearchActions);
     this.createStore('search', SearchStore, this);
+    this.createActions('video', VideoActions);
+    this.createStore('video', VideoStore, this);
   }
 }
 

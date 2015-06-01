@@ -1,5 +1,6 @@
 import { Store } from 'flummox';
 
+
 export default class SearchStore extends Store {
 
   constructor(flux) {
