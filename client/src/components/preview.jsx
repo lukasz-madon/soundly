@@ -1,9 +1,9 @@
 import mui from 'material-ui';
 import React from 'react';
 import FluxComponent from 'flummox/component';
-import YouTube from 'react-youtube';
 
 import AudioChannel from './audiochannel.jsx';
+import YouTube from './youtubeplayer.jsx';
 
 
 let Preview = React.createClass({
@@ -17,23 +17,19 @@ let Preview = React.createClass({
 });
 
 let PreviewInner = React.createClass({
-  _onPlay() {
-    console.log('PLAYING');
-  },
   render: function() {
     const opts = {
       height: '355',
       width: '568',// not sure what to choose. 100% could be confusing for the user the we change video,
-      // but 640 won't work on small screens
-      playerVars: { // https://developers.google.com/youtube/player_parameters
+      videoId: this.props.currentVideo.id,// but 640 won't work on small screens
+      playerVars: { // https://developers.google.com/youtube/player_parameters<YouTube onPlay={this._onPlay} opts={opts} />
         autoplay: 1
       }
     };
     return (
       <div>
         <h5>Preview</h5>
-        <YouTube url={`http://www.youtube.com/watch?v=${this.props.currentVideo.id}`}
-               onPlay={this._onPlay} opts={opts}/>
+          <YouTube opts={opts} />
         <AudioChannel />
         <div id="audio_settings">
           <div className="row">

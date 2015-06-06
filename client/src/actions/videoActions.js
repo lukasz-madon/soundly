@@ -15,8 +15,8 @@ export default class VideoActions extends Actions {
                 description: ''
               },
               {
-                id: 'Foo1',
-                title: 'Foo1',
+                id: 'PIyxD2Hx7G0',
+                title: 'Grabina Drift',
                 description: 'Foo1desc'
               },
               {

@@ -18,7 +18,7 @@ export default class VideoStore extends Store {
   handleVideoResponse(videos) {
     this.setState({
       videos: videos,
-      currentVideo: videos[0]
+      currentVideo: this.state.currentVideo.id ? this.state.currentVideo : videos[0]
     });
   }
 
