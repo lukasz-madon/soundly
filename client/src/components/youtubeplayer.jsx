@@ -19,7 +19,6 @@ const createPlayer = (props, cb) => {
     if (err) {
       console.error(err);
     }
-
     return cb(new window.YT.Player(props.id, props.opts));
   });
 };
@@ -90,6 +89,7 @@ let YouTube = React.createClass({
   },
 
   componentWillUnmount() {
+    this._internalPlayer.setVolume(100);
     this._destroyPlayer();
   },
 
