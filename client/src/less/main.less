@@ -10,6 +10,7 @@
 @import "publishform.less";
 @import "videolist.less";
 @import "player.less";
+@import "youtubeplayer.less";
 
 .pad-container {
   padding: 15px;
@@ -61,7 +62,7 @@
   text-decoration: underline;
 }
 .player-item a.picked {
-  background-color: #ecf0f1;
+  background-color: @primary-2-color;
 }
 
 .player-item a.sm2_paused i:before {
@@ -69,7 +70,7 @@
 }
 .player-item  a.sm2_playing,
 .player-item  a.sm2_playing:hover {
-  background-color: #ecf0f1;
+  background-color: @primary-2-color;
 }
 
 .player-item-content {

@@ -29,7 +29,9 @@ let PreviewInner = React.createClass({
     return (
       <div>
         <h5>Preview</h5>
+        <div className="preview-player">
           <YouTube opts={opts} />
+        </div>
         <AudioChannel />
         <div id="audio_settings">
           <div className="row">

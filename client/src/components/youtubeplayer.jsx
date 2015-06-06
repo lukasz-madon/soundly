@@ -70,10 +70,7 @@ let YouTube = React.createClass({
     this._internalPlayer = null;
     this._playerReadyHandle = null;
     this._stateChangeHandle = null;
-
-    this._handlePlayerReady = this._handlePlayerReady.bind(this);
-    this._handlePlayerStateChange = this._handlePlayerStateChange.bind(this);
-    return null;
+    return { volume: 0 };
   },
 
   /**
@@ -85,7 +82,6 @@ let YouTube = React.createClass({
   },
 
   componentDidMount() {
-    console.log(this.props);
     this._createPlayer();
   },
 
@@ -99,7 +95,9 @@ let YouTube = React.createClass({
 
   render: function() {
     return (
-      <div id={this.props.id} />
+      <div className="yt-player-wrapper">
+        <div id={this.props.id} />
+      </div>
     );
   },
 
@@ -115,7 +113,7 @@ let YouTube = React.createClass({
 
     createPlayer(this.props, (player) => {
       this._setupPlayer(player);
-    }.bind(this));
+    });
 
   },
 
@@ -144,7 +142,7 @@ let YouTube = React.createClass({
 
   _handlePlayerReady(event) {
     this.props.onReady(event);
-    this._internalPlayer.mute();
+    this._internalPlayer.setVolume(this.state.volume);
   },
 
   _handlePlayerStateChange(event) {
