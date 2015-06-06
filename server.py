@@ -54,7 +54,7 @@ flow = OAuth2WebServerFlow(client_id=app.config["GOOGLE_CLIENT_ID"],
                            scope=app.config["GOOGLE_API_SCOPE"])
 user_info_service = build("oauth2", "v2")
 
-admin = Admin(app)
+admin = Admin(app, template_mode="bootstrap3")
 admin.add_view(AdminModelView(User, db.session))
 admin.add_view(AdminModelView(Music, db.session))
 admin.add_view(AdminModelView(Video, db.session))

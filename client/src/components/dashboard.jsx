@@ -3,6 +3,20 @@ import React from 'react';
 
 
 let Dashboard = React.createClass({
+  getInitialState: function () {
+    return { 'videos': [] };
+  },
+  componentDidMount: function() {
+    $.get('dashboard', function(result) {
+      var lastGist = result[0];
+      if (this.isMounted()) {
+        this.setState({
+          username: lastGist.owner.login,
+          lastGistUrl: lastGist.html_url
+        });
+      }
+    }.bind(this));
+  },
   render: function() {
     let vid = [{
                 url: 'https://www.youtube.com/watch?v=pXEN57rFnIM',
@@ -16,7 +30,6 @@ let Dashboard = React.createClass({
                 music: 'awesome tune2',
                 views: 1234233
               }];
-    let videos = vid.map((video, index) => <VideoItem key={index} id={index} {...video} />);
     return (
       <div className="container">
         <div className="row">
@@ -33,7 +46,7 @@ let Dashboard = React.createClass({
               </tr>
             </thead>
             <tbody>
-              {videos}
+              {this.state.videos.map((video, index) => <VideoItem key={index} id={index} {...video} />)}
             </tbody>
           </table> 
           </div>
