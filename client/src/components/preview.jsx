@@ -17,10 +17,26 @@ let Preview = React.createClass({
 });
 
 let PreviewInner = React.createClass({
+  getInitialState: function() {
+    return {
+      musicVolume: 100,
+      audioVolume: 0,
+    };
+  },
+  handleMusicVolume: function(event, value) {
+    this.setState({
+      musicVolume: value * 100
+    });
+  },
+  handleAudioVolume: function(event, value) {
+    this.setState({
+      audioVolume: value * 100
+    });
+  },
   render: function() {
     const opts = {
       height: '355',
-      width: '568',// not sure what to choose. 100% could be confusing for the user the we change video,
+      width: '568',// not sure what to choose. 100% could be confusing for the user that we change video,
       videoId: this.props.currentVideo.id,// but 640 won't work on small screens
       playerVars: { // https://developers.google.com/youtube/player_parameters<YouTube onPlay={this._onPlay} opts={opts} />
         autoplay: 1
@@ -30,7 +46,7 @@ let PreviewInner = React.createClass({
       <div>
         <h5>Preview</h5>
         <div className="preview-player">
-          <YouTube opts={opts} />
+          <YouTube opts={opts} volume={this.state.audioVolume} />
         </div>
         <AudioChannel />
         <div id="audio_settings">
@@ -42,7 +58,7 @@ let PreviewInner = React.createClass({
               <span id="music_volume_desc" className="pull-right">Music volume</span>
             </div>
             <div className="col-xs-6">
-              <mui.Slider name="music_volume" className="music-slider" defaultValue={1.0} />
+              <mui.Slider name="music_volume" className="music-slider" defaultValue={1.0} onChange={this.handleMusicVolume} />
             </div>
             <div className="col-xs-3">
               <span className="audio-time pull-right" id="audio_end"></span>
@@ -55,7 +71,7 @@ let PreviewInner = React.createClass({
               <span id="audio_volume_desc" className="pull-right">Audio volume</span>
             </div>
             <div className="col-xs-6">
-              <mui.Slider name="audio_volume" className="audio-slider" defaultValue={0.0} />
+              <mui.Slider name="audio_volume" className="audio-slider" defaultValue={0.0} onChange={this.handleAudioVolume} />
             </div>
             <div className="col-xs-3">
             </div>

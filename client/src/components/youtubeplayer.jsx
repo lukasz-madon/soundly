@@ -43,6 +43,7 @@ let YouTube = React.createClass({
     return {
       id: 'yt-player',
       opts: {},
+      volume: 0,
       onReady: () => {},
       onPlay: () => {},
       onPause: () => {},
@@ -69,7 +70,7 @@ let YouTube = React.createClass({
     this._internalPlayer = null;
     this._playerReadyHandle = null;
     this._stateChangeHandle = null;
-    return { volume: 0 };
+    return null;
   },
 
   /**
@@ -89,8 +90,18 @@ let YouTube = React.createClass({
   },
 
   componentWillUnmount() {
-    this._internalPlayer.setVolume(100);
+    this._changeVolume(100); //well f*** yt sets volume on all yt players. Though this will fix it, but it doesn't.
     this._destroyPlayer();
+  },
+
+  _changeVolume(volume){
+    if(this._internalPlayer) {
+      this._internalPlayer.setVolume(volume);
+    }
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    this._changeVolume(nextProps.volume);
   },
 
   render: function() {
@@ -142,7 +153,7 @@ let YouTube = React.createClass({
 
   _handlePlayerReady(event) {
     this.props.onReady(event);
-    this._internalPlayer.setVolume(this.state.volume);
+    this._changeVolume(this.props.volume);
   },
 
   _handlePlayerStateChange(event) {
