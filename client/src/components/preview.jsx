@@ -9,7 +9,7 @@ import YouTube from './youtubeplayer.jsx';
 let Preview = React.createClass({
   render: function() {
     return (
-      <FluxComponent connectToStores={'video'}>
+      <FluxComponent connectToStores={['video', 'videoMeta']}>
         <PreviewInner />
       </FluxComponent>
     );
@@ -17,28 +17,18 @@ let Preview = React.createClass({
 });
 
 let PreviewInner = React.createClass({
-  getInitialState: function() {
-    return {
-      musicVolume: 100,
-      audioVolume: 0,
-    };
-  },
   handleMusicVolume: function(event, value) {
-    this.setState({
-      musicVolume: value * 100
-    });
+    this.props.flux.getActions('videoMeta').setMusicVolume(value * 100);
   },
   handleAudioVolume: function(event, value) {
-    this.setState({
-      audioVolume: value * 100
-    });
+    this.props.flux.getActions('videoMeta').setAudioVolume(value * 100);
   },
   render: function() {
     const opts = {
       height: '355',
       width: '568',// not sure what to choose. 100% could be confusing for the user that we change video,
       videoId: this.props.currentVideo.id,// but 640 won't work on small screens
-      playerVars: { // https://developers.google.com/youtube/player_parameters<YouTube onPlay={this._onPlay} opts={opts} />
+      playerVars: { // https://developers.google.com/youtube/player_parameters
         autoplay: 1
       }
     };
@@ -46,7 +36,7 @@ let PreviewInner = React.createClass({
       <div>
         <h5>Preview</h5>
         <div className="preview-player">
-          <YouTube opts={opts} volume={this.state.audioVolume} />
+          <YouTube opts={opts} volume={this.props.audioVolume} />
         </div>
         <AudioChannel />
         <div id="audio_settings">

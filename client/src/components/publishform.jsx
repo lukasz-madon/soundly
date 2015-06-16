@@ -8,6 +8,7 @@ let PublishFrom = React.createClass({
       { payload: '2', text: 'Unlisted' },
       { payload: '3', text: 'Private' },
     ];
+    // Add tags
     return (
       <div>
         <div className="row">

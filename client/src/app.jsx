@@ -7,8 +7,12 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import SearchActions from './actions/searchActions.js';
 import VideoActions from './actions/videoActions.js';
+import VideoMetaActions from './actions/videoMetaActions.js';
+
 import SearchStore from './stores/searchStore.js';
-import VideoStore from './stores/VideoStore.js';
+import VideoStore from './stores/videoStore.js';
+import VideoMetaStore from './stores/videoMetaStore.js';
+
 import Dashboard from './components/dashboard.jsx';
 import Main from './components/main.jsx';
 import Music from './components/music.jsx';
@@ -28,8 +32,12 @@ class Flux extends Flummox {
     super();
     this.createActions('search', SearchActions);
     this.createStore('search', SearchStore, this);
+
     this.createActions('video', VideoActions);
     this.createStore('video', VideoStore, this);
+
+    this.createActions('videoMeta', VideoMetaActions);
+    this.createStore('videoMeta', VideoMetaStore, this);
   }
 }
 
