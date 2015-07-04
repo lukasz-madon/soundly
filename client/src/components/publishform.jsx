@@ -13,16 +13,27 @@ let PublishFrom = React.createClass({
   }
 });
 
+const PUBLIC_STATUS = 'Public';
+const UNLISTED_STATUS = 'Unlisted';
+const PRIVATE_STATUS = 'Private';
+
 let PublishFromInner = React.createClass({
+  getInitialState: function(){
+    return {
+      description: '',
+      privacyStatus : PUBLIC_STATUS,
+      title: ''
+    };
+  },
   handlePublish: function() {
     let newVideo = {
       audioVolume: this.props.audioVolume,
       currentVideo: this.props.currentVideo,
-      description: this.props.description,
       musicUrl: this.props.musicUrl,
       musicVolume: this.props.musicVolume,
-      privacyStatus : this.props.privacyStatus,
-      title: this.props.title
+      description: this.state.description,
+      privacyStatus : this.state.privacyStatus,
+      title: this.state.title
     };
     $.ajax('process-video', {
       data : JSON.stringify(newVideo),
@@ -30,23 +41,38 @@ let PublishFromInner = React.createClass({
       type : 'POST'
     });
   },
+  handlePrivacyStatus: function(e, index, menuItem) {
+    this.setState({
+      privacyStatus: menuItem.text
+    });
+  },
+  handleTitle: function(e) {
+    this.setState({
+      title: e.target.value
+    });
+  },
+  handleDescription: function(e) {
+    this.setState({
+      description: e.target.value
+    });
+  },
   render: function() {
     let menuItems = [
-      { payload: '1', text: 'Public' },
-      { payload: '2', text: 'Unlisted' },
-      { payload: '3', text: 'Private' },
+      { payload: '1', text: PUBLIC_STATUS },
+      { payload: '2', text: UNLISTED_STATUS },
+      { payload: '3', text: PRIVATE_STATUS },
     ];
     // Add tags
     return (
       <div>
         <div className="row">
            <div className="col-lg-12">
-             <mui.TextField floatingLabelText="Title" />
+             <mui.TextField floatingLabelText="Title" onChange={this.handleTitle} />
            </div>
          </div>
          <div className="row">
            <div className="col-lg-12">
-             <mui.TextField floatingLabelText="Description" multiLine={true} />
+             <mui.TextField floatingLabelText="Description" multiLine={true} onChange={this.handleDescription}/>
            </div>
          </div>
          <div className="row">
@@ -54,7 +80,7 @@ let PublishFromInner = React.createClass({
             <mui.RaisedButton className="publish-btn" label="Publish" primary={true} onClick={this.handlePublish}/>
            </div>
           <div className="col-xs-6">
-            <mui.DropDownMenu menuItems={menuItems} />
+            <mui.DropDownMenu menuItems={menuItems} onChange={this.handlePrivacyStatus}/>
           </div>
         </div>
         <div className="row">

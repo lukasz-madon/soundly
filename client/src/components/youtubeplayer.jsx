@@ -90,12 +90,13 @@ let YouTube = React.createClass({
   },
 
   componentWillUnmount() {
-    this._changeVolume(100); //well f*** yt sets volume on all yt players. Though this will fix it, but it doesn't.
+    this._changeVolume(100); //well, f***, yt sets volume on all yt players. Thought this will fix it, but it doesn't.
     this._destroyPlayer();
   },
 
   _changeVolume(volume){
-    if(this._internalPlayer) {
+    // when router changes the rendered element player is loaded, but doesn't have all props
+    if(this._internalPlayer && this._internalPlayer.setVolume) {
       this._internalPlayer.setVolume(volume);
     }
   },

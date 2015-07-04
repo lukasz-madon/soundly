@@ -12,10 +12,7 @@ export default class VideoMetaStore extends Store {
     this.state = {
       audioVolume: 0,
       musicVolume: 100,
-      musicUrl: '',
-      title: '',
-      description: '',
-      privacyStatus: ''
+      musicUrl: ''
     };
   }
 
