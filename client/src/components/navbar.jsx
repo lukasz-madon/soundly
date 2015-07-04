@@ -8,7 +8,6 @@ let Navbar = React.createClass({
     router: React.PropTypes.func
   },
   render: function() {
-    let iconMenuItems = ["a"];
     return (
       <div className="navbar navbar-default">
         <div className="container">

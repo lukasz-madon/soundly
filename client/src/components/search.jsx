@@ -3,14 +3,14 @@ import React from 'react';
 import FluxComponent from 'flummox/component';
 
 import SearchItem from './searchitem.jsx';
-import Player from './player.jsx';
+import MusicPlayer from './musicPlayer.jsx';
 
 
 let Search = React.createClass({
   render: function() {
     return (
       <div>
-        <FluxComponent connectToStores={'search'}>
+        <FluxComponent connectToStores={['search', 'videoMeta']}>
           <SearchInner />
         </FluxComponent>
         <small>You must choose, but choose wisely. </small>
@@ -23,8 +23,7 @@ let SearchInner = React.createClass({
   getInitialState: function(){
     return {
       player: {
-        open: false,
-        url: ''
+        open: false
       }
     };
   },
@@ -32,10 +31,10 @@ let SearchInner = React.createClass({
     this.search('');
   },
   handleClick: function(searchItem) {
+    this.props.flux.getActions('videoMeta').setMusicUrl(searchItem.props.hit.url);
     this.setState({
       player: {
-        open: true,
-        url: searchItem.props.hit.url
+        open: true
       }
     });
   },
@@ -53,7 +52,7 @@ let SearchInner = React.createClass({
         <div id="player-grid" className="row">
           {this.props.hits.map((hit) => <SearchItem onClick={this.handleClick} key={hit.id} hit={hit} /> )}
         </div>
-        <Player isOpen={this.state.player.open} />
+        <MusicPlayer isOpen={this.state.player.open} />
       </div>
     );
   }

@@ -8,6 +8,7 @@ export default class VideoMetaStore extends Store {
     const videoMetaActions = flux.getActions('videoMeta');
     this.register(videoMetaActions.setAudioVolume, this.handleAudioVolume);
     this.register(videoMetaActions.setMusicVolume, this.handleMusicVolume);
+    this.register(videoMetaActions.setMusicUrl, this.handleMusicUrl);
 
     this.state = {
       audioVolume: 0,
@@ -25,6 +26,12 @@ export default class VideoMetaStore extends Store {
   handleMusicVolume(volume) {
     this.setState({
       musicVolume: volume
+    });
+  }
+
+  handleMusicUrl(musicUrl) {
+    this.setState({
+      musicUrl: musicUrl
     });
   }
 }

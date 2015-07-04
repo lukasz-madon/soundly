@@ -10,4 +10,8 @@ export default class VideoMetaActions extends Actions {
   setMusicVolume(volume) {
     return volume;
   }
+
+  setMusicUrl(musicUrl) {
+  	return musicUrl;
+  }
 }

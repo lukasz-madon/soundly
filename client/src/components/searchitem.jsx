@@ -14,7 +14,7 @@ let SearchItem = React.createClass({
           <a>
             <div className="row">
               <div className="col-xs-2">
-                <i className="fa"></i>
+                <mui.IconButton iconClassName="fa fa-play"/>
               </div>
               <div className="col-xs-10 txt text-right">
                 <span dangerouslySetInnerHTML={{ __html: hit._highlightResult.artist.value }}></span><br />
