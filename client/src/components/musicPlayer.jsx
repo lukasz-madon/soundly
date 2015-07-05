@@ -7,7 +7,7 @@ import FluxComponent from 'flummox/component';
 let MusicPlayer = React.createClass({
   render: function() {
     return (
-      <FluxComponent connectToStores={'videoMeta'}>
+      <FluxComponent connectToStores={['videoMeta', 'musicPlayer']}>
         <MusicPlayerInner isOpen={this.props.isOpen} />
       </FluxComponent>
     );
@@ -39,7 +39,8 @@ let MusicPlayerInner = React.createClass({
   render: function() {
     return (
       <mui.Paper innerClassName="pad-container" className={this.props.isOpen ? 'slide-player show-up' : 'slide-player'}>
-        <mui.IconButton iconClassName="fa fa-pause" onClick={this.handleStop}/> <span className="h4">The Spartans - Rain of the car roof</span>
+        <mui.IconButton iconClassName="fa fa-pause" onClick={this.handleStop}/> 
+        <span className="h4">{this.props.artist} - {this.props.title}</span>
       </mui.Paper>
     );
   }

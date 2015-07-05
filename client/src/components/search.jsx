@@ -10,7 +10,7 @@ let Search = React.createClass({
   render: function() {
     return (
       <div>
-        <FluxComponent connectToStores={['search', 'videoMeta']}>
+        <FluxComponent connectToStores={['search', 'musicPlayer']}>
           <SearchInner />
         </FluxComponent>
         <small>You must choose, but choose wisely. </small>
@@ -31,7 +31,9 @@ let SearchInner = React.createClass({
     this.search('');
   },
   handleClick: function(searchItem) {
-    this.props.flux.getActions('videoMeta').setMusicUrl(searchItem.props.hit.url);
+    this.props.flux.getActions('musicPlayer').setMusicUrl(searchItem.props.hit.url);
+    this.props.flux.getActions('musicPlayer').setTitle(searchItem.props.hit.title);
+    this.props.flux.getActions('musicPlayer').setArtist(searchItem.props.hit.artist);
     this.setState({
       player: {
         open: true

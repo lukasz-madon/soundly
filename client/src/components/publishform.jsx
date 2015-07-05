@@ -67,16 +67,16 @@ let PublishFromInner = React.createClass({
       <div>
         <div className="row">
            <div className="col-lg-12">
-             <mui.TextField floatingLabelText="Title" onChange={this.handleTitle} />
+             <mui.TextField className="text-field-full-width" floatingLabelText="Title" onChange={this.handleTitle} />
            </div>
          </div>
          <div className="row">
            <div className="col-lg-12">
-             <mui.TextField floatingLabelText="Description" multiLine={true} onChange={this.handleDescription}/>
+             <mui.TextField className="text-field-full-width" floatingLabelText="Description" multiLine={true} onChange={this.handleDescription}/>
            </div>
          </div>
          <div className="row">
-          <div className="col-xs-5">
+          <div className="col-xs-6">
             <mui.RaisedButton className="publish-btn" label="Publish" primary={true} onClick={this.handlePublish}/>
            </div>
           <div className="col-xs-6">
