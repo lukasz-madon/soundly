@@ -1,7 +1,6 @@
 import { Actions } from 'flummox';
 
-
-const client = algoliasearch('KR1O1TU8CE', '9ea0d0c4da7cbedf6cdc413fe0801efa');
+const client = algoliasearch(Soundly.Algolia.appId, Soundly.Algolia.apiKey);
 const index = client.initIndex('music');
 
 export default class SearchActions extends Actions {
