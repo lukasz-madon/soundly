@@ -47,7 +47,7 @@ let SearchInner = React.createClass({
   },
   render: function() {
     return (
-      <div>
+      <div className="search-container">
         <mui.TextField className="search" hintText="Search Music..." onChange={this._handleQuery} />
         <div id="player-grid" className="row">
           {this.props.hits.map((hit) => <SearchItem onClick={this.handleClick} key={hit.id} hit={hit} /> )}
