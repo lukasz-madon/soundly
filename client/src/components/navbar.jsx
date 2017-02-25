@@ -32,7 +32,7 @@ let Navbar = React.createClass({
             </ul>
             <ul className="nav navbar-nav navbar-right user-bar">          
               <li>
-                <a href="/logout">Hi test</a>
+                <Link to="profile">Hi {Soundly.login.username}</Link>
               </li>
               <li>
                 <img className="img-rounded channel-thumbnail" src="https://lh3.googleusercontent.com/-q1Smh9d8d0g/AAAAAAAAAAM/AAAAAAAAAAA/3YaY0XeTIPc/photo.jpg" />

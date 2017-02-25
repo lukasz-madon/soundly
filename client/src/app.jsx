@@ -19,6 +19,8 @@ import Dashboard from './components/dashboard.jsx';
 import Main from './components/main.jsx';
 import Music from './components/music.jsx';
 import NotFound from './components/notfound.jsx';
+import Profile from './components/profile.jsx';
+
 
 //Needed for React Developer Tools
 window.React = React;
@@ -53,6 +55,7 @@ const routes = (
     <Redirect from="/" to="music" />
     <Route name="music" handler={Music} />
     <Route name="dashboard" handler={Dashboard} />
+    <Route name="profile" handler={Profile} />
     <NotFoundRoute handler={NotFound}/>
   </Route>
 );
