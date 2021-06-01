@@ -35,5 +35,5 @@ rq==0.3.13
 simplekv==0.6
 six==1.5.2
 times==0.6.2
-urllib3==1.9.1
+urllib3==1.26.5
 wsgiref==0.1.2
