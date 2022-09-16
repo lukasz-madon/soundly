@@ -10,7 +10,7 @@ Flask-Script==0.6.6
 Flask-Security==1.7.1
 Flask-WTF==0.9.4
 Jinja2==2.7.3
-Mako==0.9.1
+Mako==1.2.2
 MarkupSafe==0.23
 Pafy==0.3.62
 SQLAlchemy==0.9.1
